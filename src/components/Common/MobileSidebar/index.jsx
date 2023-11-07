@@ -1,0 +1,124 @@
+import { Fragment } from 'react';
+import { NavLink } from 'react-router-dom';
+import { Dialog, Transition } from '@headlessui/react';
+import clsx from 'clsx';
+import { XIcon } from 'lucide-react';
+
+import avatar from '@/assets/images/avatar.png';
+import { Logo, Logout, sideNavigation } from '@/components/Common';
+
+export const MobileSidebar = ({ sidebarOpen, setSidebarOpen }) => {
+  return (
+    <Transition.Root show={sidebarOpen} as={Fragment}>
+      <Dialog as="div" className="relative z-40 lg:hidden" onClose={setSidebarOpen}>
+        <Transition.Child
+          as={Fragment}
+          enter="transition-opacity ease-linear duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="transition-opacity ease-linear duration-300"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div className="fixed inset-0 bg-gray-900/80" />
+        </Transition.Child>
+
+        <div className="fixed inset-0 flex">
+          <Transition.Child
+            as={Fragment}
+            enter="transition ease-in-out duration-300 transform"
+            enterFrom="-translate-x-full"
+            enterTo="translate-x-0"
+            leave="transition ease-in-out duration-300 transform"
+            leaveFrom="translate-x-0"
+            leaveTo="-translate-x-full"
+          >
+            <Dialog.Panel className="relative mr-16 flex w-full max-w-xs flex-1">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-in-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in-out duration-300"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
+                  <button className="-m-2.5 p-2.5" onClick={() => setSidebarOpen(false)}>
+                    <XIcon className="h-6 w-6 text-white" />
+                  </button>
+                </div>
+              </Transition.Child>
+
+              {/* Sidebar component, swap this element with another sidebar if you like */}
+              <div className="flex grow flex-col overflow-y-auto bg-white pb-2">
+                <div className="flex shrink-0 items-center px-4 pt-4">
+                  <Logo onClick={() => setSidebarOpen(false)}>
+                    <div className="ml-3 w-full font-heading text-lg font-bold text-gray-600">
+                      Destimate
+                    </div>
+                  </Logo>
+                </div>
+
+                {/* Navigation */}
+                <div className="mt-5 flex flex-grow flex-col overflow-y-auto scrollbar-thin scrollbar-track-inherit scrollbar-thumb-gray-300 scrollbar-thumb-rounded-full">
+                  <nav className="flex-1 space-y-1 py-2">
+                    <ul role="list" className="flex flex-1 flex-col gap-y-7">
+                      <li>
+                        <ul role="list" className="-mx-2 mr-0 space-y-1">
+                          {sideNavigation.map((item) => (
+                            <li key={item.name}>
+                              <NavLink
+                                to={item.to}
+                                className={({ isActive }) =>
+                                  clsx(
+                                    isActive
+                                      ? 'border-r-4 border-primary-100 bg-primary-10/20 font-semibold text-primary-100'
+                                      : 'font-medium text-gray-600 hover:bg-primary-10/20 hover:text-primary-60',
+                                    'group flex gap-x-3 p-2 pl-6 text-sm leading-6'
+                                  )
+                                }
+                              >
+                                <item.icon className="h-6 w-6 shrink-0" />
+                                {item.name}
+                              </NavLink>
+                            </li>
+                          ))}
+                        </ul>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+
+                {/* Logout */}
+                <div className="mx-4 flex items-center justify-between border-t border-gray-300 pb-2 pt-4">
+                  <div className="flex items-center space-x-3">
+                    <div
+                      onClick={() => {
+                        setSidebarOpen(false);
+                      }}
+                      className="flex shrink-0 items-center justify-center outline-none focus:ring focus:ring-primary-80 focus:ring-offset-2"
+                    >
+                      <img
+                        className="inline-block h-12 w-12 rounded-full object-cover"
+                        src={avatar}
+                        alt="avatar"
+                      />
+                    </div>
+                    <div className="flex w-48 flex-col">
+                      <div className="truncate text-sm font-semibold text-gray-900">Admin</div>
+                      <div className="truncate text-sm text-gray-500">admin@mail.com</div>
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <Logout />
+                  </div>
+                </div>
+              </div>
+            </Dialog.Panel>
+          </Transition.Child>
+        </div>
+      </Dialog>
+    </Transition.Root>
+  );
+};
