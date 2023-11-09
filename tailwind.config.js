@@ -1,8 +1,21 @@
 /* eslint-disable no-undef */
 /** @type {import('tailwindcss').Config} */
-export default {
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+module.exports = {
+  darkMode: ['class'],
+  content: [
+    './pages/**/*.{js,jsx}',
+    './components/**/*.{js,jsx}',
+    './app/**/*.{js,jsx}',
+    './src/**/*.{js,jsx}',
+  ],
   theme: {
+    container: {
+      center: true,
+      padding: '2rem',
+      screens: {
+        '2xl': '1400px',
+      },
+    },
     extend: {
       fontFamily: {
         heading: ['Poppins', 'sans-serif'],
@@ -22,7 +35,8 @@ export default {
           100: '#36B734',
         },
         dashboardDestimate: {
-          100: '#EEEFF8',
+          100: '#F1F2FF',
+          200: '#EEEFF8',
         },
         primary: {
           10: '#C3CEF6',
@@ -105,9 +119,24 @@ export default {
           900: '#1E3A8A',
         },
       },
+      keyframes: {
+        'accordion-down': {
+          from: { height: 0 },
+          to: { height: 'var(--radix-accordion-content-height)' },
+        },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: 0 },
+        },
+      },
+      animation: {
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
+      },
     },
   },
   plugins: [
+    require('tailwindcss-animate'),
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
     require('tailwind-scrollbar')({ nocompatible: true }),

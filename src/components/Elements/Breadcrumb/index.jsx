@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRightIcon, HomeIcon } from 'lucide-react';
+import { ChevronRightIcon } from 'lucide-react';
 
 export const Breadcrumb = ({
+  startingLocation = 'Dashboard',
   separator = <ChevronRightIcon className="h-4 w-4 text-gray-400" />,
   children,
 }) => {
@@ -13,8 +14,8 @@ export const Breadcrumb = ({
       <ol className="flex flex-wrap items-center space-x-2 md:space-x-3">
         <li>
           <div>
-            <Link to="/" className="text-gray-500 hover:text-primary-100">
-              <HomeIcon className="h-4 w-4" />
+            <Link to="/" className="px-2 text-sm font-semibold text-primary-100">
+              <span>{startingLocation}</span>
             </Link>
           </div>
         </li>

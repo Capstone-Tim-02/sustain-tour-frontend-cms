@@ -1,5 +1,4 @@
-import { LogOutIcon } from 'lucide-react';
-
+import { TrashIcon } from '@/components/Icons';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,22 +11,22 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 
-export const Logout = () => {
+export const DeleteUser = () => {
   return (
     <AlertDialog>
       <AlertDialogTrigger>
-        <LogOutIcon className="h-5 w-5 text-gray-500 hover:text-primary-100" />
+        <TrashIcon className="h-5 w-5 stroke-2 text-redDestimate-100 hover:cursor-pointer hover:text-redDestimate-100/70" />
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Keluar</AlertDialogTitle>
-          <AlertDialogDescription>Apakah kamu yakin ingin Keluar?</AlertDialogDescription>
+          <AlertDialogTitle>Hapus Pengguna</AlertDialogTitle>
+          <AlertDialogDescription>
+            Apakah kamu yakin ingin menghapus pengguna ini?
+          </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Batal</AlertDialogCancel>
-          <AlertDialogAction className="bg-primary-80 hover:bg-primary-80/80">
-            Keluar
-          </AlertDialogAction>
+          <AlertDialogAction className="bg-red-500 hover:bg-red-600">Hapus</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
