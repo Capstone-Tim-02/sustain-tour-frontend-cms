@@ -11,8 +11,8 @@ export const AuthService = {
   },
 
   storeCredentialsToCookie(token) {
-    // set expires 1 minute
-    const expires = new Date().getMinutes() + 1;
+    //(14 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
+    const expires = new Date(new Date().getTime() + 14 * 24 * 60 * 60 * 1000);
     if (token) Cookies.set('token', token, { expires });
   },
 

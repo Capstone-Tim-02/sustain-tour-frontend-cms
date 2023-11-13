@@ -19,6 +19,7 @@ const DialogOverlay = React.forwardRef(({ className, ...props }, ref) => (
       'fixed inset-0 z-50 bg-gray-900/40 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 dark:bg-slate-950/80',
       className
     )}
+    onClick={(e) => e.stopPropagation()}
     {...props}
   />
 ));
@@ -60,9 +61,6 @@ const DialogFooter = ({ className, children, ...props }) => (
       {...props}
     >
       {children}
-      <DialogPrimitive.Close className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-600 ring-offset-white transition-colors hover:bg-slate-100 hover:text-slate-900">
-        <span>Batal</span>
-      </DialogPrimitive.Close>
     </div>
   </>
 );

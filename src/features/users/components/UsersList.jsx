@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SearchIcon } from 'lucide-react';
 
@@ -10,6 +10,7 @@ import { fetchGetUsers, selectUsers, toggleFetchLatestUsers } from '@/stores/fea
 import { columns } from './UsersColumn';
 
 export const UsersList = () => {
+  const [searchText, setSearchText] = useState('');
   const users = useSelector(selectUsers);
 
   const dispatch = useDispatch();
@@ -22,6 +23,10 @@ export const UsersList = () => {
     dispatch(fetchGetUsers());
   }, [dispatch, users.shouldFetchLatestUsers]);
 
+  useEffect(() => {
+    dispatch(fetchGetUsers(searchText));
+  }, [searchText, dispatch]);
+
   return (
     <>
       {/* Search */}
@@ -32,6 +37,7 @@ export const UsersList = () => {
           autoComplete="off"
           placeholder="Cari"
           startIcon={<SearchIcon className="h-4 w-4 text-gray-400" />}
+          onChange={(e) => setSearchText(e.target.value)}
         />
       </div>
 

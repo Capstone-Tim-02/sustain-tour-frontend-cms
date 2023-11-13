@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { DialogClose } from '@radix-ui/react-dialog';
 import * as y from 'yup';
 
 import { APIUsers } from '@/apis/APIUsers';
@@ -35,6 +36,7 @@ const schema = y.object({
 export const EditUser = ({ id }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [detailUser, setDetailUser] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -42,8 +44,11 @@ export const EditUser = ({ id }) => {
     async function fetchUser() {
       setDetailUser(await APIUsers.getUser(id));
     }
-    fetchUser();
-  }, [id]);
+
+    if (isDialogOpen) {
+      fetchUser();
+    }
+  }, [id, isDialogOpen]);
 
   const {
     register,
@@ -66,17 +71,19 @@ export const EditUser = ({ id }) => {
   };
 
   useEffect(() => {
-    reset({
-      ...detailUser,
-    });
-  }, [reset, detailUser]);
+    if (isDialogOpen) {
+      reset({
+        ...detailUser,
+      });
+    }
+  }, [reset, detailUser, isDialogOpen]);
 
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger onClick={() => setIsDialogOpen(!isDialogOpen)}>
         <EditIcon className="h-5 w-5 stroke-2 text-primary-100 hover:cursor-pointer hover:text-primary-100/70" />
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent onClick={() => setIsDialogOpen(!isDialogOpen)} className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="mb-4 text-primary-100">Edit Pengguna</DialogTitle>
         </DialogHeader>
@@ -121,6 +128,12 @@ export const EditUser = ({ id }) => {
           <Button disabled={isLoading} form="editUser" type="submit">
             {isLoading && <Spinner size="sm" className="mr-3" />} Simpan
           </Button>
+          <DialogClose
+            onClick={() => setIsDialogOpen(!isDialogOpen)}
+            className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-600 ring-offset-white transition-colors hover:bg-slate-100 hover:text-slate-900"
+          >
+            <span>Batal</span>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

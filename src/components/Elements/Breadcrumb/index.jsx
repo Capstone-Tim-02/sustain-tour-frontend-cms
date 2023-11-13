@@ -14,7 +14,7 @@ export const Breadcrumb = ({
       <ol className="flex flex-wrap items-center space-x-2 md:space-x-3">
         <li>
           <div>
-            <Link to="/" className="px-2 text-sm font-semibold text-primary-100">
+            <Link to="/" className="pr-2 text-sm font-semibold text-primary-100">
               <span>{startingLocation}</span>
             </Link>
           </div>
