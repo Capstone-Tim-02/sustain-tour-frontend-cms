@@ -1,4 +1,4 @@
-import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
 
 import { APIUsers } from '@/apis/APIUsers';
 import { TrashIcon } from '@/components/Icons';
@@ -13,18 +13,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { toggleFetchLatestUsers } from '@/stores/features/UsersSlice';
 
 export const DeleteUser = ({ id }) => {
+  const dispatch = useDispatch();
+
   const handleDeleteUser = async (id) => {
-    await APIUsers.deleteUser(id).then((res) => console.log(res));
-  };
-
-  const handleReload = () => {
-    toast.success('Berhasil menghapus pengguna');
-
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
+    await APIUsers.deleteUser(id);
+    dispatch(toggleFetchLatestUsers());
   };
 
   return (
@@ -45,7 +41,6 @@ export const DeleteUser = ({ id }) => {
             className="bg-red-500 hover:bg-red-600"
             onClick={async () => {
               await handleDeleteUser(id);
-              handleReload();
             }}
           >
             Hapus
