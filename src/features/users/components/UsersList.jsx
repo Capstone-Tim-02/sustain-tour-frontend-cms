@@ -5,7 +5,7 @@ import { SearchIcon } from 'lucide-react';
 import { Spinner } from '@/components/Elements';
 import { DataTable } from '@/components/Elements/Table';
 import { InputField } from '@/components/Forms';
-import { fetchGetUsers, selectUsers } from '@/stores/features/UsersSlice';
+import { fetchGetUsers, selectUsers, toggleFetchLatestUsers } from '@/stores/features/UsersSlice';
 
 import { columns } from './UsersColumn';
 
@@ -15,10 +15,12 @@ export const UsersList = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    //   // if (users.shouldFetchLatestUsers) {
+    if (users?.shouldFetchLatestUsers) {
+      dispatch(fetchGetUsers());
+      dispatch(toggleFetchLatestUsers());
+    }
     dispatch(fetchGetUsers());
-    //   // dispatch(toggleFetchLatestUsers());
-  }, [dispatch]);
+  }, [dispatch, users.shouldFetchLatestUsers]);
 
   return (
     <>

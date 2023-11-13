@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as y from 'yup';
 
@@ -17,23 +17,32 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { toggleFetchLatestUsers } from '@/stores/features/UsersSlice';
 
 const schema = y.object({
   name: y.string().required('Nama wajib diisi').min(3, 'Minimal 3 karakter'),
   username: y.string().required('Username wajib diisi').min(3, 'Minimal 3 karakter'),
   email: y.string().email('Email tidak valid').required('Email wajib diisi'),
-  phone_number: y.string().required('No. Telepon wajib diisi'),
+  phone_number: y
+    .string()
+    .test('is-number', 'No. Telepon harus berupa angka', (value) => {
+      // return true if value is a number
+      return !isNaN(value);
+    })
+    .required('No. Telepon wajib diisi'),
 });
 
 export const EditUser = ({ id }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [detailUser, setDetailUser] = useState(null);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    async function fecthUser() {
+    async function fetchUser() {
       setDetailUser(await APIUsers.getUser(id));
     }
-    fecthUser();
+    fetchUser();
   }, [id]);
 
   const {
@@ -47,10 +56,9 @@ export const EditUser = ({ id }) => {
     try {
       setIsLoading(true);
       await APIUsers.updateUser(id, data);
-      toast.success('Berhasil memperbarui pengguna');
+      dispatch(toggleFetchLatestUsers());
     } catch (error) {
       setIsLoading(false);
-      toast.error('Gagal memperbarui pengguna');
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -78,7 +86,6 @@ export const EditUser = ({ id }) => {
             placeholder="Masukkan username"
             label="Username"
             autoComplete="off"
-            autoFocus="false"
             registration={register('username')}
             error={errors.username}
           />

@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify';
+
 import { axiosInstance } from '@/configs/axiosInstance';
 
 export const APIUsers = {
@@ -23,9 +25,10 @@ export const APIUsers = {
 
   updateUser: async (id, data) => {
     try {
-      await axiosInstance.put(`/admin/user/${id}`, data);
+      const result = await axiosInstance.put(`/admin/user/${id}`, data);
+      toast.success(result.data.message);
     } catch (error) {
-      console.error(error);
+      toast.error(error.response.data.message);
       throw new Error(error);
     }
   },
@@ -33,9 +36,10 @@ export const APIUsers = {
   deleteUser: async (id) => {
     try {
       const result = await axiosInstance.delete(`/admin/user/${id}`);
-      return result.data;
+      toast.success(result.data.message);
     } catch (error) {
       console.error(error);
+      toast.error(error.response.data.message);
       throw new Error(error);
     }
   },
