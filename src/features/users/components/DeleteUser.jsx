@@ -1,3 +1,6 @@
+import { toast } from 'react-toastify';
+
+import { APIUsers } from '@/apis/APIUsers';
 import { TrashIcon } from '@/components/Icons';
 import {
   AlertDialog,
@@ -11,7 +14,19 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 
-export const DeleteUser = () => {
+export const DeleteUser = ({ id }) => {
+  const handleDeleteUser = async (id) => {
+    await APIUsers.deleteUser(id).then((res) => console.log(res));
+  };
+
+  const handleReload = () => {
+    toast.success('Berhasil menghapus pengguna');
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+  };
+
   return (
     <AlertDialog>
       <AlertDialogTrigger>
@@ -26,7 +41,15 @@ export const DeleteUser = () => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Batal</AlertDialogCancel>
-          <AlertDialogAction className="bg-red-500 hover:bg-red-600">Hapus</AlertDialogAction>
+          <AlertDialogAction
+            className="bg-red-500 hover:bg-red-600"
+            onClick={async () => {
+              await handleDeleteUser(id);
+              handleReload();
+            }}
+          >
+            Hapus
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

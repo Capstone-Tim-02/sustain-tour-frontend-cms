@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { XIcon } from 'lucide-react';
 
 import avatar from '@/assets/images/avatar.png';
-import { Logo, Logout, sideNavigation } from '@/components/Common';
+import { Logo, sideNavigation, SignOut } from '@/components/Common';
 
 export const MobileSidebar = ({ sidebarOpen, setSidebarOpen }) => {
   return (
@@ -90,7 +90,7 @@ export const MobileSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                   </nav>
                 </div>
 
-                {/* Logout */}
+                {/* SignOut */}
                 <div className="mx-4 flex items-center justify-between border-t border-gray-300 pb-2 pt-4">
                   <div className="flex items-center space-x-3">
                     <div
@@ -111,7 +111,7 @@ export const MobileSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                     </div>
                   </div>
                   <div className="text-center">
-                    <Logout />
+                    <SignOut />
                   </div>
                 </div>
               </div>

@@ -1,5 +1,8 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { LogOutIcon } from 'lucide-react';
 
+import { Spinner } from '@/components/Elements';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,8 +14,25 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { AuthService } from '@/services/AuthService';
 
-export const Logout = () => {
+export const SignOut = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    try {
+      setIsLoading(true);
+      AuthService.clearCredentialsFromCookie(() => {
+        navigate('/login');
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <AlertDialog>
       <AlertDialogTrigger>
@@ -25,7 +45,12 @@ export const Logout = () => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Batal</AlertDialogCancel>
-          <AlertDialogAction className="bg-primary-80 hover:bg-primary-80/80">
+          <AlertDialogAction
+            disabled={isLoading}
+            className="bg-primary-80 hover:bg-primary-80/80"
+            onClick={() => handleSignOut()}
+          >
+            {isLoading && <Spinner size="sm" className="mr-3" />}
             Keluar
           </AlertDialogAction>
         </AlertDialogFooter>

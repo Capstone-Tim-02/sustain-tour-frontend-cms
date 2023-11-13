@@ -1,23 +1,15 @@
 import { BadgePercentIcon, LayoutDashboardIcon } from 'lucide-react';
 
-import {
-  CategoryIcon,
-  CoinIcon,
-  PaperIcon,
-  RouteIcon,
-  TicketIcon,
-  UsersIcon,
-} from '@/components/Icons';
+import { CategoryIcon, CoinIcon, PaperIcon, RouteIcon, UsersIcon } from '@/components/Icons';
 
 const sideNavigation = [
-  { name: 'Dashboard', to: '/dashboard', icon: LayoutDashboardIcon },
-  { name: 'Pengguna', to: '/users', icon: UsersIcon },
-  { name: 'Kategori', to: '/category', icon: CategoryIcon },
-  { name: 'Destinasi', to: '/destinations', icon: RouteIcon },
+  { name: 'Overview', to: '/overview', icon: LayoutDashboardIcon },
+  { name: 'Pengguna', to: '/pengguna', icon: UsersIcon },
+  { name: 'Kategori', to: '/kategori', icon: CategoryIcon },
+  { name: 'Destinasi', to: '/destinasi', icon: RouteIcon },
   { name: 'Promo', to: '/promo', icon: BadgePercentIcon },
-  { name: 'Tiket', to: '/ticket', icon: TicketIcon },
-  { name: 'Transaksi', to: '/transactions', icon: CoinIcon },
-  { name: 'Syarat & Ketentuan', to: '/terms_and_condition', icon: PaperIcon },
+  { name: 'Transaksi', to: '/transaksi', icon: CoinIcon },
+  { name: 'Syarat & Ketentuan', to: '/syarat_dan_ketentuan', icon: PaperIcon },
 ];
 
 export { sideNavigation };

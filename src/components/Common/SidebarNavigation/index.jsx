@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
 
 import avatar from '@/assets/images/avatar.png';
-import { Logo, Logout, sideNavigation } from '@/components/Common';
+import { Logo, sideNavigation, SignOut } from '@/components/Common';
 
 export const SidebarNavigation = () => {
   return (
@@ -59,7 +59,7 @@ export const SidebarNavigation = () => {
             <div className="truncate text-sm text-gray-500">admin@mail.com</div>
           </div>
           <div className="text-center">
-            <Logout />
+            <SignOut />
           </div>
         </div>
       </div>

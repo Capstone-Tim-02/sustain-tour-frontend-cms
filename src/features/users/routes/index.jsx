@@ -15,9 +15,7 @@ export const Users = () => {
       <div className="mt-6">
         <div className="mb-8 flex items-center justify-between">
           <div className="sm:flex-auto">
-            <h1 className="text-xl font-semibold text-gray-900 sm:text-3xl">
-              Kelola Data Pengguna
-            </h1>
+            <h1 className="text-xl font-semibold text-gray-900 sm:text-3xl">Data Pengguna</h1>
           </div>
         </div>
         <UsersList />

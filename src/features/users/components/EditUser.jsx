@@ -1,7 +1,11 @@
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as y from 'yup';
 
+import { APIUsers } from '@/apis/APIUsers';
+import { Spinner } from '@/components/Elements';
 import { InputField } from '@/components/Forms';
 import { EditIcon } from '@/components/Icons';
 import { Button } from '@/components/ui/button';
@@ -21,16 +25,43 @@ const schema = y.object({
   phone_number: y.string().required('No. Telepon wajib diisi'),
 });
 
-export const EditUser = () => {
+export const EditUser = ({ id }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [detailUser, setDetailUser] = useState(null);
+
+  useEffect(() => {
+    async function fecthUser() {
+      setDetailUser(await APIUsers.getUser(id));
+    }
+    fecthUser();
+  }, [id]);
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
   const onSubmit = async (data) => {
-    console.log(data);
+    try {
+      setIsLoading(true);
+      await APIUsers.updateUser(id, data);
+      toast.success('Berhasil memperbarui pengguna');
+    } catch (error) {
+      setIsLoading(false);
+      toast.error('Gagal memperbarui pengguna');
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  useEffect(() => {
+    reset({
+      ...detailUser,
+    });
+  }, [reset, detailUser]);
 
   return (
     <Dialog>
@@ -47,6 +78,7 @@ export const EditUser = () => {
             placeholder="Masukkan username"
             label="Username"
             autoComplete="off"
+            autoFocus="false"
             registration={register('username')}
             error={errors.username}
           />
@@ -79,8 +111,8 @@ export const EditUser = () => {
           />
         </form>
         <DialogFooter>
-          <Button form="editUser" type="submit">
-            Simpan
+          <Button disabled={isLoading} form="editUser" type="submit">
+            {isLoading && <Spinner size="sm" className="mr-3" />} Simpan
           </Button>
         </DialogFooter>
       </DialogContent>
