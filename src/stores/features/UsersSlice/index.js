@@ -8,7 +8,7 @@ const initialState = {
   message: '',
   status: 'idle',
   shouldFetchLatestUsers: false,
-  data: null,
+  data: [],
 };
 
 export const usersSlice = createSlice({

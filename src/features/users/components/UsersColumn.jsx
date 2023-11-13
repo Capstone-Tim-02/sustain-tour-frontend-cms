@@ -27,7 +27,7 @@ const Name = ({ user }) => {
 const Action = ({ value }) => {
   return (
     <div className="flex items-center space-x-4">
-      <EditUser id={value.id} />
+      <EditUser id={value?.id} />
       <DeleteUser id={value?.id} />
     </div>
   );
