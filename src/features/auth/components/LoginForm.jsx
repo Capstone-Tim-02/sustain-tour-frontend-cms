@@ -1,8 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as y from 'yup';
 
+import { APIAuth } from '@/apis/APIAuth';
+import { Spinner } from '@/components/Elements';
 import { InputField } from '@/components/Forms';
 import { Button } from '@/components/ui/button';
 
@@ -12,6 +16,9 @@ const schema = y.object({
 });
 
 export const LoginForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -22,7 +29,16 @@ export const LoginForm = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log(data);
+    try {
+      setIsLoading(true);
+      await APIAuth.signInWithCredentials(data);
+      toast.success('Berhasil masuk!');
+      navigate('/');
+    } catch (error) {
+      toast.error('Gagal masuk. username dan password tidak valid!');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -52,7 +68,8 @@ export const LoginForm = () => {
             registration={register('password')}
             error={errors.password}
           />
-          <Button variant="tertiary" type="submit" className="w-full">
+          <Button disabled={isLoading} variant="tertiary" type="submit" className="w-full">
+            {isLoading && <Spinner size="sm" className="mr-3" />}
             Masuk
           </Button>
         </form>
