@@ -21,16 +21,19 @@ import {
 import { toggleFetchLatestUsers } from '@/stores/features/UsersSlice';
 
 const schema = y.object({
-  name: y.string().required('Nama wajib diisi').min(3, 'Minimal 3 karakter'),
-  username: y.string().required('Username wajib diisi').min(3, 'Minimal 3 karakter'),
-  email: y.string().email('Email tidak valid').required('Email wajib diisi'),
+  name: y.string().required('Nama tidak boleh kosong!').min(3, 'Minimal 3 karakter untuk nama'),
+  username: y
+    .string()
+    .required('Username tidak boleh kosong!')
+    .min(5, 'Minimal 5 karakter untuk username'),
+  email: y.string().email('Email tidak valid').required('Email tidak boleh kosong!'),
   phone_number: y
     .string()
     .test('is-number', 'No. Telepon harus berupa angka', (value) => {
       // return true if value is a number
       return !isNaN(value);
     })
-    .required('No. Telepon wajib diisi'),
+    .required('No. Telepon tidak boleh kosong!'),
 });
 
 export const EditUser = ({ id }) => {
@@ -125,15 +128,15 @@ export const EditUser = ({ id }) => {
           />
         </form>
         <DialogFooter>
-          <Button disabled={isLoading} form="editUser" type="submit">
-            {isLoading && <Spinner size="sm" className="mr-3" />} Simpan
-          </Button>
           <DialogClose
             onClick={() => setIsDialogOpen(!isDialogOpen)}
             className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-600 ring-offset-white transition-colors hover:bg-slate-100 hover:text-slate-900"
           >
             <span>Batal</span>
           </DialogClose>
+          <Button disabled={isLoading} form="editUser" type="submit">
+            {isLoading && <Spinner size="sm" className="mr-3" />} Simpan
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

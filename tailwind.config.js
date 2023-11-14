@@ -22,6 +22,9 @@ module.exports = {
         sans: ['Inter', 'sans-serif'],
       },
       colors: {
+        blackDestimate: {
+          100: '#070707',
+        },
         greyDestimate: {
           50: '#E1E1E1',
           80: '#BEBEBE',
@@ -37,6 +40,8 @@ module.exports = {
         dashboardDestimate: {
           100: '#F1F2FF',
           200: '#EEEFF8',
+          300: '#F0F0F0',
+          400: '#515151',
         },
         primary: {
           10: '#C3CEF6',
