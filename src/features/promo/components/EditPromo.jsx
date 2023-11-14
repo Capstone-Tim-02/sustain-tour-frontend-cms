@@ -4,17 +4,24 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as y from 'yup';
 
 import { APIPromo } from "@/apis/APIPromo";
-import { InputField } from "@/components/Forms";
+import { DropdownField, InputField } from "@/components/Forms";
+import { Button } from "@/components/ui/button";
+import { formatDate } from "@/utils/format";
 
 const schema = y.object({
     title: y.string().required('Judul promo tidak boleh kosong!'),
     nama_promo: y.string().required('Nama promo tidak boleh kosong!'),
+    kode_voucher: y.string().required('Kode promo tidak boleh kosong!'),
+    jumlah_potongan_persen: y.string().required('Diskon promo tidak boleh kosong!').test('is-number', 'Diskon promo harus berupa angka', (value) => {
+        return !isNaN(value);
+    }),
+    status_aktif: y.string().required('Status promo harus diisi!'),
 });
 
-const inputFieldStyle = {
-    width: '100%',
-    backgroundColor: '#fff',
-}
+const statusOptions = [
+    { value: false, label:'tidak aktif'},
+    { value: true, label:'aktif'},
+]
 
 export const EditPromo = ({id}) => {
     const [ promo, setPromo ] = useState(null);
@@ -43,34 +50,99 @@ export const EditPromo = ({id}) => {
     };
 
     useEffect(() => {
-        reset({...promo})
+        const formattedDate = formatDate(promo?.tanggal_kadaluarsa, 'YYYY-MM-DD');
+    
+        reset({
+          ...promo,
+          tanggal_kadaluarsa: formattedDate,
+        });
     }, [reset, promo]);
+
+    const handleCancel = () => {
+        console.log('back to promo page');
+    }
+
 
     return (
         <div className="mt-8 overflow-hidden rounded-lg bg-white shadow p-10">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <div className="lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0">
-                    <div className="lg:w-1/2">
-                        <InputField
-                            isRequired
-                            style={inputFieldStyle}
-                            placeholder="Masukkan judul promo"
-                            label="Judul Promo"
-                            autoComplete="off"
-                            registration={register('title')}
-                            error={errors.title}
-                        />
-                    </div>
+            <form onSubmit={handleSubmit(onSubmit)} id='editPromo' className="space-y-4">
+                <div className="grid grid-rows-4 grid-flow-col gap-4">
+                    {/* Judul Promo */}
+                    <InputField
+                        isRequired
+                        placeholder="Masukkan judul promo"
+                        label="Judul Promo"
+                        autoComplete="off"
+                        registration={register('title')}
+                        error={errors.title}
+                    />
 
-                    <div className="lg:w-1/2">
-                        <InputField
-                            isRequired
-                            placeholder="Masukkan nama promo"
-                            label="Nama Promo"
-                            autoComplete="off"
-                            registration={register('nama_promo')}
-                            error={errors.nama_promo}
-                        />
+                    {/* Kode Promo */}
+                    <InputField
+                        isRequired
+                        placeholder="Masukkan kode promo"
+                        label="Kode Promo"
+                        autoComplete="off"
+                        registration={register('kode_voucher')}
+                        error={errors.kode_voucher}
+                    />
+
+                    {/* Diskon Promo */}
+                    <InputField
+                        isRequired
+                        placeholder="Masukkan diskon promo"
+                        label="Diskon (Masukkan Angka)"
+                        autoComplete="off"
+                        registration={register('jumlah_potongan_persen')}
+                        error={errors.jumlah_potongan_persen}
+                    />
+
+                    {/* Status */}
+                    <DropdownField
+                        isRequired
+                        label='Status'
+                        options={statusOptions}
+                        registration={register('status_aktif')}
+                        error={errors.status_aktif}
+                    />
+
+                    {/* Deskripsi */}
+                    {/* Peraturan */}
+                    {/* Gambar Promo */}
+
+                    {/* Nama Promo */}
+                    <InputField
+                        isRequired
+                        placeholder="Masukkan nama promo"
+                        label="Nama Promo"
+                        autoComplete="off"
+                        registration={register('nama_promo')}
+                        error={errors.nama_promo}
+                    />
+
+                    {/* Tanggal Kadaluarsa */}
+                    <InputField
+                        type="date"
+                        isRequired
+                        placeholder="Pilih tanggal"
+                        label="Tanggal Kadaluarsa"
+                        autoComplete="off"
+                        registration={register('tanggal_kadaluarsa')}
+                        error={errors.tanggal_kadaluarsa}
+                    />
+                </div>
+                <div className="grid grid-rows-1 justify-items-end">
+                    <div>
+                        <Button 
+                            type='button'
+                            className="mr-2 rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-600 ring-offset-white transition-colors hover:bg-slate-100 hover:text-slate-900"
+                            onClick = {() => handleCancel()}
+                            >
+                            Batal
+                        </Button>
+                        <Button form='editPromo' type='submit'>
+                            Simpan
+                        </Button>
                     </div>
                 </div>
             </form>
