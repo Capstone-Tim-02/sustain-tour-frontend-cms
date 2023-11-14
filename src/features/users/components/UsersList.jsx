@@ -5,12 +5,15 @@ import { SearchIcon } from 'lucide-react';
 import { Spinner } from '@/components/Elements';
 import { DataTable } from '@/components/Elements/Table';
 import { InputField } from '@/components/Forms';
+import { useDebounce } from '@/hooks/useDebounce';
 import { fetchGetUsers, selectUsers, toggleFetchLatestUsers } from '@/stores/features/UsersSlice';
 
 import { columns } from './UsersColumn';
 
 export const UsersList = () => {
   const [searchText, setSearchText] = useState('');
+  const debounceSearchFilter = useDebounce(searchText, 600);
+
   const users = useSelector(selectUsers);
 
   const dispatch = useDispatch();
@@ -24,8 +27,10 @@ export const UsersList = () => {
   }, [dispatch, users.shouldFetchLatestUsers]);
 
   useEffect(() => {
-    dispatch(fetchGetUsers(searchText));
-  }, [searchText, dispatch]);
+    if (debounceSearchFilter) {
+      dispatch(fetchGetUsers(debounceSearchFilter));
+    }
+  }, [dispatch, debounceSearchFilter]);
 
   return (
     <>
