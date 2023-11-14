@@ -27,9 +27,7 @@ export const UsersList = () => {
   }, [dispatch, users.shouldFetchLatestUsers]);
 
   useEffect(() => {
-    if (debounceSearchFilter) {
-      dispatch(fetchGetUsers(debounceSearchFilter));
-    }
+    dispatch(fetchGetUsers(debounceSearchFilter));
   }, [dispatch, debounceSearchFilter]);
 
   return (
