@@ -4,7 +4,7 @@ import { SearchIcon } from 'lucide-react';
 
 import { Spinner } from '@/components/Elements';
 import { DataTable } from '@/components/Elements/Table';
-import { InputField } from '@/components/Forms';
+import { InputSearchField } from '@/components/Forms';
 import { useDebounce } from '@/hooks/useDebounce';
 import { fetchGetUsers, selectUsers, toggleFetchLatestUsers } from '@/stores/features/UsersSlice';
 
@@ -34,7 +34,7 @@ export const UsersList = () => {
     <>
       {/* Search */}
       <div className="sm:flex sm:gap-x-2">
-        <InputField
+        <InputSearchField
           type="text"
           id="search"
           autoComplete="off"

@@ -39,8 +39,8 @@ export const InputField = ({
       <input
         type={type}
         className={clsx(
-          error && 'focus:!border-error-500 focus:!ring-error-500',
-          'mt-1.5 w-full rounded-lg border border-gray-300 placeholder-gray-400 shadow-sm placeholder:text-sm focus:border-primary-100 focus:outline-none focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:mt-0 sm:text-sm',
+          error && 'focus:!border-0 focus:bg-white focus:!ring-redDestimate-100',
+          'bg-dashboardDestimate-300 border-dashboardDestimate-300 mt-1.5 w-full rounded-lg border placeholder-gray-400 shadow-sm placeholder:text-sm focus:border-primary-100 focus:outline-none focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:mt-0 sm:text-sm',
           type !== 'file' && 'py-2.5',
           startIcon && 'pl-11',
           endIcon && 'pr-9',
