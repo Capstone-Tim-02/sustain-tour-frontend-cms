@@ -1,6 +1,7 @@
 import {
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
@@ -14,12 +15,17 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-export const DataTable = ({ columns, data }) => {
+export const DataTable = ({ columns, data, searchText, setSearchText }) => {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      globalFilter: searchText,
+    },
+    onGlobalFilterChange: setSearchText,
   });
 
   return (
@@ -34,9 +40,7 @@ export const DataTable = ({ columns, data }) => {
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead key={header.id} className="px-7">
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
+                    {flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 );
               })}
