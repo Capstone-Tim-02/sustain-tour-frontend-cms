@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as y from 'yup';
 
 import { APIPromo } from "@/apis/APIPromo";
-import { DropdownField, InputField, TextareaField } from "@/components/Forms";
+import { DropdownField, InputField, TextEditorField, TextareaField } from "@/components/Forms";
 import { Button } from "@/components/ui/button";
 import { Spinner } from '@/components/Elements';
 import { formatDate } from "@/utils/format";
@@ -19,6 +19,7 @@ const schema = y.object({
         }),
     status_aktif: y.string().required('Status promo harus diisi!'),
     deskripsi: y.string().required("Deskripsi promo tidak boleh kosong!"),
+    peraturan: y.string().required('Peraturan promo tidak boleh kosong!'),
 });
 
 const statusOptions = [
@@ -42,6 +43,7 @@ export const EditPromo = ({id}) => {
         register,
         handleSubmit,
         reset,
+        control,
         formState: { errors },
     } = useForm({ resolver: yupResolver(schema)});
 
@@ -74,14 +76,11 @@ export const EditPromo = ({id}) => {
 
     return (
         <div className="mt-8 overflow-hidden rounded-lg bg-white shadow p-10">
-            <form onSubmit={handleSubmit(onSubmit)} id='editPromo' 
-            className="space-y-5"
-            >
+            <form onSubmit={handleSubmit(onSubmit)} id='editPromo' className="space-y-5">
                 <div className="flex flex-col md:flex-row gap-4">
-                    <div className="flex flex-col md:flex-grow gap-4">
+                    <div className="flex flex-col md:max-w-[50%] md:flex-grow gap-4">
                         {/* Judul Promo */}
                         <InputField
-                            isRequired
                             placeholder="Masukkan judul promo"
                             label="Judul Promo"
                             autoComplete="off"
@@ -91,7 +90,6 @@ export const EditPromo = ({id}) => {
 
                         {/* Kode Promo */}
                         <InputField
-                            isRequired
                             placeholder="Masukkan kode promo"
                             label="Kode Promo"
                             autoComplete="off"
@@ -101,7 +99,6 @@ export const EditPromo = ({id}) => {
 
                         {/* Diskon Promo */}
                         <InputField
-                            isRequired
                             placeholder="Masukkan diskon promo"
                             label="Diskon (Masukkan Angka)"
                             autoComplete="off"
@@ -111,7 +108,6 @@ export const EditPromo = ({id}) => {
 
                         {/* Status */}
                         <DropdownField
-                            isRequired
                             label='Status'
                             options={statusOptions}
                             registration={register('status_aktif')}
@@ -120,7 +116,6 @@ export const EditPromo = ({id}) => {
 
                         {/* Deskripsi */}
                         <TextareaField
-                            isRequired
                             label='Deskripsi'
                             placeholder='Masukkan deskripsi promo'
                             autoComplete="off"
@@ -130,7 +125,14 @@ export const EditPromo = ({id}) => {
                         />
 
                         {/* Peraturan */}
-
+                        <TextEditorField
+                            textareaName="peraturan"
+                            label="Peraturan"
+                            control={control}
+                            registration={register('peraturan')}
+                            error={errors.peraturan}
+                        />
+                        
                         {/* Gambar Promo */}
 
                     </div>
@@ -138,7 +140,6 @@ export const EditPromo = ({id}) => {
                     <div className="flex flex-col md:flex-grow gap-4">
                         {/* Nama Promo */}
                         <InputField
-                            isRequired
                             placeholder="Masukkan nama promo"
                             label="Nama Promo"
                             autoComplete="off"
@@ -149,7 +150,6 @@ export const EditPromo = ({id}) => {
                         {/* Tanggal Kadaluarsa */}
                         <InputField
                             type="date"
-                            isRequired
                             placeholder="Pilih tanggal"
                             label="Tanggal Kadaluarsa"
                             autoComplete="off"

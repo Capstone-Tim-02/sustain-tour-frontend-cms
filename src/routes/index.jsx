@@ -17,6 +17,9 @@ export const AppRoutes = () => {
         <Route path="/" element={<Navigate to="/overview" replace />} />
         <Route path="/overview" element={<Dashboard />} />
         <Route path="/pengguna" element={<Users />} />
+        <Route path='/promo/edit/:id' element={<EditPromoRoute/>}/>
+        <Route path="/syarat_dan_ketentuan" element={<Tnc />} />
+        <Route path="/syarat_dan_ketentuan/:tncId" element={<EditTncRoute />} />
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="*" element={<NotFound />} />

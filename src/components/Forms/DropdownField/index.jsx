@@ -3,10 +3,6 @@ import { AlertCircleIcon } from 'lucide-react';
 
 import { FieldWrapper } from '../FieldWrapper';
 
-const types = {
-  file: 'cursor-pointer py-0 file:rounded-l-lg file:border file:border-solid file:border-gray-200 file:py-2.5 file:text-sm file:focus:border-primary-100',
-};
-
 export const DropdownField = ({
   label,
   id,
@@ -53,7 +49,6 @@ export const DropdownField = ({
                 <option 
                     key={option.value} 
                     value={option.value}
-                    className='placeholder-gray-400'
                 >
                     {option.label}
                 </option>
