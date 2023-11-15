@@ -5,14 +5,12 @@ import { SearchIcon } from 'lucide-react';
 import { Spinner } from '@/components/Elements';
 import { DataTable } from '@/components/Elements/Table';
 import { InputSearchField } from '@/components/Forms';
-import { useDebounce } from '@/hooks/useDebounce';
 import { fetchGetUsers, selectUsers, toggleFetchLatestUsers } from '@/stores/features/UsersSlice';
 
 import { columns } from './UsersColumn';
 
 export const UsersList = () => {
   const [searchText, setSearchText] = useState('');
-  const debounceSearchFilter = useDebounce(searchText, 600);
 
   const users = useSelector(selectUsers);
 
@@ -26,10 +24,6 @@ export const UsersList = () => {
     dispatch(fetchGetUsers());
   }, [dispatch, users.shouldFetchLatestUsers]);
 
-  useEffect(() => {
-    dispatch(fetchGetUsers(debounceSearchFilter));
-  }, [dispatch, debounceSearchFilter]);
-
   return (
     <>
       {/* Search */}
@@ -41,6 +35,7 @@ export const UsersList = () => {
           placeholder="Cari"
           startIcon={<SearchIcon className="h-4 w-4 text-gray-400" />}
           onChange={(e) => setSearchText(e.target.value)}
+          value={searchText}
         />
       </div>
 
@@ -51,7 +46,14 @@ export const UsersList = () => {
         </div>
       )}
 
-      {users?.status === 'succeeded' && <DataTable columns={columns} data={users?.data} />}
+      {users?.status === 'succeeded' && (
+        <DataTable
+          columns={columns}
+          data={users?.data}
+          searchText={searchText}
+          setSearchText={setSearchText}
+        />
+      )}
     </>
   );
 };

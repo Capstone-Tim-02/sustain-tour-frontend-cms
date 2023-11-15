@@ -3,9 +3,9 @@ import { toast } from 'react-toastify';
 import { axiosInstance } from '@/configs/axiosInstance';
 
 export const APIUsers = {
-  getUsers: async (search = '') => {
+  getUsers: async () => {
     try {
-      const result = await axiosInstance.get(`/admin/user?name=${search}`);
+      const result = await axiosInstance.get(`/admin/user`);
       return result.data.users;
     } catch (error) {
       console.error(error);
