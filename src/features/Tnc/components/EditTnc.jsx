@@ -13,7 +13,7 @@ const schema = y.object({
   tnc_name: y.string().required('Judul tidak boleh kosong!'),
   description: y
     .string()
-    .max(100000, 'Description must be less than 100000 characters')
+    .max(100000, 'Deskripsi tidak boleh lebih dari 100000 karakter')
     .required('Deskripsi tidak boleh kosong!'),
 });
 
