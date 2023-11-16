@@ -8,6 +8,7 @@ import { EditTncRoute } from '@/features/Tnc/routes/EditTncRoute';
 import { Users } from '@/features/users/routes';
 
 import { PrivateRoute } from './private';
+import { ProtectedRoute } from './protected';
 
 export const AppRoutes = () => {
   return (
@@ -19,7 +20,9 @@ export const AppRoutes = () => {
         <Route path="/syarat_dan_ketentuan" element={<Tnc />} />
         <Route path="/syarat_dan_ketentuan/:tncId" element={<EditTncRoute />} />
       </Route>
-      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<ProtectedRoute />}>
+        <Route path="/login" element={<Login />} />
+      </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
