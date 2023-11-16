@@ -26,13 +26,21 @@ const schema = y.object({
     .string()
     .required('Username tidak boleh kosong!')
     .min(5, 'Minimal 5 karakter untuk username'),
-  email: y.string().email('Email tidak valid').required('Email tidak boleh kosong!'),
+  email: y.string().email('Masukkan format email yang benar').required('Email tidak boleh kosong!'),
   phone_number: y
     .string()
-    .test('is-number', 'No. Telepon harus berupa angka', (value) => {
+    .test('is-number', 'Masukkan format nomor telepon yang benar', (value) => {
       // return true if value is a number
       return !isNaN(value);
     })
+    .test(
+      'valid-phone-number',
+      'No. Telepon tidak perlu menggunakan +62, 62, atau 0 didepan.',
+      (value) => {
+        return !value.startsWith('+62') && !value.startsWith('62') && !value.startsWith('0');
+      }
+    )
+    .matches(/^\d{10,12}$/, 'No.Telepon harus terdiri dari 10-12 digit angka')
     .required('No. Telepon tidak boleh kosong!'),
 });
 
@@ -90,9 +98,8 @@ export const EditUser = ({ id }) => {
         <DialogHeader>
           <DialogTitle className="mb-4 text-primary-100">Edit Pengguna</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)} id="editUser" className="space-y-3">
+        <form onSubmit={handleSubmit(onSubmit)} id="editUser" className="space-y-4">
           <InputField
-            isRequired
             placeholder="Masukkan username"
             label="Username"
             autoComplete="off"
@@ -100,7 +107,6 @@ export const EditUser = ({ id }) => {
             error={errors.username}
           />
           <InputField
-            isRequired
             placeholder="Masukkan nama"
             label="Nama"
             autoComplete="off"
@@ -108,7 +114,6 @@ export const EditUser = ({ id }) => {
             error={errors.name}
           />
           <InputField
-            isRequired
             type="email"
             placeholder="Masukkan email"
             label="Email"
@@ -118,7 +123,6 @@ export const EditUser = ({ id }) => {
           />
           <InputField
             startIcon={<span className="text-gray-500">+62</span>}
-            isRequired
             label="No. Telepon"
             type="tel"
             placeholder="cth : 81234382067"
