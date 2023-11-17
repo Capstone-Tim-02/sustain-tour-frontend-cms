@@ -56,7 +56,7 @@ export const columns = [
     accessorKey: 'created_at',
     cell: ({ row }) => {
       const created_at = row.original.created_at;
-      return created_at ? formatDate(created_at, 'MMMM D, YYYY HH:mm:ss') : '-';
+      return created_at ? formatDate(created_at, 'D MMMM YYYY') : '-';
     },
   },
   {

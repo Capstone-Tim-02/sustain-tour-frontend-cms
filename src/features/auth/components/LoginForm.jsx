@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as y from 'yup';
 
@@ -11,8 +10,11 @@ import { InputField } from '@/components/Forms';
 import { Button } from '@/components/ui/button';
 
 const schema = y.object({
-  username: y.string().required('Username harus diisi'),
-  password: y.string().required('Kata Sandi harus diisi').min(6, 'Kata Sandi minimal 6 karakter'),
+  username: y.string().required('Username tidak boleh kosong!'),
+  password: y
+    .string()
+    .required('Kata Sandi tidak boleh kosong!')
+    .min(6, 'Kata Sandi minimal 6 karakter'),
 });
 
 export const LoginForm = () => {
@@ -32,10 +34,9 @@ export const LoginForm = () => {
     try {
       setIsLoading(true);
       await APIAuth.signInWithCredentials(data);
-      toast.success('Berhasil masuk!');
       navigate('/');
     } catch (error) {
-      toast.error('Gagal masuk. username dan password tidak valid!');
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -52,7 +53,6 @@ export const LoginForm = () => {
       <div className="mt-6">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <InputField
-            isRequired
             type="text"
             label="Username"
             placeholder="Masukkan username"
@@ -60,7 +60,6 @@ export const LoginForm = () => {
             error={errors.username}
           />
           <InputField
-            isRequired
             type="password"
             label="Kata Sandi"
             id="password"

@@ -60,9 +60,8 @@ export const EditTnc = ({ onSuccess }) => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} id="editTnc" className="space-y-3">
+      <form onSubmit={handleSubmit(onSubmit)} id="editTnc" className="space-y-4">
         <InputField
-          isRequired
           placeholder="Masukkan judul"
           label="Judul"
           autoComplete="off"
@@ -71,7 +70,6 @@ export const EditTnc = ({ onSuccess }) => {
         />
 
         <TextEditorField
-          isRequired
           textareaName="description"
           placeholder="Masukkan Deskripsi"
           label="Deskripsi"
