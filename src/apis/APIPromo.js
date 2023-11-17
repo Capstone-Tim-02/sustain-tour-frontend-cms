@@ -3,15 +3,10 @@ import { toast } from 'react-toastify';
 import { axiosInstance } from '@/configs/axiosInstance';
 
 export const APIPromo = {
-    editPromo: async (id, data) => {
-        try {
-            const formData = new FormData();
-
-            Object.entries(data).forEach(([key, value]) => {
-                formData.append(key, key === 'status_aktif' ? value === 'true' : value);
-            });
-            
+    editPromo: async (id, formData) => {
+        try {            
             const result = await axiosInstance.put(`/admin/promo/${id}`, formData);
+            console.log('data result API: ', result.data.promo_data);
             toast.success(result.data.message);
         } catch (error) {
             toast.error(error.response.data.message);

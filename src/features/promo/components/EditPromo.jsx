@@ -4,9 +4,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as y from 'yup';
 
 import { APIPromo } from "@/apis/APIPromo";
-import { DropdownField, InputField, TextEditorField, TextareaField } from "@/components/Forms";
-import { Button } from "@/components/ui/button";
 import { Spinner } from '@/components/Elements';
+import { DropdownField, InputField, TextareaField, TextEditorField, UploadImagePromo } from "@/components/Forms";
+import { Button } from "@/components/ui/button";
 import { formatDate } from "@/utils/format";
 
 const schema = y.object({
@@ -20,16 +20,20 @@ const schema = y.object({
     status_aktif: y.string().required('Status promo harus diisi!'),
     deskripsi: y.string().required("Deskripsi promo tidak boleh kosong!"),
     peraturan: y.string().required('Peraturan promo tidak boleh kosong!'),
+    image_voucher: y.string().required('Gambar tidak boleh kosong!'),
 });
 
 const statusOptions = [
     { value: false, label:'tidak aktif'},
     { value: true, label:'aktif'},
-]
+];
+
+
 
 export const EditPromo = ({id}) => {
     const [ promo, setPromo ] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const formData = new FormData();
 
 
     useEffect(() => {
@@ -44,13 +48,18 @@ export const EditPromo = ({id}) => {
         handleSubmit,
         reset,
         control,
+        setValue,
         formState: { errors },
     } = useForm({ resolver: yupResolver(schema)});
 
     const onSubmit = async (data) => {
         try {
+            Object.entries(data).forEach(([key, value]) => {
+                formData.append(key, key === 'status_aktif' ? value === 'true' : value);
+            });
+
             setIsLoading(true);
-            await APIPromo.editPromo(id, data);
+            await APIPromo.editPromo(id, formData);
             // back to promo page
         } catch (error) {
             console.log(error);
@@ -71,6 +80,27 @@ export const EditPromo = ({id}) => {
 
     const handleCancel = () => {
         console.log('back to promo page');
+    }
+
+    const handleImageChange = (info) => {
+        if (info.file.status === 'done') {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setValue('image_voucher', e.target.result);
+            };
+            reader.readAsDataURL(info.file.originFileObj);
+            formData.append('image_voucher', info.file.originFileObj);
+        } 
+    }
+
+    const handleCustomRequest = ({ file, onSuccess, onError }) => {
+        const isValid = file.type.startsWith('image/');
+        if (isValid) {
+            setValue('image_voucher', file);
+            onSuccess();
+        } else {
+            onError();
+        }
     }
 
 
@@ -134,7 +164,15 @@ export const EditPromo = ({id}) => {
                         />
                         
                         {/* Gambar Promo */}
-
+                        <UploadImagePromo
+                            control={control}
+                            customRequest={handleCustomRequest}
+                            setValue={setValue}
+                            name='image_voucher'
+                            label='Gambar Promo (1920 x 1080)'
+                            error={errors.image_voucher}
+                            onChange={handleImageChange}
+                        />
                     </div>
 
                     <div className="flex flex-col md:flex-grow gap-4">

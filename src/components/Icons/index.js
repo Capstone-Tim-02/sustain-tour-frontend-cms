@@ -5,4 +5,5 @@ export * from './PaperIcon';
 export * from './RouteIcon';
 export * from './TicketIcon';
 export * from './TrashIcon';
+export * from './UploadIcon';
 export * from './UsersIcon';
