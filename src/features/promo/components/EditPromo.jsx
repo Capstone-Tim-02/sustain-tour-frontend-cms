@@ -5,8 +5,7 @@ import * as y from 'yup';
 
 import { APIPromo } from "@/apis/APIPromo";
 import { Spinner } from '@/components/Elements';
-import { DropdownField, InputField, TextEditorField, UploadImagePromo } from "@/components/Forms";
-// import { TextareaField } from "@/components/Forms";
+import { DropdownField, InputField, TextAreaField, TextEditorField, UploadImagePromo } from "@/components/Forms";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/utils/format";
 
@@ -19,7 +18,7 @@ const schema = y.object({
             return !isNaN(value);
         }),
     status_aktif: y.string().required('Status promo harus diisi!'),
-    // deskripsi: y.string().required("Deskripsi promo tidak boleh kosong!"),
+    deskripsi: y.string().required("Deskripsi promo tidak boleh kosong!"),
     peraturan: y.string().required('Peraturan promo tidak boleh kosong!'),
     image_voucher: y.string().required('Gambar tidak boleh kosong!'),
 });
@@ -146,14 +145,14 @@ export const EditPromo = ({id}) => {
                         />
 
                         {/* Deskripsi */}
-                        {/* <TextareaField
+                        <TextAreaField
                             label='Deskripsi'
                             placeholder='Masukkan deskripsi promo'
                             autoComplete="off"
                             registration={register('deskripsi')}
                             error={errors.deskripsi}
                             className='row-span-2'
-                        /> */}
+                        />
 
                         {/* Peraturan */}
                         <TextEditorField
