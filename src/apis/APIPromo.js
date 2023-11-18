@@ -4,9 +4,8 @@ import { axiosInstance } from '@/configs/axiosInstance';
 
 export const APIPromo = {
     editPromo: async (id, formData) => {
-        try {            
+        try {               
             const result = await axiosInstance.put(`/admin/promo/${id}`, formData);
-            console.log('data result API: ', result.data.promo_data);
             toast.success(result.data.message);
         } catch (error) {
             toast.error(error.response.data.message);

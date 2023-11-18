@@ -10,7 +10,7 @@ const { Dragger } = Upload;
 export const UploadImagePromo = ({
     id,
     control,
-    name,
+    uploadName,
     label,
     error,
     isHorizontal,
@@ -20,7 +20,7 @@ export const UploadImagePromo = ({
 }) => {
     return (
         <Controller
-            name={name}
+            name={uploadName}
             control={control}
             render={({ field }) => (
                 <FieldWrapper
@@ -31,7 +31,7 @@ export const UploadImagePromo = ({
                 >
                     <Dragger
                         {...field}
-                        name={name}
+                        name={uploadName}
                         multiple={false}
                         showUploadList={false}
                         onChange={(info) => {
@@ -40,22 +40,35 @@ export const UploadImagePromo = ({
                         customRequest={(file, onSuccess, onError)=>{customRequest(file,onSuccess,onError)}}
                         {...props}
                     >
-                        {field.value && typeof field.value === 'string'  ? (
+                        {!error && field.value && typeof field.value === 'string'  && (
                             <img src={field.value} alt="Preview" style={{ marginTop: '10px' }} />
-                        )
-                            : (
+                        )}
+
+                        {!error && !field.value && (
                                 <>
                                     <p className="grid ant-upload-drag-icon justify-items-center">
                                         <UploadIcon />
                                     </p>
                                     <p className="ant-upload-text">Tidak ada file yang dipilih</p>
                                     <p className="ant-upload-hint">
-                                        Maksimal ukuran file: 2GB <br/>
                                         Format pendukung: JPEG, PNG, GIF
                                     </p>
                                 </>
-                            )
-                        }
+                        )}
+
+                        {error && (
+                            <>
+                                <p className="grid ant-upload-drag-icon justify-items-center">
+                                <UploadIcon />
+                                </p>
+                                <p className="ant-upload-text">Format file tidak sesuai</p>
+                                <p className="ant-upload-hint">
+                                    Maksimal ukuran file: 2GB <br/>
+                                    Format pendukung: JPEG, PNG, GIF
+                                </p>
+                            </>
+                        )}
+
                     </Dragger>
                 </FieldWrapper>
             )}
