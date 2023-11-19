@@ -6,6 +6,7 @@ import { NotFound } from '@/features/notFound/routes';
 import { Promo } from '@/features/promo/routes';
 import { Tnc } from '@/features/Tnc';
 import { EditTncRoute } from '@/features/Tnc/routes/EditTncRoute';
+import { Transactions } from '@/features/transactions/routes';
 import { Users } from '@/features/users/routes';
 
 import { PrivateRoute } from './private';
@@ -19,6 +20,7 @@ export const AppRoutes = () => {
         <Route path="/overview" element={<Dashboard />} />
         <Route path="/pengguna" element={<Users />} />
         <Route path="/promo" element={<Promo />} />
+        <Route path="/transaksi" element={<Transactions />} />
         <Route path="/syarat_dan_ketentuan" element={<Tnc />} />
         <Route path="/syarat_dan_ketentuan/:tncId" element={<EditTncRoute />} />
       </Route>
