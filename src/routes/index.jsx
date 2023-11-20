@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Login } from '@/features/auth/routes';
+import { Category } from '@/features/categories';
 import { Dashboard } from '@/features/dashboard/routes';
 import { NotFound } from '@/features/notFound/routes';
 import { Tnc } from '@/features/Tnc';
@@ -14,6 +15,7 @@ export const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<PrivateRoute />}>
         <Route path="/" element={<Navigate to="/overview" replace />} />
+        <Route path="/kategori" element={<Category />} />
         <Route path="/overview" element={<Dashboard />} />
         <Route path="/pengguna" element={<Users />} />
         <Route path="/syarat_dan_ketentuan" element={<Tnc />} />
