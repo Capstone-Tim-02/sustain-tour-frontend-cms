@@ -3,8 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { Login } from '@/features/auth/routes';
 import { Dashboard } from '@/features/dashboard/routes';
 import { NotFound } from '@/features/notFound/routes';
-import { EditPromoRoute } from '@/features/promo';
-import { Promo } from '@/features/promo/routes';
+import { EditPromoRoute, PromoRoute } from '@/features/promo';
 import { Tnc } from '@/features/Tnc';
 import { EditTncRoute } from '@/features/Tnc/routes/EditTncRoute';
 import { Transactions } from '@/features/transactions/routes';
@@ -21,7 +20,7 @@ export const AppRoutes = () => {
         <Route path="/overview" element={<Dashboard />} />
         <Route path="/pengguna" element={<Users />} />
         <Route path='/promo/edit/:id' element={<EditPromoRoute/>}/>
-        <Route path="/promo" element={<Promo />} />
+        <Route path="/promo" element={<PromoRoute />} />
         <Route path="/transaksi" element={<Transactions />} />
         <Route path="/syarat_dan_ketentuan" element={<Tnc />} />
         <Route path="/syarat_dan_ketentuan/:tncId" element={<EditTncRoute />} />

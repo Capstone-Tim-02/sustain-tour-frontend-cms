@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as y from 'yup';
 
@@ -21,7 +21,9 @@ const schema = y.object({
     status_aktif: y.string().required('Status promo harus diisi!'),
     deskripsi: y.string().required("Deskripsi promo tidak boleh kosong!"),
     peraturan: y.string().required('Peraturan promo tidak boleh kosong!'),
-    image_voucher: y.mixed().required('Gambar tidak boleh kosong!'),
+    image_voucher: y
+        .mixed()
+        .required('Gambar tidak boleh kosong!'),
 });
 
 const statusOptions = [
@@ -31,9 +33,11 @@ const statusOptions = [
 
 export const EditPromo = ({id}) => {
     const [ promo, setPromo ] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [selectedImage, setSelectedImage] = useState(null);
+    const [ isLoading, setIsLoading ] = useState(false);
+    const [ selectedImage, setSelectedImage ] = useState(null);
+
     const formData = new FormData();
+    const navigate = useNavigate();
 
     const {
         register,
@@ -64,41 +68,33 @@ export const EditPromo = ({id}) => {
 
     const onSubmit = async (data) => {
         try {
-            if(Object.keys(errors).length === 0) {
-                if (selectedImage) {
-                    formData.append('image_voucher', selectedImage);
-                }
-    
-                Object.entries(data).forEach(([key, value]) => {
-                    if (key !== 'image_voucher') {
-                        formData.append(key, key === 'status_aktif' ? value === 'true' : value);
-                    }
-                });
-    
-                setIsLoading(true);
-                await APIPromo.editPromo(id, formData);
-                // back to promo page
-            } else {
-                toast.error('Terdapat field yang tidak valid!');
+            if (selectedImage) {
+                formData.append('image_voucher', selectedImage);
             }
-            
+
+            Object.entries(data).forEach(([key, value]) => {
+                if (key !== 'image_voucher') {
+                    formData.append(key, key === 'status_aktif' ? value === 'true' : value);
+                }
+            });
+
+            setIsLoading(true);
+            await APIPromo.editPromo(id, formData);
+            navigate('/promo');
         } catch (error) {
-            console.log(error);
             setIsLoading(false);
         } finally {
             setIsLoading(false);
-        }
+        }        
     };
 
     const handleImageChange = (info) => {
-        if (info.file.status === 'done') {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                setValue('image_voucher', e.target.result);
-                setSelectedImage(info.file.originFileObj);
-            };
-            reader.readAsDataURL(info.file.originFileObj);
-        } 
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            setValue('image_voucher', e.target.result);
+            setSelectedImage(info.file.originFileObj);
+        };
+        reader.readAsDataURL(info.file.originFileObj);
     }
 
     const handleCustomRequest = async ({ file, onSuccess, onError }) => {
@@ -127,14 +123,14 @@ export const EditPromo = ({id}) => {
         } else {
             setError('image_voucher', {
                 type:'manual',
-                message: 'Format file tidak sesuai.'
+                message: 'Format foto tidak sesuai, mohon hapus dan kirim foto dengan format yang benar.'
             })
             onError();
         }
     }
 
     const handleCancel = () => {
-        console.log('back to promo page');
+        navigate('/promo')
     }
 
     return (

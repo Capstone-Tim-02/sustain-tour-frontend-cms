@@ -4,7 +4,7 @@ import { ContentLayout } from '@/components/Layouts';
 import { PromoList } from '../components/PromoList';
 
 
-export const Promo = () => {
+export const PromoRoute = () => {
   return (
     <ContentLayout title="Promo">
       <div className="justify-between sm:flex">
