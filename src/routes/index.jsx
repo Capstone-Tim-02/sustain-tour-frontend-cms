@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Login } from '@/features/auth/routes';
-import { Dashboard } from '@/features/dashboard/routes';
+import { Dashboard } from '@/features/Dashboard/routes';
 import { NotFound } from '@/features/notFound/routes';
 import { Tnc } from '@/features/Tnc';
 import { EditTncRoute } from '@/features/Tnc/routes/EditTncRoute';
