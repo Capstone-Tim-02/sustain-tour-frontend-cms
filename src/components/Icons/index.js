@@ -1,5 +1,6 @@
 export * from './CategoryIcon';
 export * from './CoinIcon';
+export * from './DetailIcon';
 export * from './EditIcon';
 export * from './PaperIcon';
 export * from './RouteIcon';

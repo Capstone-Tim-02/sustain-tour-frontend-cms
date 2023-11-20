@@ -48,7 +48,7 @@ export const EditPromo = ({id}) => {
 
     useEffect(() => {
         async function fetchPromo() {
-            setPromo(await APIPromo.getPromo(id));
+            setPromo(await APIPromo.getPromoById(id));
         }
         fetchPromo();
     }, [id]);
