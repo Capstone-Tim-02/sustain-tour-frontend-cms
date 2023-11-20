@@ -1,14 +1,6 @@
 import clsx from 'clsx';
 
-export const FieldWrapper = ({
-  isHorizontal,
-  label,
-  id,
-  className,
-  error,
-  children,
-  isRequired,
-}) => {
+export const FieldWrapper = ({ isHorizontal, label, id, className, error, children }) => {
   if (isHorizontal) {
     return (
       <div className="space-y-6 sm:space-y-5">
@@ -16,24 +8,18 @@ export const FieldWrapper = ({
           {label && (
             <label
               className={clsx(
-                'text-dashboardDestimate-400 text-sm font-medium sm:grid sm:items-center sm:justify-items-start',
+                'text-sm font-medium text-dashboardDestimate-400 sm:grid sm:items-center sm:justify-items-start',
                 error && '-mt-6',
                 className
               )}
               htmlFor={id}
             >
-              <span
-                className={clsx(
-                  isRequired && 'after:ml-0.5 after:text-[#FC5555] after:content-["*"]'
-                )}
-              >
-                {label}
-              </span>
+              {label}
             </label>
           )}
 
           <div className="mt-1 sm:col-span-2 sm:mt-0 lg:col-span-4">
-            <div className="!text-blackDestimate-100 relative">{children}</div>
+            <div className="relative !text-blackDestimate-100">{children}</div>
             {error?.message && (
               <div
                 role="alert"
@@ -52,15 +38,11 @@ export const FieldWrapper = ({
   return (
     <div>
       <label
-        className={clsx('text-dashboardDestimate-400 block text-sm font-medium', className)}
+        className={clsx('block text-sm font-medium text-dashboardDestimate-400', className)}
         htmlFor={id}
       >
-        <span
-          className={clsx(isRequired && 'after:ml-0.5 after:text-[#FC5555] after:content-["*"]')}
-        >
-          {label}
-        </span>
-        <div className="!text-blackDestimate-100 relative mt-2">{children}</div>
+        {label}
+        <div className="relative !text-blackDestimate-100">{children}</div>
       </label>
 
       {error?.message && (

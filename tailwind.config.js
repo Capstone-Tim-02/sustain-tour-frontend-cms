@@ -2,20 +2,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ['class'],
-  content: [
-    './pages/**/*.{js,jsx}',
-    './components/**/*.{js,jsx}',
-    './app/**/*.{js,jsx}',
-    './src/**/*.{js,jsx}',
-  ],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
-    container: {
-      center: true,
-      padding: '2rem',
-      screens: {
-        '2xl': '1400px',
-      },
-    },
     extend: {
       fontFamily: {
         heading: ['Poppins', 'sans-serif'],
@@ -33,6 +21,7 @@ module.exports = {
         redDestimate: {
           50: '#ED6E6E',
           100: '#E10E0E',
+          200: '#FC5555',
         },
         greenDestimate: {
           100: '#36B734',
@@ -42,6 +31,7 @@ module.exports = {
           200: '#EEEFF8',
           300: '#F0F0F0',
           400: '#515151',
+          500: '#C6C6C6',
         },
         primary: {
           10: '#C3CEF6',

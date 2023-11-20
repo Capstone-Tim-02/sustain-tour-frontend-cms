@@ -2,13 +2,16 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Login } from '@/features/auth/routes';
 import { Category } from '@/features/categories';
-import { Dashboard } from '@/features/dashboard/routes';
+import { Dashboard } from '@/features/Dashboard/routes';
 import { NotFound } from '@/features/notFound/routes';
+import { Promo } from '@/features/promo/routes';
 import { Tnc } from '@/features/Tnc';
 import { EditTncRoute } from '@/features/Tnc/routes/EditTncRoute';
+import { Transactions } from '@/features/transactions/routes';
 import { Users } from '@/features/users/routes';
 
 import { PrivateRoute } from './private';
+import { ProtectedRoute } from './protected';
 
 export const AppRoutes = () => {
   return (
@@ -18,10 +21,14 @@ export const AppRoutes = () => {
         <Route path="/kategori" element={<Category />} />
         <Route path="/overview" element={<Dashboard />} />
         <Route path="/pengguna" element={<Users />} />
+        <Route path="/promo" element={<Promo />} />
+        <Route path="/transaksi" element={<Transactions />} />
         <Route path="/syarat_dan_ketentuan" element={<Tnc />} />
         <Route path="/syarat_dan_ketentuan/:tncId" element={<EditTncRoute />} />
       </Route>
-      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<ProtectedRoute />}>
+        <Route path="/login" element={<Login />} />
+      </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

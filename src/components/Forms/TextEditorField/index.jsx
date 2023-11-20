@@ -8,7 +8,6 @@ export const TextEditorField = ({
   label,
   id,
   error,
-  isRequired,
   isHorizontal,
   isHorizontalStart,
   initialValue,
@@ -29,7 +28,6 @@ export const TextEditorField = ({
           label={label}
           id={id}
           error={error}
-          isRequired={isRequired}
         >
           <Editor
             {...field}

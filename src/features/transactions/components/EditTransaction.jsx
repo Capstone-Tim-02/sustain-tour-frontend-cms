@@ -5,9 +5,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { DialogClose } from '@radix-ui/react-dialog';
 import * as y from 'yup';
 
-import { APIUsers } from '@/apis/APIUsers';
+import { APITransactions } from '@/apis/APITransactions';
 import { Spinner } from '@/components/Elements';
 import { InputField } from '@/components/Forms';
+import { DropdownField } from '@/components/Forms/DropdownField';
 import { EditIcon } from '@/components/Icons';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,48 +19,33 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { toggleFetchLatestUsers } from '@/stores/features/UsersSlice';
+import { toggleFetchLatestTransactions } from '@/stores/features/TransactionsSlice';
+import { formatDate } from '@/utils/format';
 
 const schema = y.object({
-  name: y.string().required('Nama tidak boleh kosong!').min(3, 'Minimal 3 karakter untuk nama'),
-  username: y
-    .string()
-    .required('Username tidak boleh kosong!')
-    .min(5, 'Minimal 5 karakter untuk username'),
-  email: y.string().email('Masukkan format email yang benar').required('Email tidak boleh kosong!'),
-  phone_number: y
-    .string()
-    .test('is-number', 'Masukkan format nomor telepon yang benar', (value) => {
-      // return true if value is a number
-      return !isNaN(value);
-    })
-    .test(
-      'valid-phone-number',
-      'No. Telepon tidak perlu menggunakan +62, 62, atau 0 didepan.',
-      (value) => {
-        return !value.startsWith('+62') && !value.startsWith('62') && !value.startsWith('0');
-      }
-    )
-    .matches(/^\d{10,12}$/, 'No.Telepon harus terdiri dari 10-12 digit angka')
-    .required('No. Telepon tidak boleh kosong!'),
+  paid_status: y.boolean().required('Status pembayaran harus diisi!'),
 });
 
-export const EditUser = ({ id }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [detailUser, setDetailUser] = useState(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+const statusOptions = [
+  { value: false, label: 'Belum Bayar' },
+  { value: true, label: 'Sudah Bayar' },
+];
 
+export const EditTransaction = ({ invoiceId }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [detailTransaction, setDetailTransaction] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    async function fetchUser() {
-      setDetailUser(await APIUsers.getUser(id));
+    async function fetchTransaction() {
+      setDetailTransaction(await APITransactions.getTransaction(invoiceId));
     }
 
     if (isDialogOpen) {
-      fetchUser();
+      fetchTransaction();
     }
-  }, [id, isDialogOpen]);
+  }, [invoiceId, isDialogOpen]);
 
   const {
     register,
@@ -71,8 +57,8 @@ export const EditUser = ({ id }) => {
   const onSubmit = async (data) => {
     try {
       setIsLoading(true);
-      await APIUsers.updateUser(id, data);
-      dispatch(toggleFetchLatestUsers());
+      await APITransactions.updateTransaction(invoiceId, data);
+      dispatch(toggleFetchLatestTransactions());
     } catch (error) {
       setIsLoading(false);
       console.error(error);
@@ -83,11 +69,15 @@ export const EditUser = ({ id }) => {
 
   useEffect(() => {
     if (isDialogOpen) {
+      const formattedCreatedAt = formatDate(detailTransaction?.created_at, 'YYYY-MM-DD');
+      const formattedCheckinBooking = formatDate(detailTransaction?.check_in_booking, 'YYYY-MM-DD');
       reset({
-        ...detailUser,
+        ...detailTransaction,
+        created_at: formattedCreatedAt,
+        check_in_booking: formattedCheckinBooking,
       });
     }
-  }, [reset, detailUser, isDialogOpen]);
+  }, [reset, detailTransaction, isDialogOpen]);
 
   return (
     <Dialog>
@@ -96,39 +86,44 @@ export const EditUser = ({ id }) => {
       </DialogTrigger>
       <DialogContent onClick={() => setIsDialogOpen(!isDialogOpen)} className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="mb-4 text-primary-100">Edit Pengguna</DialogTitle>
+          <DialogTitle className="mb-4 text-primary-100">Edit Transaksi</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)} id="editUser" className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} id="editTransaction" className="space-y-4">
           <InputField
-            placeholder="Masukkan username"
-            label="Username"
+            disabled
+            placeholder="Invoice Number"
+            label="Invoice Number"
             autoComplete="off"
-            registration={register('username')}
-            error={errors.username}
+            registration={register('invoice_number')}
           />
           <InputField
-            placeholder="Masukkan nama"
-            label="Nama"
+            disabled
+            placeholder="Kode Promo"
+            label="Kode Promo"
             autoComplete="off"
-            registration={register('name')}
-            error={errors.name}
+            registration={register('kode_voucher')}
           />
           <InputField
-            type="email"
-            placeholder="Masukkan email"
-            label="Email"
+            disabled
+            type="date"
+            placeholder="Tanggal Pembelian"
+            label="Tanggal Pembelian"
             autoComplete="off"
-            registration={register('email')}
-            error={errors.email}
+            registration={register('created_at')}
           />
           <InputField
-            startIcon={<span className="text-gray-500">+62</span>}
-            label="No. Telepon"
-            type="tel"
-            placeholder="cth : 81234382067"
+            disabled
+            type="date"
+            placeholder="Tanggal Penggunaan"
+            label="Tanggal Penggunaan"
             autoComplete="off"
-            registration={register('phone_number')}
-            error={errors.phone_number}
+            registration={register('check_in_booking')}
+          />
+          <DropdownField
+            label="Status"
+            options={statusOptions}
+            registration={register('paid_status')}
+            error={errors.paid_status}
           />
         </form>
         <DialogFooter>
@@ -138,7 +133,7 @@ export const EditUser = ({ id }) => {
           >
             <span>Batal</span>
           </DialogClose>
-          <Button disabled={isLoading} form="editUser" type="submit">
+          <Button disabled={isLoading} form="editTransaction" type="submit">
             {isLoading && <Spinner size="sm" className="mr-3" />} Simpan
           </Button>
         </DialogFooter>
