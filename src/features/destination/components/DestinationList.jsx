@@ -1,17 +1,33 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SearchIcon } from 'lucide-react';
+import { PlusIcon, SearchIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/Elements';
 import { DataTable } from '@/components/Elements/Table';
 import { InputSearchField } from '@/components/Forms';
-import { fetchGetUsers, selectUsers, toggleFetchLatestUsers } from '@/stores/features/UsersSlice';
+import {
+  fetchGetDestinations,
+  selectDestinations,
+  toggleFetchLatestDestinations,
+} from '@/stores/features/DestinationSlice';
 
-// import { columns } from './DestinationColumn';
+import { columns } from './DestinationColumn';
+import { Link } from 'react-router-dom';
 
 export const DestinationList = () => {
   const [searchText, setSearchText] = useState('');
+
+  const destinations = useSelector(selectDestinations);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (destinations?.shouldFetchLatestDestinations) {
+      dispatch(fetchGetDestinations());
+      dispatch(toggleFetchLatestDestinations());
+    }
+    dispatch(fetchGetDestinations());
+  }, [dispatch, destinations.shouldFetchLatestDestinations]);
 
   return (
     <>
@@ -22,7 +38,7 @@ export const DestinationList = () => {
             type="text"
             id="search"
             autoComplete="off"
-            placeholder="Cari"
+            placeholder="Search"
             startIcon={<SearchIcon className="h-4 w-4 text-gray-400" />}
             onChange={(e) => setSearchText(e.target.value)}
             value={searchText}
@@ -30,12 +46,31 @@ export const DestinationList = () => {
         </div>
 
         {/* Add Destination Button */}
-        <div className="mr-6">
+        <Link to={''}>
           <Button variant="default" size="default">
-            Tambah Destinasi +
+            Tambah Destinasi
+            <span className="ml-1">
+              <PlusIcon size={20} />
+            </span>
           </Button>
-        </div>
+        </Link>
       </div>
+
+      {/* Table */}
+      {destinations?.status === 'loading' && (
+        <div className="flex h-96 items-center justify-center">
+          <Spinner size="lg" className="mx-auto mt-10" />
+        </div>
+      )}
+
+      {destinations?.status === 'succeeded' && (
+        <DataTable
+          columns={columns}
+          data={destinations?.data}
+          searchText={searchText}
+          setSearchText={setSearchText}
+        />
+      )}
     </>
   );
 };

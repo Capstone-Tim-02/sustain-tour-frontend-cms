@@ -4,7 +4,7 @@ import { DestinationList } from '../components/DestinationList';
 
 export const Destination = () => {
   return (
-    <ContentLayout title="Pengguna">
+    <ContentLayout title="Destinasi">
       <div className="justify-between sm:flex">
         <Breadcrumb>
           <span className="px-2 text-sm font-semibold text-primary-100">Destinasi</span>
