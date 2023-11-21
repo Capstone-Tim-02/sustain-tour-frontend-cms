@@ -37,9 +37,12 @@ export const UploadImagePromo = ({
                         {...field}
                         name={uploadName}
                         multiple={false}
-                        showUploadList={false}
+                        showUploadList={{
+                            showRemoveIcon: true,
+                        }}
                         onChange={(info) => {
-                            onChange(info)
+                            onChange(info);
+                            console.log(info.file.status);
                             if(info.file.status === 'done') {
                                 setIsError(false);
                             } else if(info.file.status === 'error'){
@@ -48,7 +51,8 @@ export const UploadImagePromo = ({
                             }
                         }}
                         customRequest={(file, onSuccess, onError)=>{
-                            customRequest(file, onSuccess, onError)}}
+                            customRequest(file, onSuccess, onError);
+                        }}
                         {...props}
                     >
                         {!isError && field.value && typeof field.value === 'string'  && (
@@ -56,15 +60,15 @@ export const UploadImagePromo = ({
                         )}
 
                         {!isError && !field.value && (
-                                <>
-                                    <p className="ant-upload-text">Tidak ada file yang dipilih</p>
-                                    <p className="grid ant-upload-drag-icon justify-items-center">
-                                        <UploadIcon />
-                                    </p>
-                                    <p className="ant-upload-hint">
-                                        Format pendukung: JPEG, PNG, GIF
-                                    </p>
-                                </>
+                            <>
+                                <p className="ant-upload-text">Tidak ada file yang dipilih</p>
+                                <p className="grid ant-upload-drag-icon justify-items-center">
+                                    <UploadIcon />
+                                </p>
+                                <p className="ant-upload-hint">
+                                    Format pendukung: JPEG, PNG, GIF
+                                </p>
+                            </>
                         )}
 
                         {isError && (

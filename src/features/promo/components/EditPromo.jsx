@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as y from 'yup';
 
@@ -21,9 +22,9 @@ const schema = y.object({
     status_aktif: y.string().required('Status promo harus diisi!'),
     deskripsi: y.string().required("Deskripsi promo tidak boleh kosong!"),
     peraturan: y.string().required('Peraturan promo tidak boleh kosong!'),
-    image_voucher: y
-        .mixed()
-        .required('Gambar tidak boleh kosong!'),
+    // image_voucher: y
+    //     .mixed()
+    //     .required('Gambar tidak boleh kosong!'),
 });
 
 const statusOptions = [
@@ -70,6 +71,8 @@ export const EditPromo = ({id}) => {
         try {
             if (selectedImage) {
                 formData.append('image_voucher', selectedImage);
+            } else {
+                throw new Error('Tidak ada gambar yang dimasukkan');
             }
 
             Object.entries(data).forEach(([key, value]) => {
@@ -82,6 +85,7 @@ export const EditPromo = ({id}) => {
             await APIPromo.editPromo(id, formData);
             navigate('/promo');
         } catch (error) {
+            toast.error(error);
             setIsLoading(false);
         } finally {
             setIsLoading(false);
@@ -89,12 +93,19 @@ export const EditPromo = ({id}) => {
     };
 
     const handleImageChange = (info) => {
+        
         const reader = new FileReader();
-        reader.onload = (e) => {
-            setValue('image_voucher', e.target.result);
-            setSelectedImage(info.file.originFileObj);
-        };
-        reader.readAsDataURL(info.file.originFileObj);
+
+        if (info.file.status === 'removed') {
+            setValue('image_voucher', null);
+            setSelectedImage(null);
+        } else {
+            reader.onload = (e) => {
+                setValue('image_voucher', e.target.result);
+                setSelectedImage(info.file.originFileObj);
+            };
+            reader.readAsDataURL(info.file.originFileObj);
+        }
     }
 
     const handleCustomRequest = async ({ file, onSuccess, onError }) => {
