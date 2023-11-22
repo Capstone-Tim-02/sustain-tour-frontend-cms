@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Login } from '@/features/auth';
 import { Category } from '@/features/categories';
+import { Destination } from '@/features/destination';
 import { Dashboard } from '@/features/Dashboard';
 import { NotFound } from '@/features/notFound';
 import { Promo } from '@/features/promo';
@@ -19,6 +20,7 @@ export const AppRoutes = () => {
         <Route path="/" element={<Navigate to="/overview" replace />} />
         <Route path="/overview" element={<Dashboard />} />
         <Route path="/pengguna" element={<Users />} />
+        <Route path="/destinasi" element={<Destination />} />
         <Route path="/kategori" element={<Category />} />
         <Route path="/promo" element={<Promo />} />
         <Route path="/transaksi" element={<Transactions />} />
