@@ -8,7 +8,7 @@ export const SidebarNavigation = () => {
   return (
     <>
       {/* Static sidebar for desktop */}
-      <div className="-ml-72 flex w-[281px] shrink-0 flex-col border border-gray-200 bg-white shadow-lg lg:static lg:-ml-0">
+      <div className="-ml-[280px] flex w-[281px] shrink-0 flex-col border border-gray-200 bg-white shadow-lg lg:static lg:-ml-0">
         {/* Logo */}
         <div className="flex shrink-0 items-center border-r border-gray-200 bg-white pb-5 pl-5 pt-6">
           <Logo>

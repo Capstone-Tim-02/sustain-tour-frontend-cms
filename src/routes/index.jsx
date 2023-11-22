@@ -1,12 +1,14 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { Login } from '@/features/auth/routes';
-import { Dashboard } from '@/features/dashboard/routes';
-import { NotFound } from '@/features/notFound/routes';
-import { Tnc } from '@/features/Tnc';
+import { Login } from '@/features/auth';
+import { Category } from '@/features/categories';
 import { Destination } from '@/features/destination';
-import { EditTncRoute } from '@/features/Tnc/routes/EditTncRoute';
-import { Users } from '@/features/users/routes';
+import { Dashboard } from '@/features/Dashboard';
+import { NotFound } from '@/features/notFound';
+import { Promo } from '@/features/promo';
+import { EditTncRoute, Tnc } from '@/features/Tnc';
+import { Transactions } from '@/features/transactions';
+import { Users } from '@/features/users';
 
 import { PrivateRoute } from './private';
 import { ProtectedRoute } from './protected';
@@ -19,6 +21,9 @@ export const AppRoutes = () => {
         <Route path="/overview" element={<Dashboard />} />
         <Route path="/pengguna" element={<Users />} />
         <Route path="/destinasi" element={<Destination />} />
+        <Route path="/kategori" element={<Category />} />
+        <Route path="/promo" element={<Promo />} />
+        <Route path="/transaksi" element={<Transactions />} />
         <Route path="/syarat_dan_ketentuan" element={<Tnc />} />
         <Route path="/syarat_dan_ketentuan/:tncId" element={<EditTncRoute />} />
       </Route>

@@ -1,3 +1,5 @@
+export * from './ArrowDownLeftIcon';
+export * from './ArrowUpRightIcon';
 export * from './CategoryIcon';
 export * from './CoinIcon';
 export * from './DetailIcon';
@@ -5,5 +7,7 @@ export * from './EditIcon';
 export * from './PaperIcon';
 export * from './RouteIcon';
 export * from './TicketIcon';
+export * from './TotalUserIcon';
 export * from './TrashIcon';
+export * from './UserIcon';
 export * from './UsersIcon';

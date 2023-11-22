@@ -21,12 +21,14 @@ import {
 import { toggleFetchLatestUsers } from '@/stores/features/UsersSlice';
 
 const schema = y.object({
-  name: y.string().required('Nama tidak boleh kosong!').min(3, 'Minimal 3 karakter untuk nama'),
+  name: y.string().required('Nama tidak boleh kosong').min(3, 'Minimal 3 karakter untuk nama'),
   username: y
     .string()
-    .required('Username tidak boleh kosong!')
-    .min(5, 'Minimal 5 karakter untuk username'),
-  email: y.string().email('Masukkan format email yang benar').required('Email tidak boleh kosong!'),
+    .required('Username tidak boleh kosong')
+    .min(5, 'Minimal 5 karakter untuk username')
+    .max(20, 'Maksimal 20 karakter untuk username')
+    .matches(/^[a-zA-Z0-9_]+$/, 'Username hanya boleh terdiri dari a-z, A-Z, 0-9, dan _'),
+  email: y.string().email('Masukkan format email yang benar').required('Email tidak boleh kosong'),
   phone_number: y
     .string()
     .test('is-number', 'Masukkan format nomor telepon yang benar', (value) => {
@@ -41,7 +43,7 @@ const schema = y.object({
       }
     )
     .matches(/^\d{10,12}$/, 'No.Telepon harus terdiri dari 10-12 digit angka')
-    .required('No. Telepon tidak boleh kosong!'),
+    .required('No. Telepon tidak boleh kosong'),
 });
 
 export const EditUser = ({ id }) => {
@@ -90,7 +92,7 @@ export const EditUser = ({ id }) => {
   }, [reset, detailUser, isDialogOpen]);
 
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger onClick={() => setIsDialogOpen(!isDialogOpen)}>
         <EditIcon className="h-5 w-5 stroke-2 text-primary-100 hover:cursor-pointer hover:text-primary-100/70" />
       </DialogTrigger>

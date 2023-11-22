@@ -45,6 +45,10 @@ export const columns = [
   {
     header: 'No. Telepon',
     accessorKey: 'phone_number',
+    cell: ({ row }) => {
+      const phone_number = row.original.phone_number;
+      return phone_number ? '+62' + phone_number : '-';
+    },
   },
   {
     header: 'Tanggal Dibuat',

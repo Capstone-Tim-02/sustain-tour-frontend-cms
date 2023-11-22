@@ -1,9 +1,11 @@
 import { default as dayjs } from 'dayjs';
 
-// DATE FORMAT
-export const formatDate = (date, format) => dayjs(date).format(format);
+import 'dayjs/locale/id';
 
-// RUPIAH FORMAT
+// DATE FORMAT exp: 2021-01-01 => 30 November 2023
+export const formatDate = (date, format) => dayjs.locale('id') && dayjs(date).format(format);
+
+// RUPIAH FORMAT exp: 1000 => Rp. 1.000
 export const convertToRupiah = (number) => {
   let rupiah = '';
   let numberRev = number.toString().split('').reverse().join('');
@@ -15,4 +17,16 @@ export const convertToRupiah = (number) => {
       .reverse()
       .join('')
   );
+};
+
+// NUMBER TO THOUSAND exp: 1000 => 1.000
+export const convertNumberToThousand = (number) => {
+  let formattedNumber = number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return formattedNumber;
+};
+
+// SPLIT DATA EMISSION. exp: 1000.00 => 1000
+export const splitEmission = (number) => {
+  let splitNumber = number?.toString().split('.')[0];
+  return splitNumber;
 };
