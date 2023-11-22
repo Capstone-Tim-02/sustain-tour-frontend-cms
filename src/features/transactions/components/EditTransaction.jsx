@@ -20,10 +20,10 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { toggleFetchLatestTransactions } from '@/stores/features/TransactionsSlice';
-import { formatDate } from '@/utils/format';
+import { convertToRupiah, formatDate } from '@/utils/format';
 
 const schema = y.object({
-  paid_status: y.boolean().required('Status pembayaran harus diisi!'),
+  paid_status: y.boolean().required('Status pembayaran harus diisi'),
 });
 
 const statusOptions = [
@@ -69,32 +69,60 @@ export const EditTransaction = ({ invoiceId }) => {
 
   useEffect(() => {
     if (isDialogOpen) {
-      const formattedCreatedAt = formatDate(detailTransaction?.created_at, 'YYYY-MM-DD');
-      const formattedCheckinBooking = formatDate(detailTransaction?.check_in_booking, 'YYYY-MM-DD');
+      const formattedCreatedAt = formatDate(detailTransaction?.created_at, 'D MMMM YYYY');
+      const formattedCheckinBooking = formatDate(
+        detailTransaction?.check_in_booking,
+        'D MMMM YYYY'
+      );
       reset({
         ...detailTransaction,
         created_at: formattedCreatedAt,
         check_in_booking: formattedCheckinBooking,
+        total_cost: convertToRupiah(detailTransaction?.total_cost || 0),
       });
     }
   }, [reset, detailTransaction, isDialogOpen]);
 
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger onClick={() => setIsDialogOpen(!isDialogOpen)}>
         <EditIcon className="h-5 w-5 stroke-2 text-primary-100 hover:cursor-pointer hover:text-primary-100/70" />
       </DialogTrigger>
-      <DialogContent onClick={() => setIsDialogOpen(!isDialogOpen)} className="sm:max-w-[425px]">
+      <DialogContent
+        onClick={() => setIsDialogOpen(!isDialogOpen)}
+        className="h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-primary-20 scrollbar-thumb-rounded-full sm:max-w-[425px]"
+      >
         <DialogHeader>
           <DialogTitle className="mb-4 text-primary-100">Edit Transaksi</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} id="editTransaction" className="space-y-4">
           <InputField
             disabled
-            placeholder="Invoice Number"
-            label="Invoice Number"
+            placeholder="ID Order"
+            label="ID Order"
             autoComplete="off"
             registration={register('invoice_number')}
+          />
+          <InputField
+            disabled
+            placeholder="Nama Pengguna"
+            label="Nama Pengguna"
+            autoComplete="off"
+            registration={register('name')}
+          />
+          <InputField
+            disabled
+            placeholder="Destinasi"
+            label="Destinasi"
+            autoComplete="off"
+            registration={register('wisata_title')}
+          />
+          <InputField
+            disabled
+            placeholder="Harga Tiket"
+            label="Harga Tiket"
+            autoComplete="off"
+            registration={register('total_cost')}
           />
           <InputField
             disabled
@@ -105,7 +133,6 @@ export const EditTransaction = ({ invoiceId }) => {
           />
           <InputField
             disabled
-            type="date"
             placeholder="Tanggal Pembelian"
             label="Tanggal Pembelian"
             autoComplete="off"
@@ -113,29 +140,36 @@ export const EditTransaction = ({ invoiceId }) => {
           />
           <InputField
             disabled
-            type="date"
             placeholder="Tanggal Penggunaan"
             label="Tanggal Penggunaan"
             autoComplete="off"
             registration={register('check_in_booking')}
           />
-          <DropdownField
-            label="Status"
-            options={statusOptions}
-            registration={register('paid_status')}
-            error={errors.paid_status}
-          />
+
+          {(detailTransaction?.status_order === 'pending' ||
+            detailTransaction?.status_order === 'success') && (
+            <DropdownField
+              label="Status"
+              options={statusOptions}
+              registration={register('paid_status')}
+              error={errors.paid_status}
+            />
+          )}
         </form>
         <DialogFooter>
           <DialogClose
             onClick={() => setIsDialogOpen(!isDialogOpen)}
             className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-600 ring-offset-white transition-colors hover:bg-slate-100 hover:text-slate-900"
           >
-            <span>Batal</span>
+            Batal
           </DialogClose>
-          <Button disabled={isLoading} form="editTransaction" type="submit">
-            {isLoading && <Spinner size="sm" className="mr-3" />} Simpan
-          </Button>
+
+          {(detailTransaction?.status_order === 'pending' ||
+            detailTransaction?.status_order === 'success') && (
+            <Button disabled={isLoading} form="editTransaction" type="submit">
+              {isLoading && <Spinner size="sm" className="mr-3" />} Simpan
+            </Button>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>

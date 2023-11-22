@@ -1,7 +1,9 @@
 import { default as dayjs } from 'dayjs';
 
+import 'dayjs/locale/id';
+
 // DATE FORMAT exp: 2021-01-01 => 30 November 2023
-export const formatDate = (date, format) => dayjs(date).format(format);
+export const formatDate = (date, format) => dayjs.locale('id') && dayjs(date).format(format);
 
 // RUPIAH FORMAT exp: 1000 => Rp. 1.000
 export const convertToRupiah = (number) => {

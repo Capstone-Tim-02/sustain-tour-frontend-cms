@@ -63,7 +63,7 @@ export const DateRangePickerField = ({ placeholder, id, name, value, onChangeDat
         )}
       </div>
 
-      <div ref={ref} className="absolute left-0 top-12 z-10">
+      <div ref={ref} className="absolute left-0 top-14 z-10 shadow-2xl shadow-gray-400">
         {open && (
           <DateRangePicker
             onChange={(item) => {

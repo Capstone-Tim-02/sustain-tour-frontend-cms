@@ -91,7 +91,7 @@ export const BarChart = ({ data }) => {
 
   return (
     <div className="xl:col-span-6 xl:col-start-1">
-      <div className="w-full rounded-lg bg-white p-[17px] shadow ring-0">
+      <div className="h-full w-full rounded-lg bg-white p-[17px] shadow ring-0">
         <h1 className="mb-4 text-xl font-bold text-primary-100 sm:text-2xl">Pendapatan</h1>
         <div className="font-semibold text-blackDestimate-100">
           <div className="mb-5 flex items-end gap-4">
@@ -105,9 +105,9 @@ export const BarChart = ({ data }) => {
             </div>
           </div>
         </div>
-        <div className="h-auto sm:h-[391px]">
-          <Bar options={options} data={datas} />
-        </div>
+        {/* <div className="h-auto sm:h-[391px]"> */}
+        <Bar options={options} data={datas} />
+        {/* </div> */}
       </div>
     </div>
   );

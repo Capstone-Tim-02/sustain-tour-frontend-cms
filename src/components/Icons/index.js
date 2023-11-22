@@ -10,4 +10,5 @@ export * from './TicketIcon';
 export * from './TotalUserIcon';
 export * from './TrashIcon';
 export * from './UploadIcon';
+export * from './UserIcon';
 export * from './UsersIcon';

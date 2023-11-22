@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 
-import { APITransactions } from '@/apis/APITransactions';
+import { APIDestinations } from '@/apis/APIDestinations';
 import { TrashIcon } from '@/components/Icons';
 import {
   AlertDialog,
@@ -13,14 +13,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { toggleFetchLatestTransactions } from '@/stores/features/TransactionsSlice';
+import { toggleFetchLatestDestinations } from '@/stores/features/DestinationSlice';
 
-export const DeleteTransaction = ({ invoice_number }) => {
+export const DeleteDestination = ({ id }) => {
   const dispatch = useDispatch();
 
-  const handleDeleteTransaction = async (invoice_number) => {
-    await APITransactions.deleteTransaction(invoice_number);
-    dispatch(toggleFetchLatestTransactions());
+  const handleDeleteDestination = async (id) => {
+    await APIDestinations.deleteDestination(id);
+    dispatch(toggleFetchLatestDestinations());
   };
 
   return (
@@ -30,9 +30,9 @@ export const DeleteTransaction = ({ invoice_number }) => {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Hapus Transaksi</AlertDialogTitle>
+          <AlertDialogTitle>Hapus Destinasi</AlertDialogTitle>
           <AlertDialogDescription>
-            Apakah kamu yakin ingin menghapus transaksi ini?
+            Apakah anda yakin ingin menghapus destinasi ini ?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -40,7 +40,7 @@ export const DeleteTransaction = ({ invoice_number }) => {
           <AlertDialogAction
             className="bg-red-500 hover:bg-red-600"
             onClick={async () => {
-              await handleDeleteTransaction(invoice_number);
+              await handleDeleteDestination(id);
             }}
           >
             Hapus
