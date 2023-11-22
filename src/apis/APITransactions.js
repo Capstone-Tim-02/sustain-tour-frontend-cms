@@ -32,15 +32,4 @@ export const APITransactions = {
       throw new Error(error);
     }
   },
-
-  deleteTransaction: async (invoice_number) => {
-    try {
-      const result = await axiosInstance.delete(`/admin/ticket/${invoice_number}`);
-      toast.success(result.data.message);
-    } catch (error) {
-      console.error(error);
-      toast.error(error.response.data.message);
-      throw new Error(error);
-    }
-  },
 };

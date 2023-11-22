@@ -38,9 +38,9 @@ export const ContentLayout = ({ children, title }) => {
           </div>
 
           {/* Content */}
-          <main className="relative flex-1 overflow-y-auto overflow-x-hidden focus:outline-none">
+          <main className="relative flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-primary-20 scrollbar-thumb-rounded-full focus:outline-none">
             <div className="pb-16 pt-6 sm:pt-8">
-              <div className="max-w-full px-4 sm:px-6 md:ml-3 md:px-8">{children}</div>
+              <div className="max-w-full px-4 sm:px-6 md:px-8">{children}</div>
             </div>
           </main>
         </div>

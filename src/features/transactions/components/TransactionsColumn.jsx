@@ -1,15 +1,22 @@
-import { formatDate } from '@/utils/format';
+import { Badge } from '@/components/ui/badge';
+import { convertToRupiah, formatDate } from '@/utils/format';
 
-import { DeleteTransaction } from './DeleteTransaction';
 import { DetailTransaction } from './DetailTransaction';
 import { EditTransaction } from './EditTransaction';
+
+const StatusOrder = ({ status_order }) => {
+  if (status_order === 'success') return <Badge variant="success">{status_order}</Badge>;
+  else if (status_order === 'pending') return <Badge variant="pending">{status_order}</Badge>;
+  else if (status_order === 'dibatalkan')
+    return <Badge variant="destructive">{status_order}</Badge>;
+  else return <Badge variant="secondary">{status_order}</Badge>;
+};
 
 const Action = ({ value }) => {
   return (
     <div className="flex items-center space-x-4">
       <DetailTransaction invoiceNumber={value?.invoice_number} />
       <EditTransaction invoiceId={value?.invoice_number} />
-      <DeleteTransaction invoice_number={value?.invoice_number} />
     </div>
   );
 };
@@ -20,11 +27,27 @@ export const columns = [
     accessorKey: 'invoice_number',
   },
   {
+    header: 'Nama Pengguna',
+    accessorKey: 'user_name',
+  },
+  {
+    header: 'Destinasi',
+    accessorKey: 'wisata_title',
+  },
+  {
+    header: 'Harga Tiket',
+    accessorKey: 'total_cost',
+    cell: ({ row }) => {
+      const total_cost = row.original.total_cost;
+      return total_cost ? convertToRupiah(total_cost) : '-';
+    },
+  },
+  {
     header: 'Tanggal Pembelian',
     accessorKey: 'created_at',
     cell: ({ row }) => {
       const created_at = row.original.created_at;
-      return created_at ? formatDate(created_at, 'MMMM D, YYYY') : '-';
+      return created_at ? formatDate(created_at, 'D MMMM YYYY') : '-';
     },
   },
   {
@@ -32,15 +55,15 @@ export const columns = [
     accessorKey: 'CheckinBooking',
     cell: ({ row }) => {
       const CheckinBooking = row.original.checkin_booking;
-      return CheckinBooking ? formatDate(CheckinBooking, 'MMMM D, YYYY') : '-';
+      return CheckinBooking ? formatDate(CheckinBooking, 'D MMMM YYYY') : '-';
     },
   },
   {
     header: 'Status',
-    accessorKey: 'paid_status',
+    accessorKey: 'status_order',
     cell: ({ row }) => {
-      const paid_status = row.original.paid_status;
-      return paid_status === true ? 'Sudah Bayar' : 'Belum Bayar';
+      const status_order = row.original.status_order;
+      return <StatusOrder status_order={status_order} />;
     },
   },
   {

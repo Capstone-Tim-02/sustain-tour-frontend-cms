@@ -4,7 +4,7 @@ import { ArrowDownLeftIcon, ArrowUpRightIcon, TotalUserIcon } from '@/components
 
 export const Cards = ({ data }) => {
   return (
-    <div className="mb-4 grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-[18px] lg:grid-cols-4">
+    <div className="mb-4 grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-[18px] xl:grid-cols-4">
       {/* Total Pengguna */}
       <div className="h-auto rounded-lg bg-white shadow-md sm:h-[170px]">
         <div className="flex items-center space-x-4 rounded-t-lg bg-[#8D8D8D] px-[17px] py-[13px]">

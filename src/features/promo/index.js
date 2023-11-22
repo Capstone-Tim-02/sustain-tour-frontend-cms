@@ -1,1 +1,1 @@
-import * from './routes';
+export * from './routes';

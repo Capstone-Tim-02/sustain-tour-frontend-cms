@@ -10,10 +10,13 @@ import { InputField } from '@/components/Forms';
 import { Button } from '@/components/ui/button';
 
 const schema = y.object({
-  username: y.string().required('Username tidak boleh kosong!'),
+  username: y
+    .string()
+    .required('Username tidak boleh kosong')
+    .matches(/^[a-zA-Z0-9_]+$/, 'Username hanya boleh terdiri dari huruf, angka, dan underscore'),
   password: y
     .string()
-    .required('Kata Sandi tidak boleh kosong!')
+    .required('Kata Sandi tidak boleh kosong')
     .min(6, 'Kata Sandi minimal 6 karakter'),
 });
 

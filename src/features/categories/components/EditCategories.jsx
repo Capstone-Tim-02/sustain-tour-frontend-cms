@@ -23,7 +23,7 @@ import { toggleFetchLatestCategories } from '@/stores/features/CategoriesSlice';
 const schema = y.object({
   category_name: y
     .string()
-    .required('Nama Kategori tidak boleh kosong!')
+    .required('Nama Kategori tidak boleh kosong')
     .min(3, 'Minimal 3 karakter untuk nama'),
 });
 
@@ -72,7 +72,7 @@ export const EditCategory = ({ category_name }) => {
   }, [reset, detailCategory, isDialogOpen]);
 
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger onClick={() => setIsDialogOpen(!isDialogOpen)}>
         <EditIcon className="h-5 w-5 stroke-2 text-primary-100 hover:cursor-pointer hover:text-primary-100/70" />
       </DialogTrigger>

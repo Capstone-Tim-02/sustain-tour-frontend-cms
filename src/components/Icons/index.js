@@ -9,4 +9,5 @@ export * from './RouteIcon';
 export * from './TicketIcon';
 export * from './TotalUserIcon';
 export * from './TrashIcon';
+export * from './UserIcon';
 export * from './UsersIcon';

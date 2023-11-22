@@ -23,13 +23,14 @@ import { toggleFetchLatestCategories } from '@/stores/features/CategoriesSlice';
 const schema = y.object({
   category_name: y
     .string()
-    .required('Nama Kategori tidak boleh kosong!')
+    .required('Nama Kategori tidak boleh kosong')
     .min(3, 'Minimal 3 karakter untuk nama'),
 });
 
-export const AddCategory = () => {
+export const AddCategories = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const dispatch = useDispatch();
 
   const {
@@ -44,6 +45,7 @@ export const AddCategory = () => {
       setIsLoading(true);
       await APICategories.postCategory(data);
       dispatch(toggleFetchLatestCategories());
+      setIsDialogOpen(false);
     } catch (error) {
       setIsLoading(false);
       console.error(error);
@@ -53,18 +55,16 @@ export const AddCategory = () => {
   };
 
   useEffect(() => {
-    if (isDialogOpen) {
-      reset();
-    }
+    if (isDialogOpen) reset();
   }, [reset, isDialogOpen]);
 
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger onClick={() => setIsDialogOpen(!isDialogOpen)}>
-        <Button className="w-full gap-2 sm:w-auto">
+        <div className="flex h-10 w-full items-center justify-center gap-2 gap-x-2 rounded-md bg-primary-80 px-4 py-2 text-sm font-medium text-white hover:bg-primary-80/90 sm:w-auto">
           Tambah Kategori
-          <PlusIcon className="mr-2 h-4 w-4 bg-primary-80" />
-        </Button>
+          <PlusIcon className="h-4 w-4" />
+        </div>
       </DialogTrigger>
       <DialogContent onClick={() => setIsDialogOpen(!isDialogOpen)} className="sm:max-w-[425px]">
         <DialogHeader>
@@ -86,12 +86,7 @@ export const AddCategory = () => {
           >
             <span>Batal</span>
           </DialogClose>
-          <Button
-            disabled={isLoading}
-            form="addCategory"
-            type="submit"
-            onClick={() => setIsDialogOpen(false)}
-          >
+          <Button disabled={isLoading} form="addCategory" type="submit">
             {isLoading && <Spinner size="sm" className="mr-3" />} Tambah Kategori
           </Button>
         </DialogFooter>
