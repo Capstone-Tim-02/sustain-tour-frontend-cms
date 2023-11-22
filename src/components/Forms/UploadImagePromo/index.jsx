@@ -35,14 +35,15 @@ export const UploadImagePromo = ({
                 >
                     <Dragger
                         {...field}
+                        listType="picture"
                         name={uploadName}
                         multiple={false}
                         showUploadList={{
                             showRemoveIcon: true,
                         }}
-                        onChange={(info) => {
+                        onChange={(info, event) => {
+                            event.stopPropagation();
                             onChange(info);
-                            console.log(info.file.status);
                             if(info.file.status === 'done') {
                                 setIsError(false);
                             } else if(info.file.status === 'error'){

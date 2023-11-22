@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 
 import { Breadcrumb } from "@/components/Elements"
 import { ContentLayout } from "@/components/Layouts"
@@ -12,7 +12,9 @@ export const EditPromoRoute =  () => {
             <ContentLayout title='Edit Promo'>
                 <div className="justify-between sm:flex">
                     <Breadcrumb>
-                        <span className="px-2 text-sm font-semibold text-primary-100">Promo</span>
+                        <Link to='/promo'>
+                            <span className="px-2 text-sm font-semibold text-primary-100">Promo</span>
+                        </Link>
                         <span className="px-2 text-sm font-semibold text-primary-100">Edit Promo</span>
                     </Breadcrumb>
                 </div>

@@ -3,13 +3,20 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Upload } from 'antd';
 import * as y from 'yup';
 
 import { APIPromo } from "@/apis/APIPromo";
+import NoPicture from '@/assets/images/no-picture.png';
 import { Spinner } from '@/components/Elements';
-import { DropdownField, InputField, TextAreaField, TextEditorField, UploadImagePromo } from "@/components/Forms";
+import { DropdownField, InputField, TextAreaField, TextEditorField } from "@/components/Forms";
+import { FieldWrapper } from "@/components/Forms/FieldWrapper";
+import { TrashIcon } from '@/components/Icons';
+import { UploadIcon } from "@/components/Icons";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/utils/format";
+
+const { Dragger } = Upload;
 
 const schema = y.object({
     title: y.string().required('Judul promo tidak boleh kosong!'),
@@ -22,9 +29,17 @@ const schema = y.object({
     status_aktif: y.string().required('Status promo harus diisi!'),
     deskripsi: y.string().required("Deskripsi promo tidak boleh kosong!"),
     peraturan: y.string().required('Peraturan promo tidak boleh kosong!'),
-    // image_voucher: y
-    //     .mixed()
-    //     .required('Gambar tidak boleh kosong!'),
+    image_voucher: y
+        .mixed()
+        .required('Gambar tidak boleh kosong!')
+        .test('fileFormat',
+        'Format file tidak sesuai. Hanya diperbolehkan format JPEG, PNG, atau GIF.',
+        (value) => {
+            if (!value) return true;
+    
+            const allowedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
+            return allowedFormats.includes(value.type);
+        }),
 });
 
 const statusOptions = [
@@ -36,6 +51,7 @@ export const EditPromo = ({id}) => {
     const [ promo, setPromo ] = useState(null);
     const [ isLoading, setIsLoading ] = useState(false);
     const [ selectedImage, setSelectedImage ] = useState(null);
+    const [ errorImage, setErrorImage ] = useState(false);
 
     const formData = new FormData();
     const navigate = useNavigate();
@@ -48,8 +64,11 @@ export const EditPromo = ({id}) => {
         setValue,
         setError,
         clearErrors,
+        getValues,
         formState: { errors },
     } = useForm({ resolver: yupResolver(schema)});
+
+    const imageValue = getValues().image_voucher;
 
     useEffect(() => {
         async function fetchPromo() {
@@ -65,20 +84,13 @@ export const EditPromo = ({id}) => {
           ...promo,
           tanggal_kadaluarsa: formattedDate,
         });
+        setSelectedImage(promo?.image_voucher);
     }, [reset, promo]);
 
     const onSubmit = async (data) => {
         try {
-            if (selectedImage) {
-                formData.append('image_voucher', selectedImage);
-            } else {
-                throw new Error('Tidak ada gambar yang dimasukkan');
-            }
-
             Object.entries(data).forEach(([key, value]) => {
-                if (key !== 'image_voucher') {
-                    formData.append(key, key === 'status_aktif' ? value === 'true' : value);
-                }
+                formData.append(key, key === 'status_aktif' ? value === 'true' : value);
             });
 
             setIsLoading(true);
@@ -92,24 +104,24 @@ export const EditPromo = ({id}) => {
         }        
     };
 
-    const handleImageChange = (info) => {
-        
+    const imageOnChange = (info) => {
         const reader = new FileReader();
-
+        
         if (info.file.status === 'removed') {
             setValue('image_voucher', null);
             setSelectedImage(null);
         } else {
             reader.onload = (e) => {
-                setValue('image_voucher', e.target.result);
-                setSelectedImage(info.file.originFileObj);
-            };
+                setValue('image_voucher', info.file.originFileObj);
+                setSelectedImage(e.target.result);
+            }
             reader.readAsDataURL(info.file.originFileObj);
         }
-    }
+    };
 
-    const handleCustomRequest = async ({ file, onSuccess, onError }) => {
+    const imageCustomRequest = async ({file, onSuccess, onError} ) => {
         const isValid = file.type.startsWith('image/');
+
         if (isValid) {
             try {
                 const imageVoucherSchema = y.object({
@@ -117,27 +129,29 @@ export const EditPromo = ({id}) => {
                 });
 
                 await imageVoucherSchema.validate({ image_voucher: file });
-                setValue('image_voucher', file.originFileObj);
-                setSelectedImage(file.originFileObj);
 
                 clearErrors('image_voucher');
+                setErrorImage(false);
                 onSuccess();
-            } catch (validationError) {
-                const errorMessage = validationError.errors[0];
+            } catch (error) {
+                const errorMessage = error.errors[0];
 
                 setError('image_voucher', {
                     type:'manual',
                     message: errorMessage
                 });
                 onError();
+                setErrorImage(true);
             }
         } else {
-            setError('image_voucher', {
-                type:'manual',
-                message: 'Format foto tidak sesuai, mohon hapus dan kirim foto dengan format yang benar.'
-            })
             onError();
+            setErrorImage(true);
         }
+    };
+
+    const removeImage = () => {
+        setValue('image_voucher', null);
+        setSelectedImage('');
     }
 
     const handleCancel = () => {
@@ -204,15 +218,65 @@ export const EditPromo = ({id}) => {
                         />
                         
                         {/* Gambar Promo */}
-                        <UploadImagePromo
-                            uploadName='image_voucher'
-                            label='Gambar Promo (1920 x 1080)'
-                            control={control}
-                            customRequest={handleCustomRequest}
-                            onChange={handleImageChange}
-                            registration={register('image_voucher')}
+                        <FieldWrapper
+                            isHorizontal={false}
+                            label={"Gambar Promo"}
+                            id={'image_voucher'}
                             error={errors.image_voucher}
-                        />
+                        >
+                            <Dragger
+                                listType="picture"
+                                name="image_voucher"
+                                registration={register('image_voucher')}
+                                multiple={false}
+                                showUploadList={false}
+                                onChange={(info) => { imageOnChange(info) }}
+                                customRequest={(file, onSuccess, onError) => { imageCustomRequest(file, onSuccess, onError)}}
+                            >
+                                {!errorImage && selectedImage && (
+                                    <img src={selectedImage} alt="preview"/>
+                                )}
+
+                                {errorImage && (
+                                    <>
+                                        <p className="ant-upload-text">Format file tidak sesuai</p>
+                                        <p className="grid ant-upload-drag-icon justify-items-center">
+                                            <img src={NoPicture} alt="No Picture"/>
+                                        </p>
+                                        <p className="ant-upload-hint">
+                                            Maksimal ukuran file: 2GB <br/>
+                                            Format pendukung: JPEG, PNG, GIF
+                                        </p>
+                                    </>
+                                )}
+
+                                {!errorImage && !selectedImage && (
+                                    <>
+                                        <p className="ant-upload-text">Tidak ada file yang dipilih</p>
+                                        <p className="grid ant-upload-drag-icon justify-items-center">
+                                            <UploadIcon />
+                                        </p>
+                                        <p className="ant-upload-hint">
+                                            Format pendukung: JPEG, PNG, GIF
+                                        </p>
+                                    </>
+                                )}
+                            </Dragger>
+                        </FieldWrapper>
+                        {imageValue?.name && (
+                            <>
+                                <div className="flex justify-between">
+                                    <div className={`text-sm ${errorImage ? 'text-redDestimate-100':''}`}>
+                                        {imageValue.name}
+                                    </div>
+                                    <div onClick={() => {removeImage()}}>
+                                        <TrashIcon className="h-5 w-5 stroke-2 text-redDestimate-100 hover:cursor-pointer hover:text-redDestimate-100/70" />
+                                    </div>
+
+                                </div>
+                            </>
+                        )}
+
                     </div>
 
                     <div className="flex flex-col md:flex-grow gap-4">
