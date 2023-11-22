@@ -25,6 +25,7 @@ module.exports = {
         },
         greenDestimate: {
           100: '#36B734',
+          200: '#29CC6A',
         },
         dashboardDestimate: {
           100: '#F1F2FF',
