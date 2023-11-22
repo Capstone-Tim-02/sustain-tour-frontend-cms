@@ -42,7 +42,7 @@ export const FieldWrapper = ({ isHorizontal, label, id, className, error, childr
         htmlFor={id}
       >
         {label}
-        <div className="relative !text-blackDestimate-100">{children}</div>
+        <div className="relative mt-2 !text-blackDestimate-100">{children}</div>
       </label>
 
       {error?.message && (

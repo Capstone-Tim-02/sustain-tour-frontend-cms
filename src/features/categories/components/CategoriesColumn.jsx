@@ -3,18 +3,6 @@ import { formatDate } from '@/utils/format';
 import { DeleteCategory } from './DeleteCategories';
 import { EditCategory } from './EditCategories';
 
-const Name = ({ category }) => {
-  return (
-    <div className="flex items-center">
-      <div className="ml-4">
-        <div className="mb-1 text-sm font-semibold text-gray-600">
-          {category?.category_name ? category?.category_name : '-'}
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const Action = ({ value }) => {
   return (
     <div className="flex items-center space-x-4">
@@ -26,12 +14,8 @@ const Action = ({ value }) => {
 
 export const columns = [
   {
-    header: 'Nama Category',
+    header: 'Nama Kategori',
     accessorKey: 'category_name',
-    cell: ({ row }) => {
-      const categories = row.original;
-      return <Name category={categories} />;
-    },
   },
   {
     header: 'Tanggal Dibuat',

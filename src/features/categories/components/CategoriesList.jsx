@@ -11,8 +11,8 @@ import {
   toggleFetchLatestCategories,
 } from '@/stores/features/CategoriesSlice';
 
-import { AddCategory } from './AddCategories';
-import { columns } from './CategoriesColoumn';
+import { AddCategories } from './AddCategories';
+import { columns } from './CategoriesColumn';
 
 export const CategoryLists = () => {
   const [searchText, setSearchText] = useState('');
@@ -36,19 +36,21 @@ export const CategoryLists = () => {
           type="text"
           id="search"
           autoComplete="off"
-          placeholder="Cari data"
+          placeholder="Cari"
           startIcon={<SearchIcon className="h-4 w-4 text-gray-400" />}
           onChange={(e) => setSearchText(e.target.value)}
         />
         {/*Button Add category */}
-        <AddCategory />
+        <AddCategories />
       </div>
+
       {/* Table */}
       {categories?.status === 'loading' && (
         <div className="flex h-96 items-center justify-center">
           <Spinner size="lg" className="mx-auto mt-10" />
         </div>
       )}
+
       {categories?.status === 'succeeded' && (
         <DataTable
           columns={columns}
