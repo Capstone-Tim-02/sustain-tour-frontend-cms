@@ -40,6 +40,7 @@ export const EditTnc = ({ onSuccess }) => {
 
   const onSubmit = async (data) => {
     try {
+      console.log(data);
       setIsLoading(true);
       await APITnc.updateTnc(tncId, data);
       onSuccess();
