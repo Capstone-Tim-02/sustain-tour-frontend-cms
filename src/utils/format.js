@@ -30,3 +30,6 @@ export const splitEmission = (number) => {
   let splitNumber = number?.toString().split('.')[0];
   return splitNumber;
 };
+
+// CONVERT TO POSITIVE NUMBER exp: -1000 => 1000
+export const convertToPositive = (number) => Math.abs(number);
