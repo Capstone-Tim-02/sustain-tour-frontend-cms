@@ -20,9 +20,8 @@ export const DetailDestination = ({ id }) => {
   const [detailDestination, setDetailDestination] = useState(null);
   const fasilitas = detailDestination?.fasilitas;
   const fasilitasParse = fasilitas ? JSON.parse(fasilitas) : null;
-  console.log(fasilitasParse);
   const renderListFasilitas = (fas) => {
-    console.log('fasilitas', fas);
+    
     return Array.isArray(fas)
       ? fas.map((fasilitasItem) => (
           <li key={fasilitasItem} className="flex font-sans text-sm font-normal text-black">
