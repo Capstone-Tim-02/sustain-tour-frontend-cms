@@ -21,36 +21,36 @@ const { Dragger } = Upload;
 const schema = y.object({
   title: y
     .string()
-    .min(5, 'Minimal 5 karakter')
-    .max(100, 'Maksimal 100 karakter')
-    .required('Judul promo tidak boleh kosong'),
+    .required('Judul promo tidak boleh kosong')
+    .min(5, 'Judul promo minimal 5 karakter')
+    .max(100, 'Judul promo maksimal 100 karakter'),
   nama_promo: y
     .string()
-    .min(5, 'Minimal 5 karakter')
-    .max(100, 'Maksimal 100 karakter')
-    .required('Nama promo tidak boleh kosong'),
+    .required('Nama promo tidak boleh kosong')
+    .min(5, 'Nama promo minimal 5 karakter')
+    .max(100, 'Nama promo maksimal 100 karakter'),
   kode_voucher: y
     .string()
-    .min(5, 'Minimal 5 karakter')
-    .max(40, 'Maksimal 40 karakter')
-    .required('Kode promo tidak boleh kosong'),
+    .required('Kode promo tidak boleh kosong')
+    .min(5, 'Kode promo minimal 5 karakter')
+    .max(40, 'Kode promo maksimal 40 karakter'),
   jumlah_potongan_persen: y
     .number()
     .transform((value) => (isNaN(value) ? undefined : value))
-    .min(1, 'Minimum 1%')
-    .max(100, 'Maximum 100%')
-    .required('Diskon promo tidak boleh kosong'),
+    .required('Diskon promo tidak boleh kosong')
+    .min(1, 'Diskon promo minimal 1%')
+    .max(100, 'Diskon promo maximal 100%'),
   status_aktif: y.string().required('Status promo harus diisi'),
   deskripsi: y
-  .string()
-    .min(10, 'Minimal 10 karakter')
-    .max(2000, 'Maksimal 2000 karakter')
-    .required('Deskripsi promo tidak boleh kosong'),
+    .string()
+    .required('Deskripsi promo tidak boleh kosong')
+    .min(10, 'Deskripsi promo minimal 10 karakter')
+    .max(2000, 'Deskripsi promo maksimal 2000 karakter'),
   peraturan: y
-  .string()
-    .min(10, 'Minimal 10 karakter')
-    .max(2000, 'Maksimal 2000 karakter')
-    .required('Peraturan promo tidak boleh kosong'),
+    .string()
+    .required('Peraturan promo tidak boleh kosong')
+    .min(10, 'Peraturan promo minimal 10 karakter')
+    .max(2000, 'Peraturan promo maksimal 2000 karakter'),
   image_voucher: y
     .mixed()
     .required('Gambar tidak boleh kosong')
