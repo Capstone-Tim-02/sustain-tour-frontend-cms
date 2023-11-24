@@ -13,6 +13,16 @@ export const APIDestinations = {
     }
   },
 
+  getDestination: async (id) => {
+    try {
+      const result = await axiosInstance.get(`/wisata/${id}`);
+      return result.data.wisata;
+    } catch (error) {
+      console.error(error);
+      throw new Error(error);
+    }
+  },
+
   deleteDestination: async (id) => {
     try {
       const result = await axiosInstance.delete(`/admin/wisata/${id}`);

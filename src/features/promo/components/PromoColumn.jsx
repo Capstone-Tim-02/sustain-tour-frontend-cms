@@ -1,13 +1,20 @@
 import { Link } from 'react-router-dom';
 
 import { EditIcon } from '@/components/Icons';
+import { Badge } from '@/components/ui/badge';
 import { formatDate } from '@/utils/format';
 
 import { DeletePromo } from './DeletePromo';
 
 const Status = ({ status }) => {
   return (
-    <div className="text-sm font-normal">{status?.status_aktif ? 'Aktif' : 'Tidak Aktif'}</div>
+    <div>
+      {status?.status_aktif ? (
+        <Badge variant="success">Aktif</Badge>
+      ) : (
+        <Badge variant="destructive">Tidak Aktif</Badge>
+      )}
+    </div>
   );
 };
 
@@ -17,7 +24,7 @@ const Action = ({ value }) => {
       <Link to={`/promo/edit/${value?.id}`}>
         <EditIcon className="h-5 w-5 stroke-2 text-primary-100 hover:cursor-pointer hover:text-primary-100/70" />
       </Link>
-      
+
       <DeletePromo id={value?.id} />
     </div>
   );

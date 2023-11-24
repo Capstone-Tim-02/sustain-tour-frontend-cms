@@ -19,7 +19,7 @@ export const Promo = () => {
       <div className="mt-6">
         <div className="mb-8 flex items-center justify-between">
           <div className="sm:flex-auto">
-            <h1 className="text-xl font-semibold text-gray-900 sm:text-3xl">Kelola Data Promo</h1>
+            <h1 className="text-xl font-semibold text-gray-900 sm:text-3xl">Data Promo</h1>
           </div>
         </div>
         <PromoList />

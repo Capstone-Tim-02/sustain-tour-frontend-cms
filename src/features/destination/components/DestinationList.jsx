@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { PlusIcon, SearchIcon } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/Elements';
 import { DataTable } from '@/components/Elements/Table';
 import { InputSearchField } from '@/components/Forms';
+import { Button } from '@/components/ui/button';
 import {
   fetchGetDestinations,
   selectDestinations,
   toggleFetchLatestDestinations,
 } from '@/stores/features/DestinationSlice';
 
+import { ButtonAddDestination } from './ButtonAddDestination';
 import { columns } from './DestinationColumn';
-import { Link } from 'react-router-dom';
 
 export const DestinationList = () => {
   const [searchText, setSearchText] = useState('');
@@ -31,31 +32,24 @@ export const DestinationList = () => {
 
   return (
     <>
-      <div className="justify-between md:flex">
-        {/* Search */}
-        <div className="sm:flex sm:gap-x-2">
+        <div className="flex flex-col justify-between gap-3 sm:flex-row ">
+            {/* Search */}
           <InputSearchField
             type="text"
             id="search"
             autoComplete="off"
-            placeholder="Search"
+            placeholder="Cari"
             startIcon={<SearchIcon className="h-4 w-4 text-gray-400" />}
             onChange={(e) => setSearchText(e.target.value)}
             value={searchText}
           />
+           {/* Add Destination Button */}
+          <Link to="/destinasi/tambah">
+            <ButtonAddDestination />
+          </Link>
         </div>
 
-        {/* Add Destination Button */}
-        <Link to={''}>
-          <Button variant="default" size="default">
-            Tambah Destinasi
-            <span className="ml-1">
-              <PlusIcon size={20} />
-            </span>
-          </Button>
-        </Link>
-      </div>
-
+       
       {/* Table */}
       {destinations?.status === 'loading' && (
         <div className="flex h-96 items-center justify-center">
