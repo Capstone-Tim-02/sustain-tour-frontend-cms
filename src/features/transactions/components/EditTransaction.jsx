@@ -6,7 +6,6 @@ import { DialogClose } from '@radix-ui/react-dialog';
 import * as y from 'yup';
 
 import { APITransactions } from '@/apis/APITransactions';
-import { Spinner } from '@/components/Elements';
 import { InputField } from '@/components/Forms';
 import { DropdownField } from '@/components/Forms/DropdownField';
 import { EditIcon } from '@/components/Icons';
@@ -166,8 +165,8 @@ export const EditTransaction = ({ invoiceId }) => {
 
           {(detailTransaction?.status_order === 'pending' ||
             detailTransaction?.status_order === 'success') && (
-            <Button disabled={isLoading} form="editTransaction" type="submit">
-              {isLoading && <Spinner size="sm" className="mr-3" />} Simpan
+            <Button isloading={isLoading} form="editTransaction" type="submit">
+              Simpan
             </Button>
           )}
         </DialogFooter>

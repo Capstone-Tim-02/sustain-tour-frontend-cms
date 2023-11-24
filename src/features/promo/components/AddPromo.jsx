@@ -1,20 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Upload } from 'antd';
 import * as y from 'yup';
 
 import { APIPromo } from '@/apis/APIPromo';
-import NoPicture from '@/assets/images/no-picture.png';
-import { Spinner } from '@/components/Elements';
 import { DropdownField, InputField, TextAreaField, TextEditorField } from '@/components/Forms';
 import { FieldWrapper } from '@/components/Forms/FieldWrapper';
-import { TrashIcon } from '@/components/Icons';
-import { UploadIcon } from '@/components/Icons';
 import { Button } from '@/components/ui/button';
-import { convertToPositive, formatDate } from '@/utils/format';
+import { convertToPositive } from '@/utils/format';
+
+import { ListFile, ValidationImagePreview } from './ImagePreview';
 
 const { Dragger } = Upload;
 
@@ -56,34 +54,18 @@ const schema = y.object({
     .required('Gambar tidak boleh kosong')
     .test(
       'fileFormat',
-      'Format file tidak sesuai. Hanya diperbolehkan format JPG, JPEG, PNG, atau GIF.',
+      'Format file tidak sesuai. Hanya diperbolehkan format JPG, JPEG, PNG.',
       (value) => {
-        if (!value) return true;
+        if (!value || typeof value === 'string') return true;
 
-        const allowedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
-
-        if (typeof value === 'string') {
-          // Get the file extension from the file name
-          const sliceUrl = 'image/' + value?.split('.')[3];
-          return allowedFormats.includes(sliceUrl);
-        }
-
+        const allowedFormats = ['image/jpg', 'image/jpeg', 'image/png'];
         return allowedFormats.includes(value.type);
       }
     )
     .test('fileSize', 'Ukuran file terlalu besar. Maksimal 5MB.', (value) => {
-      if (!value) return true;
-
-      const allowedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
-
-      if (typeof value === 'string') {
-        // Get the file extension from the file name
-        const sliceUrl = 'image/' + value?.split('.')[3];
-        return allowedFormats.includes(sliceUrl);
-      }
+      if (!value || typeof value == 'string') return true;
 
       const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-
       return value.size <= MAX_FILE_SIZE;
     }),
 });
@@ -97,13 +79,9 @@ export const AddPromo = ({ onSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [errorImage, setErrorImage] = useState(false);
-
-  const formData = new FormData();
-
   const {
     register,
     handleSubmit,
-    reset,
     control,
     setValue,
     setError,
@@ -113,6 +91,8 @@ export const AddPromo = ({ onSuccess }) => {
   } = useForm({ resolver: yupResolver(schema) });
 
   const imageValue = getValues().image_voucher;
+
+  const formData = new FormData();
 
   const onSubmit = async (data) => {
     try {
@@ -267,48 +247,12 @@ export const AddPromo = ({ onSuccess }) => {
                   imageCustomRequest(file, onSuccess, onError);
                 }}
               >
-                {!errorImage && selectedImage && <img src={selectedImage} alt="preview" />}
-
-                {errorImage && (
-                  <>
-                    <p className="ant-upload-text">Format file tidak sesuai</p>
-                    <p className="ant-upload-drag-icon grid justify-items-center">
-                      <img src={NoPicture} alt="No Picture" />
-                    </p>
-                    <p className="ant-upload-hint">
-                      Maksimal ukuran file: 5MB <br />
-                      Format pendukung: JPG, JPEG, PNG, GIF
-                    </p>
-                  </>
-                )}
-
-                {!errorImage && !selectedImage && (
-                  <>
-                    <p className="ant-upload-text">Tidak ada file yang dipilih</p>
-                    <p className="ant-upload-drag-icon grid justify-items-center">
-                      <UploadIcon />
-                    </p>
-                    <p className="ant-upload-hint">Format pendukung: JPG, JPEG, PNG, GIF</p>
-                  </>
-                )}
+                {/* ValidationImagePreview */}
+                <ValidationImagePreview errorImage={errorImage} selectedImage={selectedImage} />
               </Dragger>
             </FieldWrapper>
-            {imageValue?.name && (
-              <>
-                <div className="flex justify-between">
-                  <div className={`text-sm ${errorImage ? 'text-redDestimate-100' : ''}`}>
-                    {imageValue.name}
-                  </div>
-                  <div
-                    onClick={() => {
-                      removeImage();
-                    }}
-                  >
-                    <TrashIcon className="h-5 w-5 stroke-2 text-redDestimate-100 hover:cursor-pointer hover:text-redDestimate-100/70" />
-                  </div>
-                </div>
-              </>
-            )}
+            {/* List File */}
+            <ListFile imageValue={imageValue} errorImage={errorImage} removeImage={removeImage} />
           </div>
 
           <div className="flex flex-col gap-4 md:flex-grow">
@@ -335,10 +279,10 @@ export const AddPromo = ({ onSuccess }) => {
 
         <div className="flex justify-end gap-x-2 pt-5">
           <Link to="/promo" replace>
-            <Button variant="outline">Batal</Button>
+            <Button variant="outline">Kembali</Button>
           </Link>
-          <Button form="addPromo" type="submit" disabled={isLoading}>
-            {isLoading && <Spinner size="sm" className="mr-3" />} Tambah Promo
+          <Button form="addPromo" type="submit" isloading={isLoading}>
+            Tambah Promo
           </Button>
         </div>
       </form>

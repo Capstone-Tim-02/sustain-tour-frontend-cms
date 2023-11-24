@@ -73,7 +73,7 @@ export const AddPromoRoute = () => {
         </div>
 
         <div className="mt-6">
-          <div className="mb-8 flex items-center justify-between">
+          <div className="mb-5 flex items-center justify-between">
             <div className="sm:flex-auto">
               <h1 className="text-xl font-semibold text-gray-900 sm:text-3xl">Tambah Promo</h1>
             </div>
@@ -84,4 +84,3 @@ export const AddPromoRoute = () => {
     </>
   );
 };
-

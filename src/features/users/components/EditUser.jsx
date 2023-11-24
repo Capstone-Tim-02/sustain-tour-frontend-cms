@@ -6,7 +6,6 @@ import { DialogClose } from '@radix-ui/react-dialog';
 import * as y from 'yup';
 
 import { APIUsers } from '@/apis/APIUsers';
-import { Spinner } from '@/components/Elements';
 import { InputField } from '@/components/Forms';
 import { EditIcon } from '@/components/Icons';
 import { Button } from '@/components/ui/button';
@@ -140,8 +139,8 @@ export const EditUser = ({ id }) => {
           >
             <span>Batal</span>
           </DialogClose>
-          <Button disabled={isLoading} form="editUser" type="submit">
-            {isLoading && <Spinner size="sm" className="mr-3" />} Simpan
+          <Button isloading={isLoading} form="editUser" type="submit">
+            Simpan
           </Button>
         </DialogFooter>
       </DialogContent>
