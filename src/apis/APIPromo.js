@@ -6,7 +6,6 @@ export const APIPromo = {
   addPromo: async (formData) => {
     try {
       const result = await axiosInstance.post(`/createpromo`, formData);
-      console.log("data result API: ", result.data.promo_data);
       toast.success(result.data.message);
     } catch (error) {
       toast.error(error.response.data.message);

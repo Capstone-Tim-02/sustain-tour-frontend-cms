@@ -19,9 +19,21 @@ import { convertToPositive, formatDate } from '@/utils/format';
 const { Dragger } = Upload;
 
 const schema = y.object({
-  title: y.string().required('Judul promo tidak boleh kosong'),
-  nama_promo: y.string().required('Nama promo tidak boleh kosong'),
-  kode_voucher: y.string().required('Kode promo tidak boleh kosong'),
+  title: y
+    .string()
+    .min(5, 'Minimal 5 karakter')
+    .max(100, 'Maksimal 100 karakter')
+    .required('Judul promo tidak boleh kosong'),
+  nama_promo: y
+    .string()
+    .min(5, 'Minimal 5 karakter')
+    .max(100, 'Maksimal 100 karakter')
+    .required('Nama promo tidak boleh kosong'),
+  kode_voucher: y
+    .string()
+    .min(5, 'Minimal 5 karakter')
+    .max(40, 'Maksimal 40 karakter')
+    .required('Kode promo tidak boleh kosong'),
   jumlah_potongan_persen: y
     .number()
     .transform((value) => (isNaN(value) ? undefined : value))
@@ -29,8 +41,16 @@ const schema = y.object({
     .max(100, 'Maximum 100%')
     .required('Diskon promo tidak boleh kosong'),
   status_aktif: y.string().required('Status promo harus diisi'),
-  deskripsi: y.string().required('Deskripsi promo tidak boleh kosong'),
-  peraturan: y.string().required('Peraturan promo tidak boleh kosong'),
+  deskripsi: y
+  .string()
+    .min(10, 'Minimal 10 karakter')
+    .max(2000, 'Maksimal 2000 karakter')
+    .required('Deskripsi promo tidak boleh kosong'),
+  peraturan: y
+  .string()
+    .min(10, 'Minimal 10 karakter')
+    .max(2000, 'Maksimal 2000 karakter')
+    .required('Peraturan promo tidak boleh kosong'),
   image_voucher: y
     .mixed()
     .required('Gambar tidak boleh kosong')
