@@ -47,7 +47,7 @@ export const columns = [
     accessorKey: 'created_at',
     cell: ({ row }) => {
       const created_at = row.original.created_at;
-      return created_at ? formatDate(created_at, 'D MMMM YYYY') : '-';
+      return created_at ? formatDate(created_at, 'D MMMM YYYY HH:mm:ss') : '-';
     },
   },
   {
@@ -55,7 +55,7 @@ export const columns = [
     accessorKey: 'CheckinBooking',
     cell: ({ row }) => {
       const CheckinBooking = row.original.checkin_booking;
-      return CheckinBooking ? formatDate(CheckinBooking, 'D MMMM YYYY') : '-';
+      return CheckinBooking ? formatDate(CheckinBooking, 'D MMMM YYYY HH:mm:ss') : '-';
     },
   },
   {

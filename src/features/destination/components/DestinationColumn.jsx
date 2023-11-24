@@ -1,3 +1,4 @@
+import { Badge } from '@/components/ui/badge';
 import { formatDate } from '@/utils/format';
 
 import { DeleteDestination } from './DeleteDestination';
@@ -5,7 +6,7 @@ import { DetailDestination } from './DetailDestination';
 import { EditDestination } from './EditDestinations';
 
 const Status = ({ value }) => {
-  return value ? 'Open' : 'Close';
+  return value ? <Badge variant="success">Buka</Badge> : <Badge variant="destructive">Tutup</Badge>;
 };
 
 const Destination = ({ title, kode }) => {
@@ -21,9 +22,7 @@ const Destination = ({ title, kode }) => {
 
 const Category = ({ value }) => {
   return (
-    <div className="rounded-[25px] bg-primary-40 px-2.5 py-1 text-center text-white">
-      {value?.category_name}
-    </div>
+   <Badge variant="pending">{value?.category_name}</Badge>
   );
 };
 
