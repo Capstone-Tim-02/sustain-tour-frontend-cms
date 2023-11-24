@@ -5,7 +5,7 @@ import { Category } from '@/features/categories';
 import { Dashboard } from '@/features/Dashboard';
 import { Destination } from '@/features/destination';
 import { NotFound } from '@/features/notFound';
-import { EditPromoRoute, Promo } from '@/features/promo';
+import { AddPromoRoute, EditPromoRoute, Promo } from '@/features/promo';
 import { EditTncRoute, Tnc } from '@/features/Tnc';
 import { Transactions } from '@/features/transactions';
 import { Users } from '@/features/users';
@@ -20,6 +20,7 @@ export const AppRoutes = () => {
         <Route path="/" element={<Navigate to="/overview" replace />} />
         <Route path="/overview" element={<Dashboard />} />
         <Route path="/pengguna" element={<Users />} />
+        <Route path="/promo/tambah" element={<AddPromoRoute />} />
         <Route path="/promo/edit/:promoId" element={<EditPromoRoute />} />
         <Route path="/promo" element={<Promo />} />
         <Route path="/destinasi" element={<Destination />} />
