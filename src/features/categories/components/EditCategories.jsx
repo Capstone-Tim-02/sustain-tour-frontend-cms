@@ -6,7 +6,6 @@ import { DialogClose } from '@radix-ui/react-dialog';
 import * as y from 'yup';
 
 import { APICategories } from '@/apis/APICategories';
-import { Spinner } from '@/components/Elements';
 import { InputField } from '@/components/Forms';
 import { EditIcon } from '@/components/Icons';
 import { Button } from '@/components/ui/button';
@@ -96,8 +95,8 @@ export const EditCategory = ({ category_name }) => {
           >
             <span>Batal</span>
           </DialogClose>
-          <Button disabled={isLoading} form="editCategory" type="submit">
-            {isLoading && <Spinner size="sm" className="mr-3" />} Simpan
+          <Button isloading={isLoading} form="editCategory" type="submit">
+            Simpan
           </Button>
         </DialogFooter>
       </DialogContent>

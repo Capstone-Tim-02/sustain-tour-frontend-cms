@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { PlusIcon, SearchIcon } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/Elements';
 import { DataTable } from '@/components/Elements/Table';
 import { InputSearchField } from '@/components/Forms';
+import { Button } from '@/components/ui/button';
 import {
   fetchGetDestinations,
   selectDestinations,
@@ -13,7 +14,6 @@ import {
 } from '@/stores/features/DestinationSlice';
 
 import { columns } from './DestinationColumn';
-import { Link } from 'react-router-dom';
 
 export const DestinationList = () => {
   const [searchText, setSearchText] = useState('');

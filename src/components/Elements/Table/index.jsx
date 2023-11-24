@@ -1,5 +1,3 @@
-import React from 'react';
-
 import {
   flexRender,
   getCoreRowModel,
@@ -18,19 +16,6 @@ import {
 } from '@/components/ui/table';
 
 export const DataTable = ({ columns, data, searchText, setSearchText }) => {
-  // Filter Data in object
-  const filterTypes = React.useMemo(
-    () => ({
-      filterByObject: (rows, id, filterValue) => {
-        return rows.filter((row) => {
-          const rowValue = row.values[id];
-          return rowValue && rowValue.some((obj) => obj.name.includes(filterValue));
-        });
-      },
-    }),
-    []
-  );
-
   const table = useReactTable({
     data,
     columns,
@@ -41,7 +26,6 @@ export const DataTable = ({ columns, data, searchText, setSearchText }) => {
       globalFilter: searchText,
     },
     onGlobalFilterChange: setSearchText,
-    filterTypes,
   });
 
   return (

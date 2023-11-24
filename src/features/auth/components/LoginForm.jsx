@@ -5,7 +5,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as y from 'yup';
 
 import { APIAuth } from '@/apis/APIAuth';
-import { Spinner } from '@/components/Elements';
 import { InputField } from '@/components/Forms';
 import { Button } from '@/components/ui/button';
 
@@ -70,8 +69,7 @@ export const LoginForm = () => {
             registration={register('password')}
             error={errors.password}
           />
-          <Button disabled={isLoading} variant="tertiary" type="submit" className="w-full">
-            {isLoading && <Spinner size="sm" className="mr-3" />}
+          <Button isloading={isLoading} variant="tertiary" type="submit" className="w-full">
             Masuk
           </Button>
         </form>

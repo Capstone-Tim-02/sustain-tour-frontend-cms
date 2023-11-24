@@ -5,7 +5,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as y from 'yup';
 
 import { APITnc } from '@/apis/APITnc';
-import { Spinner } from '@/components/Elements';
 import { InputField, TextEditorField } from '@/components/Forms';
 import { Button } from '@/components/ui/button';
 
@@ -40,7 +39,6 @@ export const EditTnc = ({ onSuccess }) => {
 
   const onSubmit = async (data) => {
     try {
-      console.log(data);
       setIsLoading(true);
       await APITnc.updateTnc(tncId, data);
       onSuccess();
@@ -81,10 +79,10 @@ export const EditTnc = ({ onSuccess }) => {
 
       <div className="flex justify-end gap-x-2 pt-5">
         <Link to="/syarat_dan_ketentuan" replace>
-          <Button variant="outline">Batal</Button>
+          <Button variant="outline">Kembali</Button>
         </Link>
-        <Button disabled={isLoading} form="editTnc" type="submit">
-          {isLoading && <Spinner size="sm" className="mr-3" />} Simpan
+        <Button isloading={isLoading} form="editTnc" type="submit">
+          Simpan
         </Button>
       </div>
     </>

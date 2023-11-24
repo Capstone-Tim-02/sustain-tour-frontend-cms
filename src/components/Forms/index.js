@@ -5,4 +5,3 @@ export * from './InputField';
 export * from './InputSearchField';
 export * from './TextAreaField';
 export * from './TextEditorField';
-export * from './UploadImagePromo';

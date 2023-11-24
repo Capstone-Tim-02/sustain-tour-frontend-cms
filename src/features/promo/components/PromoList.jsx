@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { SearchIcon } from 'lucide-react';
+import { PlusIcon, SearchIcon } from 'lucide-react';
 
 import { Spinner } from '@/components/Elements';
 import { DataTable } from '@/components/Elements/Table';
 import { InputSearchField } from '@/components/Forms';
+import { Button } from '@/components/ui/button';
 import { fetchGetPromo, selectPromo, toggleFetchLatestPromo } from '@/stores/features/PromoSlice';
 
-import { ButtonAddPromo } from './ButtonAddPromo';
 import { columns } from './PromoColumn';
 
 export const PromoList = () => {
@@ -29,7 +29,7 @@ export const PromoList = () => {
   return (
     <>
       {/* Search */}
-      <div className="justify-between flex flex-col sm:flex-row gap-3 ">
+      <div className="flex flex-col justify-between gap-3 sm:flex-row ">
         <InputSearchField
           type="text"
           id="search"
@@ -39,8 +39,13 @@ export const PromoList = () => {
           onChange={(e) => setSearchText(e.target.value)}
           value={searchText}
         />
+
+        {/* Button Add Promo */}
         <Link to="/promo/tambah">
-          <ButtonAddPromo />
+          <Button className="w-full gap-2 sm:w-auto">
+            Tambah Promo
+            <PlusIcon className="mr-2 h-4 w-4 bg-primary-80" />
+          </Button>
         </Link>
       </div>
 
