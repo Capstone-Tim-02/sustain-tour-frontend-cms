@@ -44,7 +44,7 @@ export function CarouselDetailDestination({ detailDestination }) {
           alt="image 1"
           className="h-full w-full object-cover"
         />
-        <div className="absolute bottom-6 left-5 rounded-lg bg-primary-80">
+        <div className="absolute bottom-8 left-5 right-auto rounded-lg bg-primary-80">
           <div className="flex w-auto flex-col justify-start p-2 text-white">
             <h1 className="font-sans font-bold">{detailDestination?.title}</h1>
             <h1 className="font-sans text-sm font-normal">{detailDestination?.kode}</h1>
@@ -58,7 +58,7 @@ export function CarouselDetailDestination({ detailDestination }) {
           alt="image 2"
           className="h-full w-full object-cover"
         />
-        <div className="absolute bottom-6 left-5 rounded-lg bg-primary-80">
+        <div className="absolute bottom-8 left-5 right-auto rounded-lg bg-primary-80">
           <div className="flex w-auto flex-col justify-start p-2 text-white">
             <h1 className="font-sans font-bold">{detailDestination?.title}</h1>
             <h1 className="font-sans text-sm font-normal">{detailDestination?.kode}</h1>
@@ -72,9 +72,9 @@ export function CarouselDetailDestination({ detailDestination }) {
           alt="image 3"
           className="h-full w-full object-cover"
         />
-        <div className="absolute bottom-6 left-5 rounded-lg bg-primary-80">
+        <div className="absolute bottom-8 left-5 right-auto rounded-lg bg-primary-80">
           <div className="flex w-auto flex-col justify-start p-2 text-white">
-            <h1 className="font-sans font-bold">{detailDestination?.title}</h1>
+            <h1 className="font-sans font-semibold">{detailDestination?.title}</h1>
             <h1 className="font-sans text-sm font-normal">{detailDestination?.kode}</h1>
           </div>
         </div>
