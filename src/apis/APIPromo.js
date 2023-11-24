@@ -3,6 +3,16 @@ import { toast } from 'react-toastify';
 import { axiosInstance } from '@/configs/axiosInstance';
 
 export const APIPromo = {
+  addPromo: async (formData) => {
+    try {
+      const result = await axiosInstance.post(`/createpromo`, formData);
+      toast.success(result.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
+      throw new Error(error);
+    }
+  },
+
     editPromo: async (id, formData) => {
         try {               
             const result = await axiosInstance.put(`/admin/promo/${id}`, formData);
