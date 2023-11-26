@@ -49,6 +49,9 @@ const schema = y.object({
     .required('Peraturan promo tidak boleh kosong')
     .min(10, 'Peraturan promo minimal 10 karakter')
     .max(2000, 'Peraturan promo tidak boleh lebih dari 2000 karakter'),
+  tanggal_kadaluarsa: y
+    .string()
+    .required('Tanggal kadaluarsa tidak boleh kosong'),
   image_voucher: y
     .mixed()
     .required('Gambar tidak boleh kosong')
