@@ -17,9 +17,21 @@ import { ListFile, ValidationImagePreview } from './ImagePreview';
 const { Dragger } = Upload;
 
 const schema = y.object({
-  title: y.string().required('Judul promo tidak boleh kosong'),
-  nama_promo: y.string().required('Nama promo tidak boleh kosong'),
-  kode_voucher: y.string().required('Kode promo tidak boleh kosong'),
+  title: y
+    .string()
+    .required('Judul promo tidak boleh kosong')
+    .min(5, 'Judul promo minimal 5 karakter')
+    .max(100, 'Judul promo maksimal 100 karakter'),
+  nama_promo: y
+    .string()
+    .required('Nama promo tidak boleh kosong')
+    .min(5, 'Nama promo minimal 5 karakter')
+    .max(100, 'Nama promo maksimal 100 karakter'),
+  kode_voucher: y
+    .string()
+    .required('Kode promo tidak boleh kosong')
+    .min(5, 'Kode promo minimal 5 karakter')
+    .max(40, 'Kode promo maksimal 40 karakter'),
   jumlah_potongan_persen: y
     .number()
     .transform((value) => (isNaN(value) ? undefined : value))
@@ -27,8 +39,16 @@ const schema = y.object({
     .max(100, 'Maximum 100%')
     .required('Diskon promo tidak boleh kosong'),
   status_aktif: y.string().required('Status promo harus diisi'),
-  deskripsi: y.string().required('Deskripsi promo tidak boleh kosong'),
-  peraturan: y.string().required('Peraturan promo tidak boleh kosong'),
+  deskripsi: y
+    .string()
+    .required('Deskripsi promo tidak boleh kosong')
+    .min(10, 'Deskripsi promo minimal 10 karakter')
+    .max(2000, 'Deskripsi promo maksimal 2000 karakter'),
+  peraturan: y
+    .string()
+    .required('Peraturan promo tidak boleh kosong')
+    .min(10, 'Peraturan promo minimal 10 karakter')
+    .max(2000, 'Peraturan promo maksimal 2000 karakter'),
   image_voucher: y
     .mixed()
     .required('Gambar tidak boleh kosong')
