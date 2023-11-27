@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
 import { Upload } from 'antd';
 
-import { ListFile, ValidationImagePreview } from "@/features/promo/components/ImagePreview";
-
 import { FieldWrapper } from "..";
+
+import { ListFile, ValidationImagePreview } from "./ImagePreview";
 const { Dragger } = Upload;
  
 
@@ -23,7 +23,7 @@ export const FieldImagePromo = ({
 }) => {
     const [selectedImage, setSelectedImage] = useState(null);
 
-    const imageValue = getValues().image_voucher;
+    const imageValue = getValues()[name];
     useEffect(() => {        
         const imageValue = promo?.[name];
         
@@ -34,11 +34,11 @@ export const FieldImagePromo = ({
         const reader = new FileReader();
     
         if (info.file.status === 'removed') {
-          setValue('image_voucher', null);
+          setValue(name, null);
           setSelectedImage(null);
         } else {
           reader.onload = (e) => {
-            setValue('image_voucher', info.file.originFileObj);
+            setValue(name, info.file.originFileObj);
             setSelectedImage(e.target.result);
           };
           reader.readAsDataURL(info.file.originFileObj);
@@ -46,7 +46,7 @@ export const FieldImagePromo = ({
     }; 
 
     const removeImage = () => {
-        setValue('image_voucher', null);
+        setValue(name, null);
         setSelectedImage(null);
         setIsImageError(false);
     };

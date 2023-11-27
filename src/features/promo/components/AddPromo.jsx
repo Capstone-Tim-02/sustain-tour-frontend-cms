@@ -207,7 +207,9 @@ export const AddPromo = ({ onSuccess }) => {
               setValue={setValue}
               getValues={getValues}
               error={errors.image_voucher}
-              customRequest={(file, onSuccess, onError) => imageCustomRequest(file, onSuccess, onError)}
+              customRequest={(file, onSuccess, onError) => 
+                imageCustomRequest(file, onSuccess, onError)
+              }
               isImageError={errorImage}
               setIsImageError={setErrorImage}
               />
