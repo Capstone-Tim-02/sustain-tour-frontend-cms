@@ -7,7 +7,7 @@ import { ListFile, ValidationImagePreview } from "./ImagePreview";
 const { Dragger } = Upload;
  
 
-export const FieldImagePromo = ({ 
+export const FieldImage = ({ 
   isHorizontal, 
   id, 
   label, 

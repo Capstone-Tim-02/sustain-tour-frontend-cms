@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as y from 'yup';
 
 import { APIPromo } from '@/apis/APIPromo';
-import { DropdownField, FieldImagePromo, InputField, TextAreaField, TextEditorField } from '@/components/Forms';
+import { DropdownField, FieldImage, InputField, TextAreaField, TextEditorField } from '@/components/Forms';
 import { Button } from '@/components/ui/button';
 import { convertToPositive } from '@/utils/format';
 
@@ -199,7 +199,7 @@ export const AddPromo = ({ onSuccess }) => {
             />
 
           {/* Gambar Promo */}            
-          <FieldImagePromo
+          <FieldImage
               id='image_voucher'
               label='Gambar Promo'
               name='image_voucher'
