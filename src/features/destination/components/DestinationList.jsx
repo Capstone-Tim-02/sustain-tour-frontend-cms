@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { PlusIcon, SearchIcon } from 'lucide-react';
+import { SearchIcon } from 'lucide-react';
 
 import { Spinner } from '@/components/Elements';
 import { DataTable } from '@/components/Elements/Table';
 import { InputSearchField } from '@/components/Forms';
-import { Button } from '@/components/ui/button';
 import {
   fetchGetDestinations,
   selectDestinations,
@@ -32,24 +31,23 @@ export const DestinationList = () => {
 
   return (
     <>
-        <div className="flex flex-col justify-between gap-3 sm:flex-row ">
-            {/* Search */}
-          <InputSearchField
-            type="text"
-            id="search"
-            autoComplete="off"
-            placeholder="Cari"
-            startIcon={<SearchIcon className="h-4 w-4 text-gray-400" />}
-            onChange={(e) => setSearchText(e.target.value)}
-            value={searchText}
-          />
-           {/* Add Destination Button */}
-          <Link to="/destinasi/tambah">
-            <ButtonAddDestination />
-          </Link>
-        </div>
+      <div className="flex flex-col justify-between gap-3 sm:flex-row ">
+        {/* Search */}
+        <InputSearchField
+          type="text"
+          id="search"
+          autoComplete="off"
+          placeholder="Cari"
+          startIcon={<SearchIcon className="h-4 w-4 text-gray-400" />}
+          onChange={(e) => setSearchText(e.target.value)}
+          value={searchText}
+        />
+        {/* Add Destination Button */}
+        <Link to="/destinasi/tambah">
+          <ButtonAddDestination />
+        </Link>
+      </div>
 
-       
       {/* Table */}
       {destinations?.status === 'loading' && (
         <div className="flex h-96 items-center justify-center">
