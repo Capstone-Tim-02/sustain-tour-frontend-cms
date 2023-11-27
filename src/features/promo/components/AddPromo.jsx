@@ -3,18 +3,12 @@ import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Upload } from 'antd';
 import * as y from 'yup';
 
 import { APIPromo } from '@/apis/APIPromo';
-import { DropdownField, InputField, TextAreaField, TextEditorField } from '@/components/Forms';
-import { FieldWrapper } from '@/components/Forms/FieldWrapper';
+import { DropdownField, FieldImagePromo, InputField, TextAreaField, TextEditorField } from '@/components/Forms';
 import { Button } from '@/components/ui/button';
 import { convertToPositive } from '@/utils/format';
-
-import { ListFile, ValidationImagePreview } from './ImagePreview';
-
-const { Dragger } = Upload;
 
 const schema = y.object({
   title: y
@@ -77,7 +71,6 @@ const statusOptions = [
 
 export const AddPromo = ({ onSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
   const [errorImage, setErrorImage] = useState(false);
   const {
     register,
@@ -89,8 +82,6 @@ export const AddPromo = ({ onSuccess }) => {
     getValues,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
-
-  const imageValue = getValues().image_voucher;
 
   const formData = new FormData();
 
@@ -108,21 +99,6 @@ export const AddPromo = ({ onSuccess }) => {
       setIsLoading(false);
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const imageOnChange = (info) => {
-    const reader = new FileReader();
-
-    if (info.file.status === 'removed') {
-      setValue('image_voucher', null);
-      setSelectedImage(null);
-    } else {
-      reader.onload = (e) => {
-        setValue('image_voucher', info.file.originFileObj);
-        setSelectedImage(e.target.result);
-      };
-      reader.readAsDataURL(info.file.originFileObj);
     }
   };
 
@@ -154,11 +130,6 @@ export const AddPromo = ({ onSuccess }) => {
       onError();
       setErrorImage(true);
     }
-  };
-
-  const removeImage = () => {
-    setValue('image_voucher', null);
-    setSelectedImage('');
   };
 
   const handleConvertToPositive = (e) => {
@@ -227,32 +198,19 @@ export const AddPromo = ({ onSuccess }) => {
               error={errors.peraturan}
             />
 
-            {/* Gambar Promo */}
-            <FieldWrapper
-              isHorizontal={false}
-              label="Gambar Promo"
-              id={'image_voucher'}
+          {/* Gambar Promo */}            
+          <FieldImagePromo
+              id='image_voucher'
+              label='Gambar Promo'
+              name='image_voucher'
+              register={register}
+              setValue={setValue}
+              getValues={getValues}
               error={errors.image_voucher}
-            >
-              <Dragger
-                listType="picture"
-                name="image_voucher"
-                registration={register('image_voucher')}
-                multiple={false}
-                showUploadList={false}
-                onChange={(info) => {
-                  imageOnChange(info);
-                }}
-                customRequest={(file, onSuccess, onError) => {
-                  imageCustomRequest(file, onSuccess, onError);
-                }}
-              >
-                {/* ValidationImagePreview */}
-                <ValidationImagePreview errorImage={errorImage} selectedImage={selectedImage} />
-              </Dragger>
-            </FieldWrapper>
-            {/* List File */}
-            <ListFile imageValue={imageValue} errorImage={errorImage} removeImage={removeImage} />
+              customRequest={(file, onSuccess, onError) => imageCustomRequest(file, onSuccess, onError)}
+              isImageError={errorImage}
+              setIsImageError={setErrorImage}
+              />
           </div>
 
           <div className="flex flex-col gap-4 md:flex-grow">
