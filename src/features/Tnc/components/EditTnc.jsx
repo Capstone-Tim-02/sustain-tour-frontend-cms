@@ -9,11 +9,16 @@ import { InputField, TextEditorField } from '@/components/Forms';
 import { Button } from '@/components/ui/button';
 
 const schema = y.object({
-  tnc_name: y.string().required('Judul tidak boleh kosong'),
+  tnc_name: y
+    .string()
+    .required('Judul tidak boleh kosong')
+    .min(5, 'Judul minimal 5 karakter')
+    .max(100, 'Judul tidak boleh lebih dari 100 karakter'),
   description: y
     .string()
-    .max(100000, 'Deskripsi tidak boleh lebih dari 100000 karakter')
-    .required('Deskripsi tidak boleh kosong'),
+    .required('Deskripsi tidak boleh kosong')
+    .min(10, 'Deskripsi minimal 10 karakter')
+    .max(2000, 'Deskripsi tidak boleh lebih dari 2000 karakter'),
 });
 
 export const EditTnc = ({ onSuccess }) => {

@@ -23,7 +23,8 @@ const schema = y.object({
   category_name: y
     .string()
     .required('Nama Kategori tidak boleh kosong')
-    .min(3, 'Minimal 3 karakter untuk nama'),
+    .min(5, 'Nama kategori minimal 5 karakter')
+    .max(30, 'Nama kategori tidak boleh lebih dari 30 karakter'),
 });
 
 export const EditCategory = ({ category_name }) => {

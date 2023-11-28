@@ -21,17 +21,17 @@ const schema = y.object({
     .string()
     .required('Judul promo tidak boleh kosong')
     .min(5, 'Judul promo minimal 5 karakter')
-    .max(100, 'Judul promo maksimal 100 karakter'),
+    .max(100, 'Judul promo tidak boleh lebih dari 100 karakter'),
   nama_promo: y
     .string()
     .required('Nama promo tidak boleh kosong')
     .min(5, 'Nama promo minimal 5 karakter')
-    .max(100, 'Nama promo maksimal 100 karakter'),
+    .max(100, 'Nama promo tidak boleh lebih dari 100 karakter'),
   kode_voucher: y
     .string()
     .required('Kode promo tidak boleh kosong')
     .min(5, 'Kode promo minimal 5 karakter')
-    .max(40, 'Kode promo maksimal 40 karakter'),
+    .max(40, 'Kode promo tidak boleh lebih dari 40 karakter'),
   jumlah_potongan_persen: y
     .number()
     .transform((value) => (isNaN(value) ? undefined : value))
@@ -43,12 +43,15 @@ const schema = y.object({
     .string()
     .required('Deskripsi promo tidak boleh kosong')
     .min(10, 'Deskripsi promo minimal 10 karakter')
-    .max(2000, 'Deskripsi promo maksimal 2000 karakter'),
+    .max(2000, 'Deskripsi promo tidak boleh lebih dari 2000 karakter'),
   peraturan: y
     .string()
     .required('Peraturan promo tidak boleh kosong')
     .min(10, 'Peraturan promo minimal 10 karakter')
-    .max(2000, 'Peraturan promo maksimal 2000 karakter'),
+    .max(2000, 'Peraturan promo tidak boleh lebih dari 2000 karakter'),
+  tanggal_kadaluarsa: y
+    .string()
+    .required('Tanggal kadaluarsa tidak boleh kosong'),
   image_voucher: y
     .mixed()
     .required('Gambar tidak boleh kosong')
