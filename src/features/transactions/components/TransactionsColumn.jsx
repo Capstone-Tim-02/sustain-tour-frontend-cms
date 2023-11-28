@@ -5,11 +5,9 @@ import { DetailTransaction } from './DetailTransaction';
 import { EditTransaction } from './EditTransaction';
 
 const StatusOrder = ({ status_order }) => {
-  if (status_order === 'success') return <Badge variant="success">{status_order}</Badge>;
-  else if (status_order === 'pending') return <Badge variant="pending">{status_order}</Badge>;
-  else if (status_order === 'dibatalkan')
-    return <Badge variant="destructive">{status_order}</Badge>;
-  else return <Badge variant="secondary">{status_order}</Badge>;
+  if (status_order === 'success') return <Badge variant="success">Selesai</Badge>;
+  if (status_order === 'pending') return <Badge variant="pending">Tertunda</Badge>;
+  if (status_order === 'dibatalkan') return <Badge variant="destructive">Batal</Badge>;
 };
 
 const Action = ({ value }) => {
