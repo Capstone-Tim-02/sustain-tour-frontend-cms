@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { EyeOff } from 'lucide-react';
+import { Eye } from 'lucide-react';
 import * as y from 'yup';
 
 import { APIAuth } from '@/apis/APIAuth';
@@ -21,6 +23,7 @@ const schema = y.object({
 
 export const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -61,14 +64,28 @@ export const LoginForm = () => {
             registration={register('username')}
             error={errors.username}
           />
-          <InputField
-            type="password"
-            label="Kata Sandi"
-            id="password"
-            placeholder="Masukkan Kata Sandi"
-            registration={register('password')}
-            error={errors.password}
-          />
+
+          <div className="relative">
+            <InputField
+              type={showPassword ? 'text' : 'password'}
+              label="Kata Sandi"
+              id="password"
+              placeholder="Masukkan Kata Sandi"
+              registration={register('password')}
+              error={errors.password}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-14 -translate-y-1/2 transform sm:top-12"
+            >
+              {showPassword ? (
+                <EyeOff className="h-5 w-5 text-gray-600 hover:text-gray-600/80" />
+              ) : (
+                <Eye className="h-5 w-5 text-gray-600 hover:text-gray-600/80" />
+              )}
+            </button>
+          </div>
           <Button isloading={isLoading} variant="tertiary" type="submit" className="w-full">
             Masuk
           </Button>
