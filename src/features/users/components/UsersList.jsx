@@ -5,24 +5,40 @@ import { SearchIcon } from 'lucide-react';
 import { Spinner } from '@/components/Elements';
 import { DataTable } from '@/components/Elements/Table';
 import { InputSearchField } from '@/components/Forms';
+import { useDebounce } from '@/hooks/useDebounce';
 import { fetchGetUsers, selectUsers, toggleFetchLatestUsers } from '@/stores/features/UsersSlice';
+import {
+  selectReactTable,
+  setQueryPageIndex,
+  setQuerySearchGlobal,
+} from '@/stores/ReactTableSlice';
 
 import { columns } from './UsersColumn';
 
 export const UsersList = () => {
   const [searchText, setSearchText] = useState('');
+  const debouncedSearchTextFilter = useDebounce(searchText, 600);
 
-  const users = useSelector(selectUsers);
+  const usersSelector = useSelector(selectUsers);
+  const { searchGlobal, pageIndex, pageSize } = useSelector(selectReactTable);
 
   const dispatch = useDispatch();
 
+  const USERS_DATA = usersSelector?.data.users;
+  const USERS_PAGINATION = usersSelector?.data?.pagination;
+
   useEffect(() => {
-    if (users?.shouldFetchLatestUsers) {
+    dispatch(setQuerySearchGlobal(debouncedSearchTextFilter));
+    dispatch(setQueryPageIndex(0));
+  }, [dispatch, debouncedSearchTextFilter]);
+
+  useEffect(() => {
+    if (usersSelector?.shouldFetchLatestUsers) {
       dispatch(fetchGetUsers());
       dispatch(toggleFetchLatestUsers());
     }
-    dispatch(fetchGetUsers());
-  }, [dispatch, users.shouldFetchLatestUsers]);
+    dispatch(fetchGetUsers({ search: searchGlobal, pageIndex: pageIndex + 1, pageSize }));
+  }, [dispatch, usersSelector.shouldFetchLatestUsers, searchGlobal, pageIndex, pageSize]);
 
   return (
     <>
@@ -40,18 +56,19 @@ export const UsersList = () => {
       </div>
 
       {/* Table */}
-      {users?.status === 'loading' && (
+      {usersSelector?.status === 'loading' && (
         <div className="flex h-96 items-center justify-center">
           <Spinner size="lg" className="mx-auto mt-10" />
         </div>
       )}
 
-      {users?.status === 'succeeded' && (
+      {usersSelector?.status === 'succeeded' && (
         <DataTable
           columns={columns}
-          data={users?.data}
-          searchText={searchText}
-          setSearchText={setSearchText}
+          data={USERS_DATA}
+          pageCount={USERS_PAGINATION?.last_page}
+          queryPageIndex={pageIndex}
+          queryPageSize={pageSize}
         />
       )}
     </>
