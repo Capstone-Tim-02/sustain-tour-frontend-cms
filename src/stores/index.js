@@ -1,11 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import categories from '@/stores/features/CategoriesSlice'
+import categories from '@/stores/features/CategoriesSlice';
+import destinations from '@/stores/features/DestinationSlice';
 import promos from '@/stores/features/PromoSlice';
 import tnc from '@/stores/features/TncSlice';
 import transactions from '@/stores/features/TransactionsSlice';
 import users from '@/stores/features/UsersSlice';
-import destinations from './features/DestinationSlice';
+import reactTable from '@/stores/ReactTableSlice';
 
 const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ const store = configureStore({
     destinations,
     promos,
     transactions,
+    reactTable,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
