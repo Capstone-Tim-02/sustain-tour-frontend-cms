@@ -5,7 +5,7 @@ import { TransactionsList } from '../components/TransactionsList';
 
 export const Transactions = () => {
   return (
-    <ContentLayout title="Pengguna">
+    <ContentLayout title="Transaksi">
       <div className="justify-between sm:flex">
         <Breadcrumb>
           <span className="px-2 text-sm font-semibold text-primary-100">Transaksi</span>
