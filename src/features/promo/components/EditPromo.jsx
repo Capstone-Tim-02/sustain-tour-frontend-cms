@@ -3,18 +3,14 @@ import { useForm } from 'react-hook-form';
 import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Upload } from 'antd';
 import * as y from 'yup';
 
 import { APIPromo } from '@/apis/APIPromo';
-import { DropdownField, InputField, TextAreaField, TextEditorField } from '@/components/Forms';
-import { FieldWrapper } from '@/components/Forms/FieldWrapper';
+import { DropdownField, FieldImage, InputField, TextAreaField, TextEditorField } from '@/components/Forms';
 import { Button } from '@/components/ui/button';
 import { convertToPositive, formatDate } from '@/utils/format';
 
-import { ListFile, ValidationImagePreview } from './ImagePreview';
 
-const { Dragger } = Upload;
 
 const schema = y.object({
   title: y
@@ -82,7 +78,6 @@ export const EditPromo = ({ onSuccess }) => {
   const { promoId } = useParams();
   const [promo, setPromo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
   const [errorImage, setErrorImage] = useState(false);
 
   const {
@@ -97,7 +92,6 @@ export const EditPromo = ({ onSuccess }) => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const imageValue = getValues().image_voucher;
 
   useEffect(() => {
     async function fetchPromo() {
@@ -113,7 +107,6 @@ export const EditPromo = ({ onSuccess }) => {
       ...promo,
       tanggal_kadaluarsa: formattedDate,
     });
-    setSelectedImage(promo?.image_voucher);
   }, [reset, promo]);
 
   const formData = new FormData();
@@ -132,21 +125,6 @@ export const EditPromo = ({ onSuccess }) => {
       setIsLoading(false);
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const imageOnChange = (info) => {
-    const reader = new FileReader();
-
-    if (info.file.status === 'removed') {
-      setValue('image_voucher', null);
-      setSelectedImage(null);
-    } else {
-      reader.onload = (e) => {
-        setValue('image_voucher', info.file.originFileObj);
-        setSelectedImage(e.target.result);
-      };
-      reader.readAsDataURL(info.file.originFileObj);
     }
   };
 
@@ -178,11 +156,6 @@ export const EditPromo = ({ onSuccess }) => {
       onError();
       setErrorImage(true);
     }
-  };
-
-  const removeImage = () => {
-    setValue('image_voucher', null);
-    setSelectedImage('');
   };
 
   const handleConvertToPositive = (e) => {
@@ -251,33 +224,22 @@ export const EditPromo = ({ onSuccess }) => {
               error={errors.peraturan}
             />
 
-            {/* Gambar Promo */}
-            <FieldWrapper
-              isHorizontal={false}
-              label="Gambar Promo"
-              id={'image_voucher'}
+            {/* Gambar Promo */}            
+            <FieldImage
+              id='image_voucher'
+              label='Gambar Promo'
+              name='image_voucher'
+              register={register}
+              setValue={setValue}
+              getValues={getValues}
               error={errors.image_voucher}
-            >
-              <Dragger
-                listType="picture"
-                name="image_voucher"
-                registration={register('image_voucher')}
-                multiple={false}
-                showUploadList={false}
-                onChange={(info) => {
-                  imageOnChange(info);
-                }}
-                customRequest={(file, onSuccess, onError) => {
-                  imageCustomRequest(file, onSuccess, onError);
-                }}
-              >
-                {/* Validation Image Preview */}
-                <ValidationImagePreview errorImage={errorImage} selectedImage={selectedImage} />
-              </Dragger>
-            </FieldWrapper>
-
-            {/* List File */}
-            <ListFile imageValue={imageValue} errorImage={errorImage} removeImage={removeImage} />
+              customRequest={(file, onSuccess, onError) => 
+                imageCustomRequest(file, onSuccess, onError)
+              }
+              isImageError={errorImage}
+              setIsImageError={setErrorImage}
+              promo={promo}
+              />
           </div>
 
           <div className="flex flex-col gap-4 md:flex-grow">

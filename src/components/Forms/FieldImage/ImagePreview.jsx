@@ -1,12 +1,12 @@
 import NoPicture from '@/assets/images/no-picture.png';
 import { TrashIcon, UploadIcon } from '@/components/Icons';
 
-export const ValidationImagePreview = ({ errorImage, selectedImage }) => {
+export const ValidationImagePreview = ({ isImageError, selectedImage }) => {
   return (
     <>
-      {!errorImage && selectedImage && <img src={selectedImage} alt="preview" />}
+      {!isImageError && selectedImage && <img src={selectedImage} alt="preview" />}
 
-      {errorImage && (
+      {isImageError && (
         <>
           <p className="ant-upload-text">Format file tidak sesuai</p>
           <p className="ant-upload-drag-icon grid justify-items-center">
@@ -19,7 +19,7 @@ export const ValidationImagePreview = ({ errorImage, selectedImage }) => {
         </>
       )}
 
-      {!errorImage && !selectedImage && (
+      {!isImageError && !selectedImage && (
         <>
           <p className="ant-upload-text">Tidak ada file yang dipilih</p>
           <p className="ant-upload-drag-icon grid justify-items-center">
@@ -32,12 +32,12 @@ export const ValidationImagePreview = ({ errorImage, selectedImage }) => {
   );
 };
 
-export const ListFile = ({ imageValue, errorImage, removeImage }) => {
+export const ListFile = ({ imageValue, isImageError, removeImage }) => {
   return (
     <>
       {imageValue?.name && (
         <div className="flex justify-between">
-          <div className={`text-sm ${errorImage ? 'text-redDestimate-100' : ''}`}>
+          <div className={`text-sm ${isImageError ? 'text-redDestimate-100' : ''}`}>
             {imageValue.name}
           </div>
           <div
