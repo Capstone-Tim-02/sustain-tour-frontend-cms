@@ -1,8 +1,11 @@
+import { Link } from 'react-router-dom';
+
+import { EditIcon } from '@/components/Icons';
 import { formatDate } from '@/utils/format';
 
 import { DeleteDestination } from './DeleteDestination';
 import { DetailDestination } from './DetailDestination';
-import { EditDestination } from './EditDestinations';
+// import { EditDestination } from './EditDestinations';
 
 const Status = ({ value }) => {
   return value ? 'Open' : 'Close';
@@ -31,7 +34,10 @@ const Action = ({ value }) => {
   return (
     <div className="flex items-center space-x-4">
       <DetailDestination id={value?.id} />
-      <EditDestination id={value?.id} />
+      <Link to={`/destinasi/edit/${value?.id}`}>
+        <EditIcon className="h-5 w-5 stroke-2 text-primary-100 hover:cursor-pointer hover:text-primary-100/70" />
+      </Link>
+      {/* <EditDestination id={value?.id} /> */}
       <DeleteDestination id={value?.id} />
     </div>
   );

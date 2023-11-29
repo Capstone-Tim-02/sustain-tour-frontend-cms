@@ -4,6 +4,7 @@ import { Login } from '@/features/auth';
 import { Category } from '@/features/categories';
 import { Dashboard } from '@/features/Dashboard';
 import { Destination } from '@/features/destination';
+import { EditDestinationRoute} from '@/features/destination'
 import { NotFound } from '@/features/notFound';
 import { EditPromoRoute, Promo } from '@/features/promo';
 import { EditTncRoute, Tnc } from '@/features/Tnc';
@@ -23,6 +24,7 @@ export const AppRoutes = () => {
         <Route path="/promo/edit/:promoId" element={<EditPromoRoute />} />
         <Route path="/promo" element={<Promo />} />
         <Route path="/destinasi" element={<Destination />} />
+        <Route path="/destinasi/edit/:destinasiId" element={<EditDestinationRoute />} />
         <Route path="/kategori" element={<Category />} />
         <Route path="/transaksi" element={<Transactions />} />
         <Route path="/syarat_dan_ketentuan" element={<Tnc />} />
