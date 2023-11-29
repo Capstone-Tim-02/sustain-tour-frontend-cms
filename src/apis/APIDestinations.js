@@ -3,10 +3,12 @@ import { toast } from 'react-toastify';
 import { axiosInstance } from '@/configs/axiosInstance';
 
 export const APIDestinations = {
-  getDestinations: async () => {
+  getDestinations: async ({ search, pageIndex, pageSize }) => {
     try {
-      const result = await axiosInstance.get(`/wisata`);
-      return result.data.wisatas;
+      const result = await axiosInstance.get(
+        `/wisata?search=${search}&page=${pageIndex}&limit=${pageSize}`
+      );
+      return result.data;
     } catch (error) {
       console.error(error);
       throw new Error(error);

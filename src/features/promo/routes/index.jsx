@@ -18,7 +18,7 @@ export const Promo = () => {
       </div>
 
       <div className="mt-6">
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-5 flex items-center justify-between">
           <div className="sm:flex-auto">
             <h1 className="text-xl font-semibold text-gray-900 sm:text-3xl">Data Promo</h1>
           </div>
@@ -45,13 +45,15 @@ export const EditPromoRoute = () => {
         </div>
 
         <div className="mt-6">
-          <div className="mb-8 flex items-center justify-between">
+          <div className="mb-5 flex items-center justify-between">
             <div className="sm:flex-auto">
               <h1 className="text-xl font-semibold text-gray-900 sm:text-3xl">Edit Promo</h1>
             </div>
           </div>
         </div>
-        <EditPromo onSuccess={() => navigate('/promo', { replace: true })} />
+        <div className="mt-8 rounded-lg border border-gray-100 bg-white px-5 py-5 shadow sm:px-[58px] sm:py-[57.5px]">
+          <EditPromo onSuccess={() => navigate('/promo', { replace: true })} />
+        </div>
       </ContentLayout>
     </>
   );
@@ -79,7 +81,9 @@ export const AddPromoRoute = () => {
             </div>
           </div>
         </div>
-        <AddPromo onSuccess={() => navigate('/promo', { replace: true })} />
+        <div className="mt-8 rounded-lg border border-gray-100 bg-white px-5 py-5 shadow sm:px-[58px] sm:py-[57.5px]">
+          <AddPromo onSuccess={() => navigate('/promo', { replace: true })} />
+        </div>
       </ContentLayout>
     </>
   );

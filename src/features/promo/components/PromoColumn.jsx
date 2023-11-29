@@ -1,10 +1,47 @@
 import { Link } from 'react-router-dom';
+import dayjs from 'dayjs';
 
+import { Tooltip } from '@/components/Elements';
 import { EditIcon } from '@/components/Icons';
 import { Badge } from '@/components/ui/badge';
 import { formatDate } from '@/utils/format';
 
 import { DeletePromo } from './DeletePromo';
+
+const ExpiredAt = ({ value }) => {
+  const date = dayjs(formatDate(value, 'DD MMMM YYYY'));
+  const today = dayjs();
+
+  // if value is same or before today, then it will be red
+  const isExpired = date.isSame(today, 'day') || date.isBefore(today, 'day');
+
+  // if value is less or equal than 7 days from today, then it will be yellow
+  const isLessThan7Days = date.isAfter(today.subtract(7, 'day'));
+
+  if (isExpired) {
+    return (
+      <Tooltip message={'Kadaluarsa'}>
+        <span className="cursor-default text-sm font-medium text-redDestimate-100">
+          {formatDate(value, 'DD MMMM YYYY')}
+        </span>
+      </Tooltip>
+    );
+  } else if (isLessThan7Days) {
+    return (
+      <Tooltip message={'Kadaluarsa kurang dari 7 hari'}>
+        <span className="cursor-default text-sm font-medium text-warning-500">
+          {formatDate(value, 'DD MMMM YYYY')}
+        </span>
+      </Tooltip>
+    );
+  } else {
+    return (
+      <span className="text-sm font-medium text-success-500">
+        {formatDate(value, 'DD MMMM YYYY')}
+      </span>
+    );
+  }
+};
 
 const Status = ({ status }) => {
   return (
@@ -36,6 +73,10 @@ export const columns = [
     accessorKey: 'nama_promo',
   },
   {
+    header: 'Kode Promo',
+    accessorKey: 'kode_voucher',
+  },
+  {
     header: 'Diskon',
     accessorKey: 'jumlah_potongan_persen',
     cell: ({ row }) => {
@@ -48,7 +89,7 @@ export const columns = [
     accessorKey: 'tanggal_kadaluarsa',
     cell: ({ row }) => {
       const expired = row.original.tanggal_kadaluarsa;
-      return expired ? formatDate(expired, 'D MMMM YYYY') : '-';
+      return <ExpiredAt value={expired} />;
     },
   },
   {

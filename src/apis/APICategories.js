@@ -3,10 +3,12 @@ import { toast } from 'react-toastify';
 import { axiosInstance } from '@/configs/axiosInstance';
 
 export const APICategories = {
-  getCategories: async () => {
+  getCategories: async ({ search, pageIndex, pageSize }) => {
     try {
-      const result = await axiosInstance.get(`/categories`);
-      return result.data.categories;
+      const result = await axiosInstance.get(
+        `/categories?category_name=${search}&page=${pageIndex}&per_page=${pageSize}`
+      );
+      return result.data;
     } catch (error) {
       console.error(error);
       throw new Error(error);

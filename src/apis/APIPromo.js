@@ -3,6 +3,28 @@ import { toast } from 'react-toastify';
 import { axiosInstance } from '@/configs/axiosInstance';
 
 export const APIPromo = {
+  getPromo: async ({ search, pageIndex, pageSize }) => {
+    try {
+      const result = await axiosInstance.get(
+        `/user/promo?name=${search}&page=${pageIndex}&per_page=${pageSize}`
+      );
+      return result.data;
+    } catch (error) {
+      console.error(error);
+      throw new Error(error);
+    }
+  },
+
+  getPromoById: async (id) => {
+    try {
+      const result = await axiosInstance.get(`/user/promo/${id}`);
+      return result.data.promo;
+    } catch (error) {
+      console.error(error);
+      throw new Error(error);
+    }
+  },
+
   addPromo: async (formData) => {
     try {
       const result = await axiosInstance.post(`/createpromo`, formData);
@@ -19,26 +41,6 @@ export const APIPromo = {
       toast.success(result.data.message);
     } catch (error) {
       toast.error(error.response.data.message);
-      throw new Error(error);
-    }
-  },
-
-  getPromoById: async (id) => {
-    try {
-      const result = await axiosInstance.get(`/user/promo/${id}`);
-      return result.data.promo;
-    } catch (error) {
-      console.error(error);
-      throw new Error(error);
-    }
-  },
-
-  getPromo: async () => {
-    try {
-      const result = await axiosInstance.get(`/user/promo`);
-      return result.data.promos;
-    } catch (error) {
-      console.error(error);
       throw new Error(error);
     }
   },
