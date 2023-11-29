@@ -1,4 +1,5 @@
 import { Fragment } from 'react';
+import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Dialog, Transition } from '@headlessui/react';
 import clsx from 'clsx';
@@ -6,8 +7,11 @@ import { XIcon } from 'lucide-react';
 
 import avatar from '@/assets/images/avatar.png';
 import { Logo, sideNavigation, SignOut } from '@/components/Common';
+import { clearQuery } from '@/stores/ReactTableSlice';
 
 export const MobileSidebar = ({ sidebarOpen, setSidebarOpen }) => {
+  const dispatch = useDispatch();
+
   return (
     <Transition.Root show={sidebarOpen} as={Fragment}>
       <Dialog as="div" className="relative z-40 lg:hidden" onClose={setSidebarOpen}>
@@ -70,6 +74,7 @@ export const MobileSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                             <li key={item.name}>
                               <NavLink
                                 to={item.to}
+                                onClick={() => dispatch(clearQuery())}
                                 className={({ isActive }) =>
                                   clsx(
                                     isActive

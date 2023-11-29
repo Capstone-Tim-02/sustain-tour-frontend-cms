@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as y from 'yup';
 
 import { APITnc } from '@/apis/APITnc';
+import { Spinner } from '@/components/Elements';
 import { InputField, TextEditorField } from '@/components/Forms';
 import { Button } from '@/components/ui/button';
+import { clearQuery } from '@/stores/ReactTableSlice';
 
 const schema = y.object({
   tnc_name: y
@@ -26,9 +29,13 @@ export const EditTnc = ({ onSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [detailTnc, setDetailTnc] = useState(null);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     async function fetchTnc() {
+      setIsLoading(true);
       setDetailTnc(await APITnc.getTncById(tncId));
+      setIsLoading(false);
     }
 
     fetchTnc();
@@ -46,6 +53,7 @@ export const EditTnc = ({ onSuccess }) => {
     try {
       setIsLoading(true);
       await APITnc.updateTnc(tncId, data);
+      dispatch(clearQuery());
       onSuccess();
     } catch (error) {
       setIsLoading(false);
@@ -63,33 +71,41 @@ export const EditTnc = ({ onSuccess }) => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} id="editTnc" className="space-y-4">
-        <InputField
-          placeholder="Masukkan judul"
-          label="Judul"
-          autoComplete="off"
-          registration={register('tnc_name')}
-          error={errors.tnc_name}
-        />
+      {isLoading ? (
+        <div className="flex h-96 items-center justify-center">
+          <Spinner size="lg" className="mx-auto mt-10" />
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit(onSubmit)} id="editTnc" className="space-y-4">
+          <InputField
+            placeholder="Masukkan judul"
+            label="Judul"
+            autoComplete="off"
+            registration={register('tnc_name')}
+            error={errors.tnc_name}
+          />
 
-        <TextEditorField
-          textareaName="description"
-          placeholder="Masukkan Deskripsi"
-          label="Deskripsi"
-          control={control}
-          registration={register('description')}
-          error={errors.description}
-        />
-      </form>
+          <TextEditorField
+            textareaName="description"
+            placeholder="Masukkan Deskripsi"
+            label="Deskripsi"
+            control={control}
+            registration={register('description')}
+            error={errors.description}
+          />
 
-      <div className="flex justify-end gap-x-2 pt-5">
-        <Link to="/syarat_dan_ketentuan" replace>
-          <Button variant="outline">Kembali</Button>
-        </Link>
-        <Button isloading={isLoading} form="editTnc" type="submit">
-          Simpan
-        </Button>
-      </div>
+          <div className="flex justify-end gap-x-2 pt-5">
+            <Link to="/syarat_dan_ketentuan">
+              <Button variant="outline" onClick={() => dispatch(clearQuery())}>
+                Kembali
+              </Button>
+            </Link>
+            <Button isloading={isLoading} form="editTnc" type="submit">
+              Simpan
+            </Button>
+          </div>
+        </form>
+      )}
     </>
   );
 };

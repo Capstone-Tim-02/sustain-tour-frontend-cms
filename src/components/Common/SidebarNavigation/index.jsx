@@ -1,10 +1,14 @@
+import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
 
 import avatar from '@/assets/images/avatar.png';
 import { Logo, sideNavigation, SignOut } from '@/components/Common';
+import { clearQuery } from '@/stores/ReactTableSlice';
 
 export const SidebarNavigation = () => {
+  const dispatch = useDispatch();
+
   return (
     <>
       {/* Static sidebar for desktop */}
@@ -28,6 +32,7 @@ export const SidebarNavigation = () => {
                     <li key={item.name}>
                       <NavLink
                         to={item.to}
+                        onClick={() => dispatch(clearQuery())}
                         className={({ isActive }) =>
                           clsx(
                             isActive

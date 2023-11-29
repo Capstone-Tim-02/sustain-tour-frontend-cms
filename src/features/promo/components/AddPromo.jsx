@@ -1,13 +1,21 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as y from 'yup';
 
 import { APIPromo } from '@/apis/APIPromo';
-import { DropdownField, FieldImage, InputField, TextAreaField, TextEditorField } from '@/components/Forms';
+import {
+  DropdownField,
+  FieldImage,
+  InputField,
+  TextAreaField,
+  TextEditorField,
+} from '@/components/Forms';
 import { Button } from '@/components/ui/button';
+import { clearQuery } from '@/stores/ReactTableSlice';
 import { convertToPositive } from '@/utils/format';
 
 const schema = y.object({
@@ -23,6 +31,7 @@ const schema = y.object({
     .max(100, 'Nama promo tidak boleh lebih dari 100 karakter'),
   kode_voucher: y
     .string()
+    .uppercase()
     .required('Kode promo tidak boleh kosong')
     .min(5, 'Kode promo minimal 5 karakter')
     .max(40, 'Kode promo tidak boleh lebih dari 40 karakter'),
@@ -43,9 +52,7 @@ const schema = y.object({
     .required('Peraturan promo tidak boleh kosong')
     .min(10, 'Peraturan promo minimal 10 karakter')
     .max(2000, 'Peraturan promo tidak boleh lebih dari 2000 karakter'),
-  tanggal_kadaluarsa: y
-    .string()
-    .required('Tanggal kadaluarsa tidak boleh kosong'),
+  tanggal_kadaluarsa: y.string().required('Tanggal kadaluarsa tidak boleh kosong'),
   image_voucher: y
     .mixed()
     .required('Gambar tidak boleh kosong')
@@ -75,6 +82,9 @@ const statusOptions = [
 export const AddPromo = ({ onSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorImage, setErrorImage] = useState(false);
+
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
@@ -96,6 +106,7 @@ export const AddPromo = ({ onSuccess }) => {
 
       setIsLoading(true);
       await APIPromo.addPromo(formData);
+      dispatch(clearQuery());
       onSuccess();
     } catch (error) {
       toast.error(error);
@@ -141,114 +152,117 @@ export const AddPromo = ({ onSuccess }) => {
   };
 
   return (
-    <div className="mt-8 overflow-hidden rounded-lg bg-white p-10 shadow">
-      <form onSubmit={handleSubmit(onSubmit)} id="addPromo" className="space-y-5">
-        <div className="flex flex-col gap-4 md:flex-row">
-          <div className="flex flex-col gap-4 md:max-w-[50%] md:flex-grow">
-            {/* Judul Promo */}
-            <InputField
-              placeholder="Masukkan judul promo"
-              label="Judul Promo"
-              autoComplete="off"
-              registration={register('title')}
-              error={errors.title}
-            />
+    <form onSubmit={handleSubmit(onSubmit)} id="addPromo" className="space-y-5">
+      <div className="flex flex-col gap-4 md:flex-row">
+        <div className="flex flex-col gap-4 md:max-w-[50%] md:flex-grow">
+          {/* Judul Promo */}
+          <InputField
+            placeholder="Masukkan judul promo"
+            label="Judul Promo"
+            autoComplete="off"
+            registration={register('title')}
+            error={errors.title}
+          />
 
-            {/* Kode Promo */}
-            <InputField
-              placeholder="Masukkan kode promo"
-              label="Kode Promo"
-              autoComplete="off"
-              registration={register('kode_voucher')}
-              error={errors.kode_voucher}
-            />
+          {/* Kode Promo */}
+          <InputField
+            placeholder="Masukkan kode promo"
+            label="Kode Promo"
+            autoComplete="off"
+            registration={register('kode_voucher')}
+            error={errors.kode_voucher}
+            onInput={(e) => {
+              e.target.value = e.target.value.toUpperCase();
+            }}
+          />
 
-            {/* Diskon Promo */}
-            <InputField
-              type="number"
-              placeholder="Masukkan diskon promo"
-              label="Diskon (Masukkan Angka)"
-              autoComplete="off"
-              registration={register('jumlah_potongan_persen')}
-              error={errors.jumlah_potongan_persen}
-              onChange={handleConvertToPositive}
-            />
+          {/* Diskon Promo */}
+          <InputField
+            type="number"
+            placeholder="Masukkan diskon promo"
+            label="Diskon (Masukkan Angka)"
+            autoComplete="off"
+            registration={register('jumlah_potongan_persen')}
+            error={errors.jumlah_potongan_persen}
+            onChange={handleConvertToPositive}
+          />
 
-            {/* Status */}
-            <DropdownField
-              label="Status"
-              options={statusOptions}
-              registration={register('status_aktif')}
-              error={errors.status_aktif}
-            />
+          {/* Status */}
+          <DropdownField
+            label="Status"
+            options={statusOptions}
+            registration={register('status_aktif')}
+            error={errors.status_aktif}
+          />
 
-            {/* Deskripsi */}
-            <TextAreaField
-              label="Deskripsi"
-              placeholder="Masukkan deskripsi promo"
-              autoComplete="off"
-              registration={register('deskripsi')}
-              error={errors.deskripsi}
-              className="row-span-2"
-            />
+          {/* Deskripsi */}
+          <TextAreaField
+            label="Deskripsi"
+            placeholder="Masukkan deskripsi promo"
+            autoComplete="off"
+            registration={register('deskripsi')}
+            error={errors.deskripsi}
+            className="row-span-2"
+          />
 
-            {/* Peraturan */}
-            <TextEditorField
-              textareaName="peraturan"
-              label="Peraturan"
-              control={control}
-              registration={register('peraturan')}
-              error={errors.peraturan}
-            />
+          {/* Peraturan */}
+          <TextEditorField
+            textareaName="peraturan"
+            label="Peraturan"
+            control={control}
+            registration={register('peraturan')}
+            error={errors.peraturan}
+          />
 
-          {/* Gambar Promo */}            
+          {/* Gambar Promo */}
           <FieldImage
-              id='image_voucher'
-              label='Gambar Promo'
-              name='image_voucher'
-              register={register}
-              setValue={setValue}
-              getValues={getValues}
-              error={errors.image_voucher}
-              customRequest={(file, onSuccess, onError) => 
-                imageCustomRequest(file, onSuccess, onError)
-              }
-              isImageError={errorImage}
-              setIsImageError={setErrorImage}
-              />
-          </div>
-
-          <div className="flex flex-col gap-4 md:flex-grow">
-            {/* Nama Promo */}
-            <InputField
-              placeholder="Masukkan nama promo"
-              label="Nama Promo"
-              autoComplete="off"
-              registration={register('nama_promo')}
-              error={errors.nama_promo}
-            />
-
-            {/* Tanggal Kadaluarsa */}
-            <InputField
-              type="date"
-              placeholder="Pilih tanggal"
-              label="Tanggal Kadaluarsa"
-              autoComplete="off"
-              registration={register('tanggal_kadaluarsa')}
-              error={errors.tanggal_kadaluarsa}
-            />
-          </div>
+            id="image_voucher"
+            label="Gambar Promo"
+            name="image_voucher"
+            register={register}
+            setValue={setValue}
+            getValues={getValues}
+            error={errors.image_voucher}
+            customRequest={(file, onSuccess, onError) =>
+              imageCustomRequest(file, onSuccess, onError)
+            }
+            isImageError={errorImage}
+            setIsImageError={setErrorImage}
+          />
         </div>
 
-        <div className="flex justify-end gap-x-2 pt-5">
-          <Link to="/promo" replace>
-            <Button variant="outline">Kembali</Button>
-          </Link>
-          <Button form="addPromo" type="submit" isloading={isLoading}>
-            Tambah Promo
+        <div className="flex flex-col gap-4 md:flex-grow">
+          {/* Nama Promo */}
+          <InputField
+            placeholder="Masukkan nama promo"
+            label="Nama Promo"
+            autoComplete="off"
+            registration={register('nama_promo')}
+            error={errors.nama_promo}
+          />
+
+          {/* Tanggal Kadaluarsa */}
+          <InputField
+            type="date"
+            placeholder="Pilih tanggal"
+            label="Tanggal Kadaluarsa"
+            autoComplete="off"
+            registration={register('tanggal_kadaluarsa')}
+            error={errors.tanggal_kadaluarsa}
+          />
+        </div>
+      </div>
+
+      <div className="flex justify-end gap-x-2 pt-5">
+        <Link to="/promo">
+          <Button variant="outline" onClick={() => dispatch(clearQuery())}>
+            Kembali
           </Button>
-        </div>
-      </form>
-    </div>
+        </Link>
+        <Button form="addPromo" type="submit" isloading={isLoading}>
+          Tambah Promo
+        </Button>
+      </div>
+    </form>
   );
 };

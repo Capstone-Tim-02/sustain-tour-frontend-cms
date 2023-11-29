@@ -12,6 +12,7 @@ import {
   setQueryPageIndex,
   setQuerySearchGlobal,
 } from '@/stores/ReactTableSlice';
+import { convertNumberToThousand } from '@/utils/format';
 
 import { columns } from './UsersColumn';
 
@@ -24,7 +25,7 @@ export const UsersList = () => {
 
   const dispatch = useDispatch();
 
-  const USERS_DATA = usersSelector?.data.users;
+  const USERS_DATA = usersSelector?.data?.users;
   const USERS_PAGINATION = usersSelector?.data?.pagination;
 
   useEffect(() => {
@@ -48,7 +49,7 @@ export const UsersList = () => {
           type="text"
           id="search"
           autoComplete="off"
-          placeholder="Cari"
+          placeholder={`${convertNumberToThousand(USERS_PAGINATION?.total || 0)} Data...`}
           startIcon={<SearchIcon className="h-4 w-4 text-gray-400" />}
           onChange={(e) => setSearchText(e.target.value)}
           value={searchText}

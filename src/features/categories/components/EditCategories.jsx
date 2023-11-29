@@ -6,6 +6,7 @@ import { DialogClose } from '@radix-ui/react-dialog';
 import * as y from 'yup';
 
 import { APICategories } from '@/apis/APICategories';
+import { Spinner } from '@/components/Elements';
 import { InputField } from '@/components/Forms';
 import { EditIcon } from '@/components/Icons';
 import { Button } from '@/components/ui/button';
@@ -36,7 +37,9 @@ export const EditCategory = ({ category_name }) => {
 
   useEffect(() => {
     async function fetchCategory() {
+      setIsLoading(true);
       setDetailCategory(await APICategories.getCategory(category_name));
+      setIsLoading(false);
     }
     if (isDialogOpen) {
       fetchCategory();
@@ -80,26 +83,32 @@ export const EditCategory = ({ category_name }) => {
         <DialogHeader>
           <DialogTitle className="mb-4 text-primary-100">Edit Kategori</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)} id="editCategory" className="space-y-3">
-          <InputField
-            placeholder="Masukkan Nama Kategori"
-            label="Nama Kategori"
-            autoComplete="off"
-            registration={register('category_name')}
-            error={errors.category_name}
-          />
-        </form>
-        <DialogFooter>
-          <DialogClose
-            onClick={() => setIsDialogOpen(!isDialogOpen)}
-            className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-600 ring-offset-white transition-colors hover:bg-slate-100 hover:text-slate-900"
-          >
-            <span>Batal</span>
-          </DialogClose>
-          <Button isloading={isLoading} form="editCategory" type="submit">
-            Simpan
-          </Button>
-        </DialogFooter>
+        {isLoading ? (
+          <Spinner size="base" className="mx-auto mb-5" />
+        ) : (
+          <>
+            <form onSubmit={handleSubmit(onSubmit)} id="editCategory" className="space-y-3">
+              <InputField
+                placeholder="Masukkan Nama Kategori"
+                label="Nama Kategori"
+                autoComplete="off"
+                registration={register('category_name')}
+                error={errors.category_name}
+              />
+            </form>
+            <DialogFooter>
+              <DialogClose
+                onClick={() => setIsDialogOpen(!isDialogOpen)}
+                className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-600 ring-offset-white transition-colors hover:bg-slate-100 hover:text-slate-900"
+              >
+                <span>Batal</span>
+              </DialogClose>
+              <Button isloading={isLoading} form="editCategory" type="submit">
+                Simpan
+              </Button>
+            </DialogFooter>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );

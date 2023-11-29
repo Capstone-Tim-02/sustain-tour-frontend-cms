@@ -33,6 +33,10 @@ export const columns = [
     accessorKey: 'wisata_title',
   },
   {
+    header: 'Kode Promo',
+    accessorKey: 'kode_voucher',
+  },
+  {
     header: 'Harga Tiket',
     accessorKey: 'total_cost',
     cell: ({ row }) => {
@@ -53,7 +57,7 @@ export const columns = [
     accessorKey: 'CheckinBooking',
     cell: ({ row }) => {
       const CheckinBooking = row.original.checkin_booking;
-      return CheckinBooking ? formatDate(CheckinBooking, 'D MMMM YYYY HH:mm:ss') : '-';
+      return CheckinBooking ? formatDate(CheckinBooking, 'D MMMM YYYY') : '-';
     },
   },
   {

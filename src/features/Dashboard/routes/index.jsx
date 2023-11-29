@@ -61,7 +61,7 @@ export const Dashboard = () => {
   }, []);
 
   return (
-    <ContentLayout title="Dashboard">
+    <ContentLayout title="Overview">
       <div className="justify-between sm:flex">
         <Breadcrumb>
           <span className="px-2 text-sm font-semibold text-primary-100">Overview</span>

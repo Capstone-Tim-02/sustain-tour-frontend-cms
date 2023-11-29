@@ -82,7 +82,7 @@ export const DetailTransaction = ({ invoiceNumber }) => {
           <DialogTitle className="mb-4 text-primary-100">Detail Transaksi</DialogTitle>
         </DialogHeader>
         {isLoading ? (
-          <Spinner size="lg" className="mx-auto mb-5" />
+          <Spinner size="base" className="mx-auto mb-5" />
         ) : (
           <div className="grid grid-cols-1 items-center justify-center gap-2 sm:grid-cols-2">
             <div className="flex flex-col items-center justify-center sm:hidden">
