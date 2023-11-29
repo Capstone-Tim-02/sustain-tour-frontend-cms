@@ -365,15 +365,12 @@ const onPreview = async (file) => {
               id= 'cate'
             />
 
-
-            {/* Fasilitas Lokal */}
-            <TextEditorField
-              textareaName="fasilitas"
+            <InputField
+              placeholder="Masukkan fasilitas(contoh: Parkiran, Kantin, Mushola, dll)"
               label="Fasilitas Lokal"
-              control={control}
+              autoComplete="off"
               registration={register('fasilitas')}
               error={errors.fasilitas}
-              id='fas'
             />
 
             {/* Highlight */}
