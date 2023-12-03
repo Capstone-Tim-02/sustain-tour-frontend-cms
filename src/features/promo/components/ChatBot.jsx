@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import IconChatBot from '@/assets/images/icon-chat-bot.png';
 import LogoDestimate from '@/assets/images/logo-destimate.png';
 
@@ -7,10 +7,15 @@ import { useDispatch } from 'react-redux';
 import { SendIcon } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { formatDate } from '@/utils/format';
+import { bubbleLeft, bubbleRight } from '@/utils/bubble';
+import { Spinner } from '@/components/Elements';
 
 export const ChatBot = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [date, setDate] = useState();
+  const [date, setDate] = useState('');
+  const [check, setCheck] = useState({
+    data: '',
+  });
 
   const [prompts, setPrompts] = useState([]);
   const [data, setData] = useState({ message: '' });
@@ -20,16 +25,16 @@ export const ChatBot = () => {
 
     try {
       setIsLoading(true);
-      setDate(new Date().toLocaleString());
-      // setPrompts((prevPrompts) => ({ ...prevPrompts, question: data.message }));
+      setDate(formatDate(new Date().toLocaleString(), 'D MMMM YYYY, HH:mm'));
+
+      setCheck((prevCheck) => ({ ...prevCheck, data: data.message }));
+
       const result = await APIPromo.addChatBot(data);
       setPrompts((prevPrompts) => [
         ...prevPrompts,
         { question: data.message, answer: result.data },
       ]);
-      // setPrompts((prevPrompts) => ({ ...prevPrompts, answer: result.data }));
       console.log(result);
-      // dispatch(clearQuery());
     } catch (error) {
       toast.error(error);
       setIsLoading(false);
@@ -39,39 +44,68 @@ export const ChatBot = () => {
     }
   };
 
+  console.log(check.data);
+
   return (
     <div className="flex min-h-[470px] flex-col justify-between xl:max-h-[470px]">
       <div className="pb-5">
         <p className="text-center text-sm text-[#AEAEAE]">{date}</p>
       </div>
-
       <div>
-        {date ? (
-          <div className="flex flex-col gap-5 overflow-y-hidden hover:overflow-y-auto xl:max-h-[330px]">
-            {prompts.map((prompt, index) => (
+        <div className="flex max-h-screen flex-col overflow-y-hidden hover:overflow-y-auto xl:max-h-[330px]">
+          {date ? (
+            prompts.map((prompt, index) => (
               <div key={index}>
-                <div className="chat chat-end">
-                  <p className="chat-bubble bg-primary-40 text-[15px] text-white">
+                <div className="flex items-end justify-end">
+                  <p className="bg-primary-40 text-[15px] text-white" style={bubbleRight}>
                     {prompt.question}
                   </p>
                 </div>
 
-                <div className="chat chat-start">
-                  <div className="chat-image avatar">
+                <div className="flex">
+                  <div className="my-6 -mr-3 flex flex-row items-end">
                     <div className="h-12 w-12 rounded-full border border-primary-80 bg-white px-2 py-3">
                       <img src={IconChatBot} alt="Chat Bot Icon" />
                     </div>
                   </div>
-                  <p className="chat-bubble whitespace-pre-line bg-[#F0F0F0] text-[15px] text-black">
+                  <p
+                    className="whitespace-pre-line bg-[#F0F0F0] text-[15px] text-black"
+                    style={bubbleLeft}
+                  >
                     {prompt.answer}
                   </p>
                 </div>
               </div>
-            ))}
-          </div>
-        ) : (
-          <BlankChat />
-        )}
+            ))
+          ) : (
+            <BlankChat />
+          )}
+          {isLoading && (
+            <>
+              <div className="flex items-end justify-end">
+                <p className="bg-primary-40 text-[15px] text-white" style={bubbleRight}>
+                  {check.data}
+                </p>
+              </div>
+
+              <div className="flex">
+                <div className="my-6 -mr-3 flex flex-row items-end">
+                  <div className="h-12 w-12 rounded-full border border-primary-80 bg-white px-2 py-3">
+                    <img src={IconChatBot} alt="Chat Bot Icon" />
+                  </div>
+                </div>
+                <div
+                  className="whitespace-pre-line bg-[#F0F0F0] text-[15px] text-black"
+                  style={bubbleLeft}
+                >
+                  <div className="flex items-center justify-center">
+                    <Spinner size="md" />
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
 
         <form onSubmit={handleSubmit}>
           <div className="mt-5 flex">

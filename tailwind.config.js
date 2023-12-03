@@ -137,6 +137,5 @@ module.exports = {
     require('@tailwindcss/typography'),
     require('@material-tailwind/react'),
     require('tailwind-scrollbar')({ nocompatible: true }),
-    require('daisyui'),
   ],
 };
