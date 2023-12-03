@@ -55,4 +55,14 @@ export const APIPromo = {
       throw new Error(error);
     }
   },
+
+  addChatBot: async (data) => {
+    try {
+      const result = await axiosInstance.post(`/chatbot/recommend-promo`, data);
+      return result.data;
+    } catch (error) {
+      console.log(error.response.data.message);
+      throw new Error(error);
+    }
+  },
 };

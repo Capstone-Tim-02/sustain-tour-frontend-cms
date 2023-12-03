@@ -26,6 +26,7 @@
     "chart.js": "^4.4.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "daisyui": "^4.4.17",
     "dayjs": "^1.11.10",
     "dompurify": "^3.0.6",
     "fs-extra": "^11.1.1",
