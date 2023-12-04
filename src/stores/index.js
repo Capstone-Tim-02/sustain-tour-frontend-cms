@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
+import currentUser from '@/stores/CurrentUserSlice';
 import categories from '@/stores/features/CategoriesSlice';
 import destinations from '@/stores/features/DestinationSlice';
 import promos from '@/stores/features/PromoSlice';
@@ -17,6 +18,7 @@ const store = configureStore({
     promos,
     transactions,
     reactTable,
+    currentUser,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

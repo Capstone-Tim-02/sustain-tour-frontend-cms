@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
 import { Login } from '@/features/auth';
 import { Category } from '@/features/categories';
@@ -8,12 +8,17 @@ import { NotFound } from '@/features/notFound';
 import { AddPromoRoute, EditPromoRoute, Promo } from '@/features/promo';
 import { EditTncRoute, Tnc } from '@/features/Tnc';
 import { Transactions } from '@/features/transactions';
+import { Unauthorized } from '@/features/unauthorized';
 import { Users } from '@/features/users';
+import { globalRoute } from '@/lib/globalRoute';
 
 import { PrivateRoute } from './private';
 import { ProtectedRoute } from './protected';
 
 export const AppRoutes = () => {
+  const navigate = useNavigate();
+  globalRoute.navigate = navigate;
+
   return (
     <Routes>
       <Route path="/" element={<PrivateRoute />}>
@@ -33,6 +38,7 @@ export const AppRoutes = () => {
         <Route path="/login" element={<Login />} />
       </Route>
       <Route path="*" element={<NotFound />} />
+      <Route path="/unauthorized" element={<Unauthorized />} />
     </Routes>
   );
 };

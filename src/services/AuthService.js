@@ -16,8 +16,7 @@ export const AuthService = {
     if (token) Cookies.set('token', token, { expires });
   },
 
-  clearCredentialsFromCookie(callback) {
+  clearCredentialsFromCookie() {
     Cookies.remove('token');
-    if (callback) callback();
   },
 };
