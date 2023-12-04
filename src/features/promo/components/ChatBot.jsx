@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import IconChatBot from '@/assets/images/icon-chat-bot.png';
 import LogoDestimate from '@/assets/images/logo-destimate.png';
 
 import { APIPromo } from '@/apis/APIPromo';
-import { Check, RotateCcwIcon, SendIcon } from 'lucide-react';
+import { RotateCcwIcon, SendIcon } from 'lucide-react';
 import { formatDate } from '@/utils/format';
 import { bubbleLeft, bubbleRight } from '@/utils/bubble';
 import { Spinner } from '@/components/Elements';
 
 export const ChatBot = () => {
+  const bottomRef = useRef(null);
   const [date, setDate] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isRotating, setIsRotating] = useState(false);
@@ -66,13 +67,17 @@ export const ChatBot = () => {
     setCheck({ data: '' });
   };
 
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [prompts, isLoading]);
+
   return (
     <div className="flex min-h-[470px] flex-col justify-between xl:max-h-[470px]">
       <div className="pb-5">
         <p className="text-center text-sm text-[#AEAEAE]">{date}</p>
       </div>
       <div>
-        <div className="flex max-h-screen flex-col overflow-y-hidden hover:overflow-y-auto xl:max-h-[330px]">
+        <div className="relative flex max-h-screen flex-col overflow-y-hidden hover:overflow-y-auto xl:max-h-[330px]">
           {date ? (
             prompts.map((prompt, index) => (
               <div key={index}>
@@ -84,7 +89,7 @@ export const ChatBot = () => {
 
                 <div className="flex">
                   <div className="my-6 -mr-3 flex flex-row items-end">
-                    <div className="h-12 w-12 rounded-full border border-primary-80 bg-white px-2 py-3">
+                    <div className="h-6 w-6 rounded-full border border-primary-80 bg-white p-0.5 md:h-12 md:w-12 md:px-2 md:py-3">
                       <img src={IconChatBot} alt="Chat Bot Icon" />
                     </div>
                   </div>
@@ -110,7 +115,7 @@ export const ChatBot = () => {
 
               <div className="flex">
                 <div className="my-6 -mr-3 flex flex-row items-end">
-                  <div className="h-12 w-12 rounded-full border border-primary-80 bg-white px-2 py-3">
+                  <div className="h-6 w-6 rounded-full border border-primary-80 bg-white p-0.5 md:h-12 md:w-12 md:px-2 md:py-3">
                     <img src={IconChatBot} alt="Chat Bot Icon" />
                   </div>
                 </div>
@@ -125,11 +130,12 @@ export const ChatBot = () => {
               </div>
             </>
           )}
+          <div ref={bottomRef} />
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="mt-5 flex">
-            <div onClick={handleReset} className="-ml-8 cursor-pointer p-3">
+            <div onClick={handleReset} className="-ml-4 cursor-pointer p-3 md:-ml-8">
               <RotateCcwIcon
                 size={25}
                 style={{
@@ -151,7 +157,7 @@ export const ChatBot = () => {
                   handleSubmit(e);
                 }
               }}
-              className="w-full resize-none overflow-hidden rounded border-[#C6C6C6] p-3 pr-12 text-black"
+              className="w-full resize-none overflow-hidden rounded border-[#C6C6C6] p-3 pr-12 text-[13px] text-black md:text-base"
             ></textarea>
             <button
               type="submit"
@@ -163,7 +169,7 @@ export const ChatBot = () => {
             </button>
           </div>
         </form>
-        <p className=" mt-2 text-center text-sm text-[#AEAEAE]">
+        <p className=" mt-2 text-center text-[8px] text-[#AEAEAE] md:text-sm">
           Virtual Asisten bisa saja memberi informasi yang tidak tepat. Mohon untuk memeriksa
           kembali informasi yang diberikan
         </p>
@@ -178,7 +184,7 @@ const BlankChat = () => {
       <div className="w-14">
         <img src={LogoDestimate} alt="Destimate Logo" />
       </div>
-      <div className="mt-5 text-center font-serif text-black">
+      <div className="mt-5 text-center font-sans text-black">
         <h2 className="text-xl font-bold">Mau Cari Promo Apa ?</h2>
         <p className="text-sm">
           DeBot Akan membantu kamu menjawab pertanyaan terkait rekomendasi Promo Destinasi

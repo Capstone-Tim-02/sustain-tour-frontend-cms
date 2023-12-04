@@ -17,7 +17,7 @@ export const Promo = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setIsVisible((prevIsVisible) => !prevIsVisible);
-    }, 8000);
+    }, 7000);
     return () => clearInterval(timer);
   }, []);
 
@@ -30,26 +30,30 @@ export const Promo = () => {
       </div>
 
       <div className="mt-6">
-        <div className="mb-5 flex items-center justify-between">
-          <div className="sm:flex-auto">
-            <h1 className="text-xl font-semibold text-gray-900 sm:text-3xl">Data Promo</h1>
+        <div className="mb-5 flex items-center justify-end">
+          <div className="flex w-full justify-start">
+            <div className="sm:flex-auto">
+              <h1 className="text-xl font-semibold text-gray-900 sm:text-3xl">Data Promo</h1>
+            </div>
           </div>
-          {isVisible && (
-            <div className="-mt-20">
-              <p
-                className="rounded-xl bg-primary-40 text-sm text-white md:w-[320px]"
-                style={bubbleRight}
-              >
-                Bisa tanya aku kalau kamu masih bingung mencari promo yang menarik
-              </p>
-            </div>
-          )}
+          <div className="absolute flex sm:relative">
+            {isVisible && (
+              <div className="-mr-2 -mt-14 md:-mt-16">
+                <p
+                  className="w-[280px] rounded-xl bg-primary-40 text-xs text-white  md:w-[320px] md:text-sm"
+                  style={bubbleRight}
+                >
+                  Bisa tanya aku kalau kamu masih bingung mencari promo yang menarik
+                </p>
+              </div>
+            )}
 
-          <Link to="/promo/virtual-asisten">
-            <div className="-mt-5 h-14 w-14 rounded-full border border-primary-80 bg-white px-2 py-3">
-              <img src={IconChatBot} alt="Chat Bot Icon" />
-            </div>
-          </Link>
+            <Link to="/promo/virtual-asisten">
+              <div className="-mt-5 h-14 w-14 rounded-full border border-primary-80 bg-white px-2 py-3">
+                <img src={IconChatBot} alt="Chat Bot Icon" />
+              </div>
+            </Link>
+          </div>
         </div>
         <PromoList />
       </div>
