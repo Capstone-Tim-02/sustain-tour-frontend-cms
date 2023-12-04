@@ -82,7 +82,10 @@ export const ChatBot = () => {
             prompts.map((prompt, index) => (
               <div key={index}>
                 <div className="flex items-end justify-end">
-                  <p className="bg-primary-40 text-[15px] text-white" style={bubbleRight}>
+                  <p
+                    className="bg-primary-40 text-[11px] text-white md:text-[15px]"
+                    style={bubbleRight}
+                  >
                     {prompt.question}
                   </p>
                 </div>
@@ -94,7 +97,7 @@ export const ChatBot = () => {
                     </div>
                   </div>
                   <p
-                    className="whitespace-pre-line bg-[#F0F0F0] text-[15px] text-black"
+                    className="whitespace-pre-line bg-[#F0F0F0] text-[10px] text-black md:text-[15px]"
                     style={bubbleLeft}
                   >
                     {prompt.answer}
@@ -108,7 +111,10 @@ export const ChatBot = () => {
           {isLoading && (
             <>
               <div className="flex items-end justify-end">
-                <p className="bg-primary-40 text-[15px] text-white" style={bubbleRight}>
+                <p
+                  className="bg-primary-40 text-[11px] text-white md:text-[15px]"
+                  style={bubbleRight}
+                >
                   {check.data}
                 </p>
               </div>
