@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Breadcrumb } from '@/components/Elements';
@@ -12,6 +13,14 @@ import { EditPromo } from '../components/EditPromo';
 import { PromoList } from '../components/PromoList';
 
 export const Promo = () => {
+  const [isVisible, setIsVisible] = useState(true);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIsVisible((prevIsVisible) => !prevIsVisible);
+    }, 8000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <ContentLayout title="Promo">
       <div className="justify-between sm:flex">
@@ -25,14 +34,16 @@ export const Promo = () => {
           <div className="sm:flex-auto">
             <h1 className="text-xl font-semibold text-gray-900 sm:text-3xl">Data Promo</h1>
           </div>
-          <div className="-mt-20">
-            <p
-              className="rounded-xl bg-primary-40 text-sm text-white md:w-[320px]"
-              style={bubbleRight}
-            >
-              Bisa tanya aku kalau kamu masih bingung mencari promo yang menarik
-            </p>
-          </div>
+          {isVisible && (
+            <div className="-mt-20">
+              <p
+                className="rounded-xl bg-primary-40 text-sm text-white md:w-[320px]"
+                style={bubbleRight}
+              >
+                Bisa tanya aku kalau kamu masih bingung mencari promo yang menarik
+              </p>
+            </div>
+          )}
 
           <Link to="/promo/virtual-asisten">
             <div className="-mt-5 h-14 w-14 rounded-full border border-primary-80 bg-white px-2 py-3">

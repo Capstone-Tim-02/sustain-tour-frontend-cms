@@ -61,7 +61,7 @@ export const APIPromo = {
       const result = await axiosInstance.post(`/chatbot/recommend-promo`, data);
       return result.data;
     } catch (error) {
-      console.log(error.response.data.message);
+      toast.error(error.response.data.message);
       throw new Error(error);
     }
   },

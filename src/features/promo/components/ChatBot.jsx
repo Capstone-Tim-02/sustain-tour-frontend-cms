@@ -3,22 +3,20 @@ import IconChatBot from '@/assets/images/icon-chat-bot.png';
 import LogoDestimate from '@/assets/images/logo-destimate.png';
 
 import { APIPromo } from '@/apis/APIPromo';
-import { useDispatch } from 'react-redux';
-import { SendIcon } from 'lucide-react';
-import { toast } from 'react-toastify';
+import { Check, RotateCcwIcon, SendIcon } from 'lucide-react';
 import { formatDate } from '@/utils/format';
 import { bubbleLeft, bubbleRight } from '@/utils/bubble';
 import { Spinner } from '@/components/Elements';
 
 export const ChatBot = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState('');
-  const [check, setCheck] = useState({
-    data: '',
-  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [isRotating, setIsRotating] = useState(false);
 
-  const [prompts, setPrompts] = useState([]);
+  const [arrQuestion, setArrQuestion] = useState([]);
+  const [check, setCheck] = useState({ data: '' });
   const [data, setData] = useState({ message: '' });
+  const [prompts, setPrompts] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,25 +24,47 @@ export const ChatBot = () => {
     try {
       setIsLoading(true);
       setDate(formatDate(new Date().toLocaleString(), 'D MMMM YYYY, HH:mm'));
-
       setCheck((prevCheck) => ({ ...prevCheck, data: data.message }));
+      setArrQuestion((prevArrQuestion) => [...prevArrQuestion, data.message]);
 
-      const result = await APIPromo.addChatBot(data);
+      const result =
+        arrQuestion.length > 0
+          ? await APIPromo.addChatBot({
+              message:
+                'pertanyaan sebelumnya \n' +
+                arrQuestion
+                  .map((question, index) => `pertanyaan ${index + 1}: ${question}`)
+                  .join('\n') +
+                'jawab berhubungan dengan pertanyaan dan jawaban yang harusnya anda jawab dari pertanyaan sebelumnya untuk pertanyaan berikut : \n' +
+                data.message,
+            })
+          : await APIPromo.addChatBot({
+              message: data.message,
+            });
+
       setPrompts((prevPrompts) => [
         ...prevPrompts,
         { question: data.message, answer: result.data },
       ]);
-      console.log(result);
     } catch (error) {
-      toast.error(error);
+      setDate('');
       setIsLoading(false);
     } finally {
       setData({ message: '' });
       setIsLoading(false);
+      setIsRotating(false);
     }
   };
 
-  console.log(check.data);
+  const handleReset = () => {
+    setArrQuestion([]);
+    setIsRotating(true);
+    setIsLoading(false);
+    setDate('');
+    setPrompts([]);
+    setData({ message: '' });
+    setCheck({ data: '' });
+  };
 
   return (
     <div className="flex min-h-[470px] flex-col justify-between xl:max-h-[470px]">
@@ -109,11 +129,20 @@ export const ChatBot = () => {
 
         <form onSubmit={handleSubmit}>
           <div className="mt-5 flex">
+            <div onClick={handleReset} className="-ml-8 cursor-pointer p-3">
+              <RotateCcwIcon
+                size={25}
+                style={{
+                  transform: !isRotating ? 'rotate(360deg)' : 'none',
+                  transition: 'transform 0.5s',
+                }}
+              />
+            </div>
             <textarea
               name="message"
               id="message"
               rows={1}
-              value={data.message}
+              value={isLoading ? '' : data.message}
               placeholder="Kirim pertanyaanmu di sini...."
               onChange={(e) => setData({ ...data, message: e.target.value })}
               onKeyDown={(e) => {
@@ -126,7 +155,7 @@ export const ChatBot = () => {
             ></textarea>
             <button
               type="submit"
-              className="-ml-[45px] mt-[7px] flex h-9 w-9 items-center justify-center rounded bg-primary-40 pr-1 pt-1 hover:bg-primary-80"
+              className="-ml-[45px] mr-2 mt-[7px] flex h-9 w-9 items-center justify-center rounded bg-primary-40 pr-1 pt-1 hover:bg-primary-80"
               disabled={isLoading}
               style={{ cursor: isLoading ? 'not-allowed' : 'pointer' }}
             >
