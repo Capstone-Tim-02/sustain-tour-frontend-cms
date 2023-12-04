@@ -1,5 +1,5 @@
-import { Fragment } from 'react';
-import { useDispatch } from 'react-redux';
+import { Fragment, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Dialog, Transition } from '@headlessui/react';
 import clsx from 'clsx';
@@ -7,10 +7,25 @@ import { XIcon } from 'lucide-react';
 
 import avatar from '@/assets/images/avatar.png';
 import { Logo, sideNavigation, SignOut } from '@/components/Common';
+import {
+  fetchGetCurrentUser,
+  selectCurrentUser,
+  toggleFetchLatestCurrentUser,
+} from '@/stores/CurrentUserSlice';
 import { clearQuery } from '@/stores/ReactTableSlice';
 
 export const MobileSidebar = ({ sidebarOpen, setSidebarOpen }) => {
+  const currentSelector = useSelector(selectCurrentUser);
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (currentSelector?.shouldFetchCurrentUser) {
+      dispatch(fetchGetCurrentUser());
+      dispatch(toggleFetchLatestCurrentUser());
+    }
+    dispatch(fetchGetCurrentUser());
+  }, [dispatch, currentSelector?.shouldFetchCurrentUser]);
 
   return (
     <Transition.Root show={sidebarOpen} as={Fragment}>
@@ -97,24 +112,25 @@ export const MobileSidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
                 {/* SignOut */}
                 <div className="mx-4 flex items-center justify-between border-t border-gray-300 pb-2 pt-4">
-                  <div className="flex items-center space-x-3">
-                    <div
-                      onClick={() => {
-                        setSidebarOpen(false);
-                      }}
-                      className="flex shrink-0 items-center justify-center outline-none focus:ring focus:ring-primary-80 focus:ring-offset-2"
-                    >
-                      <img
-                        className="inline-block h-12 w-12 rounded-full object-cover"
-                        src={avatar}
-                        alt="avatar"
-                      />
+                  <img
+                    className="inline-block h-12 w-12 rounded-full object-cover"
+                    src={currentSelector?.data?.photoProfil || avatar}
+                    alt="avatar"
+                  />
+
+                  <div className="ml-2 mr-1 flex w-44 grow flex-col">
+                    <div className="truncate text-sm font-semibold text-gray-900">
+                      {currentSelector?.data?.name || (
+                        <div className="mb-2 flex h-3 w-40 animate-pulse rounded-full bg-gray-300" />
+                      )}
                     </div>
-                    <div className="flex w-48 flex-col">
-                      <div className="truncate text-sm font-semibold text-gray-900">Admin</div>
-                      <div className="truncate text-sm text-gray-500">admin@mail.com</div>
+                    <div className="truncate text-sm text-gray-500">
+                      {currentSelector?.data?.email || (
+                        <div className="flex h-3 w-40 animate-pulse rounded-full bg-gray-300" />
+                      )}
                     </div>
                   </div>
+
                   <div className="text-center">
                     <SignOut />
                   </div>

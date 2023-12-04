@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogOutIcon } from 'lucide-react';
 
+import { APIAuth } from '@/apis/APIAuth';
 import { Spinner } from '@/components/Elements';
 import {
   AlertDialog,
@@ -14,7 +15,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { AuthService } from '@/services/AuthService';
 
 export const SignOut = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -23,9 +23,8 @@ export const SignOut = () => {
   const handleSignOut = () => {
     try {
       setIsLoading(true);
-      AuthService.clearCredentialsFromCookie(() => {
-        navigate('/login');
-      });
+      APIAuth.signOut();
+      navigate('/login');
     } catch (error) {
       console.error(error);
     } finally {
