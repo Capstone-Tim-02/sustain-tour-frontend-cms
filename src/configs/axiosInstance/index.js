@@ -26,9 +26,10 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error?.response?.status === 401) {
-      globalRoute.navigate && globalRoute.navigate('/unauthorized');
+    const isLoginRequest = error?.config?.url === '/admin/signin';
 
+    if (error?.response?.status === 401 && !isLoginRequest) {
+      globalRoute.navigate && globalRoute.navigate('/unauthorized');
       AuthService.clearCredentialsFromCookie();
     }
     return Promise.reject(error);
