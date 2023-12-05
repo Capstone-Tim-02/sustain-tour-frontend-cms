@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom';
+import clsx from 'clsx';
 
 import { MarkdownPreview } from '@/components/Elements';
 import { EditIcon } from '@/components/Icons';
 import { formatDate } from '@/utils/format';
 
 const TncName = ({ tncName }) => {
-  const isLongTncName = tncName.length > 40;
-
+  const isLongName = tncName.length > 40;
   return (
-    <div className={`${isLongTncName ? 'text-ellipsis whitespace-normal' : 'text-sm'}`}>
+    <div className={clsx(isLongName && 'w-[300px] truncate whitespace-normal text-sm')}>
       {tncName}
     </div>
   );
@@ -16,10 +16,13 @@ const TncName = ({ tncName }) => {
 
 const Description = ({ description }) => {
   const isLongDescription = description.length > 40;
+  const truncatedDescription = isLongDescription
+    ? `${description.substring(0, 200)}...`
+    : description;
 
   return (
-    <div className={`${isLongDescription ? 'text-ellipsis whitespace-normal' : 'text-sm'}`}>
-      <MarkdownPreview value={description} />
+    <div className="w-[500px] truncate whitespace-normal text-sm">
+      <MarkdownPreview value={truncatedDescription} />
     </div>
   );
 };
