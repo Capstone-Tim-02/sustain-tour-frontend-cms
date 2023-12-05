@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import IconChatBot from '@/assets/images/icon-chat-bot.png';
-import LogoDestimate from '@/assets/images/logo-destimate.png';
+import LogoDestimate from '/logo-2.png';
 
 import { APIPromo } from '@/apis/APIPromo';
 import { RotateCcwIcon, SendIcon } from 'lucide-react';
@@ -77,7 +77,7 @@ export const ChatBot = () => {
         <p className="text-center text-sm text-[#AEAEAE]">{date}</p>
       </div>
       <div>
-        <div className="relative flex max-h-screen flex-col overflow-y-hidden hover:overflow-y-auto xl:max-h-[330px]">
+        <div className="relative flex max-h-screen flex-col overflow-y-hidden scrollbar-thin scrollbar-thumb-primary-20 scrollbar-thumb-rounded-full hover:overflow-y-auto xl:max-h-[330px]">
           {date ? (
             prompts.map((prompt, index) => (
               <div key={index}>

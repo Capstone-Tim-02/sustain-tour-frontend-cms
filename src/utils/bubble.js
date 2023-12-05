@@ -1,16 +1,3 @@
-// export const bubbleRight = {
-//   position: 'relative',
-//   display: 'inline-block',
-//   margin: '20px 0px',
-//   maxWidth: '100%',
-//   padding: '10px 10px 10px 14px',
-//   borderRadius: '12px',
-//   WebkitMask: `radial-gradient(30px at 100% 0, #0000 98%, #000 102%) 100%  20px no-repeat,
-//       conic-gradient(at 25px 25px, #000 75%, #0000 0) calc(25px / -2) calc(25px / -2) padding-box,
-//       radial-gradient(50% 50%, #000 98%, #0000 101%) 0 0 / 25px 25px space padding-box`,
-//   'border-right': '30px solid #0000',
-// };
-
 export const bubbleRight = {
   '--r': '25px',
   '--t': '30px',
