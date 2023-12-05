@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
+import { Admins } from '@/features/admins';
 import { Login } from '@/features/auth';
 import { Category } from '@/features/categories';
 import { Dashboard } from '@/features/Dashboard';
@@ -24,6 +25,7 @@ export const AppRoutes = () => {
       <Route path="/" element={<PrivateRoute />}>
         <Route path="/" element={<Navigate to="/overview" replace />} />
         <Route path="/overview" element={<Dashboard />} />
+        <Route path="/admin" element={<Admins />} />
         <Route path="/pengguna" element={<Users />} />
         <Route path="/promo/tambah" element={<AddPromoRoute />} />
         <Route path="/promo/edit/:promoId" element={<EditPromoRoute />} />
