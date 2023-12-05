@@ -28,5 +28,14 @@ export const APIAuth = {
     }
   },
 
-  signOut: () => AuthService.clearCredentialsFromCookie(),
+  signOut: async () => {
+    try {
+      const result = await axiosInstance.post('/logout');
+      AuthService.clearCredentialsFromCookie();
+      toast.success(result.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
+      throw new Error(error);
+    }
+  },
 };
