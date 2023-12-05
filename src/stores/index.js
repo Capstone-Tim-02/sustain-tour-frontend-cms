@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import currentUser from '@/stores/CurrentUserSlice';
+import admins from '@/stores/features/AdminsSlice';
 import categories from '@/stores/features/CategoriesSlice';
 import destinations from '@/stores/features/DestinationSlice';
 import promos from '@/stores/features/PromoSlice';
@@ -19,6 +20,7 @@ const store = configureStore({
     transactions,
     reactTable,
     currentUser,
+    admins,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
