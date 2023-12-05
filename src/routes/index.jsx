@@ -6,7 +6,7 @@ import { Category } from '@/features/categories';
 import { Dashboard } from '@/features/Dashboard';
 import { Destination } from '@/features/destination';
 import { NotFound } from '@/features/notFound';
-import { AddPromoRoute, EditPromoRoute, Promo } from '@/features/promo';
+import { AddPromoRoute, ChatBotRoute, EditPromoRoute, Promo } from '@/features/promo';
 import { EditTncRoute, Tnc } from '@/features/Tnc';
 import { Transactions } from '@/features/transactions';
 import { Unauthorized } from '@/features/unauthorized';
@@ -27,9 +27,10 @@ export const AppRoutes = () => {
         <Route path="/overview" element={<Dashboard />} />
         <Route path="/admin" element={<Admins />} />
         <Route path="/pengguna" element={<Users />} />
-        <Route path="/promo/tambah" element={<AddPromoRoute />} />
-        <Route path="/promo/edit/:promoId" element={<EditPromoRoute />} />
         <Route path="/promo" element={<Promo />} />
+        <Route path="/promo/tambah" element={<AddPromoRoute />} />
+        <Route path="/promo/virtual-asisten" element={<ChatBotRoute />} />
+        <Route path="/promo/edit/:promoId" element={<EditPromoRoute />} />
         <Route path="/destinasi" element={<Destination />} />
         <Route path="/kategori" element={<Category />} />
         <Route path="/transaksi" element={<Transactions />} />
