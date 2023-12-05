@@ -9,14 +9,11 @@ import { formatDate } from '@/utils/format';
 import { DeletePromo } from './DeletePromo';
 
 const ExpiredAt = ({ value }) => {
-  const date = dayjs(formatDate(value, 'DD MMMM YYYY'));
+  const date = dayjs(value);
   const today = dayjs();
 
-  // if value is same or before today, then it will be red
-  const isExpired = date.isSame(today, 'day') || date.isBefore(today, 'day');
-
-  // if value is less or equal than 7 days from today, then it will be yellow
-  const isLessThan7Days = date.isAfter(today.subtract(7, 'day'));
+  const isExpired = date.isBefore(today, 'day');
+  const isLessThanSevenDays = date.diff(today, 'day') < 7;
 
   if (isExpired) {
     return (
@@ -26,7 +23,7 @@ const ExpiredAt = ({ value }) => {
         </span>
       </Tooltip>
     );
-  } else if (isLessThan7Days) {
+  } else if (isLessThanSevenDays) {
     return (
       <Tooltip message={'Kadaluarsa kurang dari 7 hari'}>
         <span className="cursor-default text-sm font-medium text-warning-500">
