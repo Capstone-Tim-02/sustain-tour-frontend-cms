@@ -6,7 +6,7 @@ export const APIPromo = {
   getPromo: async ({ search, pageIndex, pageSize }) => {
     try {
       const result = await axiosInstance.get(
-        `/user/promo?name=${search}&page=${pageIndex}&per_page=${pageSize}`
+        `/user/promo?nama_promo=${search}&page=${pageIndex}&per_page=${pageSize}`
       );
       return result.data;
     } catch (error) {
