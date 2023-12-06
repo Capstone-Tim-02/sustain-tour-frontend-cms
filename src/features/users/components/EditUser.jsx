@@ -123,7 +123,7 @@ export const EditUser = ({ id }) => {
                 error={errors.name}
               />
               <InputField
-                type="email"
+                type="text"
                 placeholder="Masukkan email"
                 label="Email"
                 autoComplete="off"
