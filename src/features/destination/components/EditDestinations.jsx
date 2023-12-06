@@ -8,18 +8,16 @@ import * as y from 'yup';
 
 import { APICategories } from '@/apis/APICategories'
 import { APIDestinations } from '@/apis/APIDestinations';
-import NoPicture from '@/assets/images/no-picture.png';
 import { Spinner } from '@/components/Elements';
-import { DropdownField, InputField, TextAreaField, TextEditorField } from '@/components/Forms';
-import { FieldWrapper } from '@/components/Forms/FieldWrapper';
+import { DropdownField, FieldWrapper,InputField, TextAreaField} from '@/components/Forms';
 import { RadioButton } from '@/components/Forms/RadioButton';
 import { RadioGroup } from '@/components/Forms/RadioGroup';
-import { TrashIcon } from '@/components/Icons';
-import { UploadIcon } from '@/components/Icons';
 import { Button } from '@/components/ui/button';
+import {ImageDestinationField} from '@/features/destination/components/DestinationField'
+import { ImagePreview, ListFile} from '@/features/destination/components/ImageDestinationPreview'
 import { convertToPositive } from '@/utils/format';
 
-const { Dragger } = Upload;
+
 
 const schema = y.object({
   kode: y
@@ -37,13 +35,13 @@ const schema = y.object({
     .required('Alamat tidak boleh kosong')
     .min(8, 'Minimal 8 karakter')
     .max(200, 'Maksimal 200 karakter'),
-  is_open: y.boolean().required('Buka tutup tidak boleh kosong'),
-  category_name: y.string().required('Category tidak boleh kosong'),
+  is_open: y.boolean().required('Opsi buka/tutup tidak boleh kosong'),
   description_is_open: y
     .string()
-    .required('Deskripsi Buka/Tutup tidak boleh kosong')
+    .required('Deskripsi tidak boleh kosong')
     .min(5, 'Minimal 5 karakter')
     .max(40, 'Maksimal 40 karakter'),
+  category_name: y.string().required('Kategory tidak boleh kosong'),
   fasilitas: y
     .string()
     .required('Fasilitas lokal tidak boleh kosong')
@@ -58,45 +56,67 @@ const schema = y.object({
     .number()
     .required('Jumlah stok tiket tidak boleh kosong')
     .transform((value) => (isNaN(value) ? undefined : value))
-    .min(1, 'Jumlah tiket harus lebih dari 0'),
+    .min(1, 'Jumlah tiket harus lebih dari 0')
+    .typeError('Longitude Peta harus berupa angka'),
   price: y
     .number()
     .required('Harga tiket tidak boleh kosong')
     .transform((value) => (isNaN(value) ? undefined : value))
-    .min(1, 'Harga harus lebih dari 0'),
+    .min(1, 'Harga harus lebih dari 0')
+    .typeError('Longitude Peta harus berupa angka'),
   photo_wisata1: y
     .mixed()
     .required('Gambar tidak boleh kosong')
     .test(
       'fileFormat',
-      'Format file tidak sesuai. Hanya diperbolehkan format JPG, JPEG, PNG, atau GIF.',
+      'Format file tidak sesuai. Hanya diperbolehkan format JPG, JPEG, PNG.',
       (value) => {
-        if (!value) return true;
+        if (!value || typeof value === 'string') return true;
 
-        const allowedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
-
-        if (typeof value === 'string') {
-          // Get the file extension from the file name
-          const sliceUrl = 'image/' + value?.split('.')[3];
-          return allowedFormats.includes(sliceUrl);
-        }
-
+        const allowedFormats = ['image/jpg', 'image/jpeg', 'image/png'];
         return allowedFormats.includes(value.type);
       }
     )
     .test('fileSize', 'Ukuran file terlalu besar. Maksimal 5MB.', (value) => {
-      if (!value) return true;
-
-      const allowedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
-
-      if (typeof value === 'string') {
-        // Get the file extension from the file name
-        const sliceUrl = 'image/' + value?.split('.')[3];
-        return allowedFormats.includes(sliceUrl);
-      }
+      if (!value || typeof value == 'string') return true;
 
       const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+      return value.size <= MAX_FILE_SIZE;
+    }),
+  photo_wisata2: y
+    .mixed()
+    .test(
+      'fileFormat',
+      'Format file tidak sesuai. Hanya diperbolehkan format JPG, JPEG, PNG.',
+      (value) => {
+        if (!value || typeof value === 'string') return true;
 
+        const allowedFormats = ['image/jpg', 'image/jpeg', 'image/png'];
+        return allowedFormats.includes(value.type);
+      }
+    )
+    .test('fileSize', 'Ukuran file terlalu besar. Maksimal 5MB.', (value) => {
+      if (!value || typeof value == 'string') return true;
+
+      const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+      return value.size <= MAX_FILE_SIZE;
+    }),
+  photo_wisata3: y
+    .mixed()
+    .test(
+      'fileFormat',
+      'Format file tidak sesuai. Hanya diperbolehkan format JPG, JPEG, PNG.',
+      (value) => {
+        if (!value || typeof value === 'string') return true;
+
+        const allowedFormats = ['image/jpg', 'image/jpeg', 'image/png'];
+        return allowedFormats.includes(value.type);
+      }
+    )
+    .test('fileSize', 'Ukuran file terlalu besar. Maksimal 5MB.', (value) => {
+      if (!value || typeof value == 'string') return true;
+
+      const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
       return value.size <= MAX_FILE_SIZE;
     }),
   title: y
@@ -110,25 +130,27 @@ const schema = y.object({
     .min(5, 'Minimal 5 karakter')
     .max(200, 'Maksimal 200 karakter'),
   lat: y
-    .number('Latitude harus berupa angka')
-    .required('Latitude Peta tidak boleh kosong')
-    .transform((value) => (isNaN(value) ? undefined : value)),//ini string apa number yah
+    .number()
+    .typeError('Longitude Peta harus berupa angka')
+    .required('Latitude Peta tidak boleh kosong'),
   long: y
-    .number('Longitude harus berupa angka')
+    .number()
+    .typeError('Longitude Peta harus berupa angka')
     .required('Longitude Peta tidak boleh kosong')
-    .transform((value) => (isNaN(value) ? undefined : value)), //ini string apa number yah
 });
 
 
 export const EditDestination = ({ onSuccess }) => {
-  // const { categoryData } = useParams();
   const { destinasiId } = useParams();
   const [wisata, setWisata] = useState(null);
   const [categories, setCategories] = useState(null);
-  // const [selectedCategory, setSelectedCategory] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedImage, setSelectedImage] = useState([null, null, null]);
   const [errorImage, setErrorImage] = useState(false);
+  const [previewImage, setPreviewImage] = useState({
+    photo_wisata1: null,
+    photo_wisata2: null,
+    photo_wisata3: null,
+  });
 
   const formData = new FormData();
 
@@ -136,15 +158,16 @@ export const EditDestination = ({ onSuccess }) => {
     register,
     handleSubmit,
     reset,
-    control,
+    // control,
     setValue,
     setError,
     clearErrors,
     getValues,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
-
-  const imageValue = getValues().photo_wisata1;
+  const imageValue1 = getValues().photo_wisata1;
+  const imageValue2 = getValues().photo_wisata2;
+  const imageValue3 = getValues().photo_wisata3;
 
   useEffect(() => {
     async function fetchDestination() {
@@ -166,10 +189,11 @@ export const EditDestination = ({ onSuccess }) => {
       ...wisata,
       is_open: wisata?.is_open?.toString(),
     });
-    setSelectedImage(wisata?.photo_wisata1);
-    setSelectedImage(wisata?.photo_wisata2);
-    setSelectedImage(wisata?.photo_wisata3);
-  
+    setPreviewImage({
+      photo_wisata1: wisata?.photo_wisata1 || null,
+      photo_wisata2: wisata?.photo_wisata2 || null,
+      photo_wisata3: wisata?.photo_wisata3 || null,
+    });
   }, [reset, wisata]);
 
   const [kategoriOptions, setKategoriOptions] = useState([]);
@@ -186,11 +210,32 @@ export const EditDestination = ({ onSuccess }) => {
   }
   }, [categories]);  
 
+  const handlePreview = (file, imageKey) => {
+    if (!file.url && !file.preview) {
+      file.preview = file.originFileObj;
+    }
+    setPreviewImage((prevState) => ({
+      ...prevState,
+      [imageKey]: file.url || file.preview,
+    }));
+  };
+
   const onSubmit = async (data) => {
     try {
       Object.entries(data).forEach(([key, value]) => {
         formData.append(key, value);
       });
+      if (imageValue1) {
+        formData.append('image1', imageValue1);
+      }
+  
+      if (imageValue2) {
+        formData.append('image2', imageValue2);
+      }
+  
+      if (imageValue3) {
+        formData.append('image3', imageValue3);
+      }
       setIsLoading(true);
       await APIDestinations.editDestination(destinasiId, formData);
       onSuccess();
@@ -201,41 +246,83 @@ export const EditDestination = ({ onSuccess }) => {
       setIsLoading(false);
     }
   };
-
-//revisi ke 3
-  const imageOnChange = (info, photoIndex) => {
-    const reader = new FileReader();
   
+  const imageOnChange1 = (info) => {
+    const reader = new FileReader();
+
     if (info.file.status === 'removed') {
-      setValue(`photo_wisata${photoIndex}`, null);
-      setSelectedImage((prevSelectedImage) => {
-        const updatedImages = [...prevSelectedImage];
-        updatedImages[photoIndex] = null;
-        return updatedImages;
-      });
+      setValue('photo_wisata1', null);
+      setPreviewImage((prevState) => ({
+        ...prevState,
+        photo_wisata1: null,
+      }));
     } else {
       reader.onload = (e) => {
-        setValue(`photo_wisata${photoIndex}`, info.file.originFileObj);
-        setSelectedImage((prevSelectedImage) => {
-          const updatedImages = [...prevSelectedImage];
-          updatedImages[photoIndex] = e.target.result;
-          return updatedImages;
-        });
+        setValue('photo_wisata1', info.file.originFileObj);
+        setPreviewImage((prevState) => ({
+          ...prevState,
+          photo_wisata1: e.target.result,
+        }));
       };
       reader.readAsDataURL(info.file.originFileObj);
     }
   };
+
   
-  const imageCustomRequest = async ({ file, onSuccess, onError }) => {
+  
+  const imageOnChange2 = (info) => {
+    const reader = new FileReader();
+
+    if (info.file.status === 'removed') {
+      setValue('photo_wisata2', null);
+      setPreviewImage((prevState) => ({
+        ...prevState,
+        photo_wisata2: null,
+      }));
+    } else {
+      reader.onload = (e) => {
+        setValue('photo_wisata2', info.file.originFileObj);
+        setPreviewImage((prevState) => ({
+          ...prevState,
+          photo_wisata2: e.target.result,
+        }));
+      };
+      reader.readAsDataURL(info.file.originFileObj);
+    }
+  };
+
+  
+  const imageOnChange3 = (info) => {
+    const reader = new FileReader();
+
+    if (info.file.status === 'removed') {
+      setValue('photo_wisata3', null);
+      setPreviewImage((prevState) => ({
+        ...prevState,
+        photo_wisata3: null,
+      }));
+    } else {
+      reader.onload = (e) => {
+        setValue('photo_wisata3', info.file.originFileObj);
+        setPreviewImage((prevState) => ({
+          ...prevState,
+          photo_wisata3: e.target.result,
+        }));
+      };
+      reader.readAsDataURL(info.file.originFileObj);
+    }
+  };
+
+  const imageCustomRequest1 = async ({ file, onSuccess, onError }) => {
     const isValid = file.type.startsWith('image/');
 
     if (isValid) {
       try {
-        const photoWisata1Schema = y.object({
+        const imageDestinationSchema = y.object({
           photo_wisata1: schema.fields.photo_wisata1,
         });
 
-        await photoWisata1Schema.validate({ photo_wisata1: file });
+        await imageDestinationSchema.validate({ photo_wisata1: file });
 
         clearErrors('photo_wisata1');
         setErrorImage(false);
@@ -255,49 +342,71 @@ export const EditDestination = ({ onSuccess }) => {
       setErrorImage(true);
     }
   };
+  const imageCustomRequest2 = async ({ file, onSuccess, onError }) => {
+    const isValid = file.type.startsWith('image/');
 
-  const removeImage = () => {
-    setValue('photo_wisata1', null);
-    setSelectedImage('');
+    if (isValid) {
+      try {
+        const imageDestinationSchema = y.object({
+          photo_wisata2: schema.fields.photo_wisata2,
+        });
+
+        await imageDestinationSchema.validate({ photo_wisata2: file });
+
+        clearErrors('photo_wisata2');
+        setErrorImage(false);
+        onSuccess();
+      } catch (error) {
+        const errorMessage = error.errors[0];
+
+        setError('photo_wisata2', {
+          type: 'manual',
+          message: errorMessage,
+        });
+        onError();
+        setErrorImage(true);
+      }
+    } else {
+      onError();
+      setErrorImage(true);
+    }
   };
+  const imageCustomRequest3 = async ({ file, onSuccess, onError }) => {
+    const isValid = file.type.startsWith('image/');
+
+    if (isValid) {
+      try {
+        const imageDestinationSchema = y.object({
+          photo_wisata3: schema.fields.photo_wisata3,
+        });
+
+        await imageDestinationSchema.validate({ photo_wisata3: file });
+
+        clearErrors('photo_wisata3');
+        setErrorImage(false);
+        onSuccess();
+      } catch (error) {
+        const errorMessage = error.errors[0];
+
+        setError('photo_wisata3', {
+          type: 'manual',
+          message: errorMessage,
+        });
+        onError();
+        setErrorImage(true);
+      }
+    } else {
+      onError();
+      setErrorImage(true);
+    }
+  };
+
 
   const handleConvertToPositive = (e) => {
     const { value } = e.target;
     e.target.value = convertToPositive(value);
   };
 
-  //revisi ke 2
-const [fileList, setFileList] = useState([
-  {
-    name: 'image.png',
-    status: 'done',
-    url: 'https://cdn.icon-icons.com/icons2/834/PNG/512/plus_icon-icons.com_66718.png',
-  },
-  {
-    name: 'image.png',
-    status: 'done',
-    url: 'https://cdn.icon-icons.com/icons2/834/PNG/512/plus_icon-icons.com_66718.png',
-  },
-  
-]);
-
-const onChange = ({ fileList: newFileList }) => {
-  setFileList(newFileList);
-};
-const onPreview = async (file) => {
-  let src = file.url;
-  if (!src) {
-    src = await new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file.originFileObj);
-      reader.onload = () => resolve(reader.result);
-    });
-  }
-  const image = new Image();
-  image.src = src;
-  const imgWindow = window.open(src);
-  imgWindow?.document.write(image.outerHTML);
-};
   return (
     <div className="mt-8 overflow-hidden rounded-lg bg-white p-10 shadow">
       <form onSubmit={handleSubmit(onSubmit)} id="editDestinations" className="space-y-5">
@@ -365,6 +474,7 @@ const onPreview = async (file) => {
               id= 'cate'
             />
 
+            {/* Fasilitas lokal */}
             <InputField
               placeholder="Masukkan fasilitas(contoh: Parkiran, Kantin, Mushola, dll)"
               label="Fasilitas Lokal"
@@ -405,89 +515,77 @@ const onPreview = async (file) => {
               onChange={handleConvertToPositive}
             />
 
-            {/* Gambar destinasi belum */}
-
-            {/* Gambar Destinasi */}
+            {/* Gambar destinasi */}
             <FieldWrapper
               isHorizontal={false}
               label="Gambar Destinasi (1920 x 1080)"
               id={'photo_wisata1'}
               error={errors.photo_wisata1}
             >
-              <Dragger
-                listType="picture-card"
-                name="photo_wisata1"
-                registration={register('photo_wisata1')}
-                multiple={false}
-                showUploadList={false}
-                onChange={(info) => imageOnChange(info)}
-                customRequest={(file, onSuccess, onError) => {
-                  imageCustomRequest(file, onSuccess, onError);
-                }}
+              <ImageDestinationField
+                photo_wisata1={previewImage.photo_wisata1}
+                photo_wisata2={previewImage.photo_wisata2}
+                photo_wisata3={previewImage.photo_wisata3}
               >
-                {!errorImage && selectedImage && <img src={selectedImage} alt="preview" />}
-
-                {errorImage && (
-                  <>
-                    <p className="ant-upload-text">Format file tidak sesuai</p>
-                    <p className="ant-upload-drag-icon grid justify-items-center">
-                      <img src={NoPicture} alt="No Picture" />
-                    </p>
-                    <p className="ant-upload-hint">
-                      Maksimal ukuran file: 5MB <br />
-                      Format pendukung: JPG, JPEG, PNG, GIF
-                    </p>
-                  </>
-                )}
-
-                {!errorImage && !selectedImage && (
-                  <>
-                    <p className="ant-upload-text">Tidak ada file yang dipilih</p>
-                    <p className="ant-upload-drag-icon grid justify-items-center">
-                      <UploadIcon />
-                    </p>
-                    <p className="ant-upload-hint">Maksimal ukuran file : 5 MB</p>
-                    <p className="ant-upload-hint">Format pendukung: JPG, JPEG, PNG, GIF</p>
-                  </>
-                )}
-              </Dragger>
-             
-              {/* <ImgCrop rotationSlider> */}
-                <Upload
-                  action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                  listType="picture-card"
-                  fileList={fileList}
-                  name="photo_wisata1"
-                  registration={register('photo_wisata1')}
-                  onChange={onChange}
-                  onPreview={onPreview}
-                  customRequest={(file, onSuccess, onError) => {
-                    imageCustomRequest(file, onSuccess, onError);
-                  }}
-                >
-                  {fileList.length < 3 && 
-                  <UploadIcon/>
-                  }
-                </Upload>
-              {/* </ImgCrop> */}
-            </FieldWrapper>
-            {imageValue?.name && (
-              <>
-                <div className="flex justify-between">
-                  <div className={`text-sm ${errorImage ? 'text-redDestimate-100' : ''}`}>
-                    {imageValue.name}
-                  </div>
-                  <div
-                    onClick={() => {
-                      removeImage();
+                <div>
+                  <Upload
+                    name="photo_wisata1"
+                    listType="picture-card"
+                    showUploadList={false}
+                    onPreview={(file) => handlePreview(file, 'photo_wisata1')}
+                    onChange={(info) => {
+                      imageOnChange1(info);
                     }}
+                    customRequest={(file, onSuccess, onError) => {
+                      imageCustomRequest1(file, onSuccess, onError);
+                    }}
+                    registration={register('image1')}
                   >
-                    <TrashIcon className="h-5 w-5 stroke-2 text-redDestimate-100 hover:cursor-pointer hover:text-redDestimate-100/70" />
-                  </div>
+                    <ImagePreview imageSource={previewImage.photo_wisata1} />
+                  </Upload>
                 </div>
-              </>
-            )}
-          </div>
+                <div>
+                  <Upload
+                    name="photo_wisata2"
+                    listType="picture-card"
+                    showUploadList={false}
+                    onPreview={(file) => handlePreview(file, 'photo_wisata2')}
+                    onChange={(info) => {
+                      imageOnChange2(info);
+                    }}
+                    customRequest={(file, onSuccess, onError) => {
+                      imageCustomRequest2(file, onSuccess, onError);
+                    }}
+                    registration={register('image2')}
+                  >
+                    <ImagePreview imageSource={previewImage.photo_wisata2} />
+                  </Upload>
+                </div>
+                <div>
+                  <Upload
+                    name="photo_wisata3"
+                    listType="picture-card"
+                    showUploadList={false}
+                    onPreview={(file) => handlePreview(file, 'photo_wisata3')}
+                    onChange={(info) => {
+                      imageOnChange3(info);
+                    }}
+                    customRequest={(file, onSuccess, onError) => {
+                      imageCustomRequest3(file, onSuccess, onError);
+                    }}
+                    registration={register('image3')}
+                  >
+                    <ImagePreview imageSource={previewImage.photo_wisata3} />
+                  </Upload>
+                </div>
+              </ImageDestinationField>
+            </FieldWrapper>
+            <ListFile imageValue={imageValue1} errorImage={errorImage} removeImage={imageOnChange1} />
+            <ListFile imageValue={imageValue2} errorImage={errorImage} removeImage={imageOnChange2} />
+            <ListFile imageValue={imageValue3} errorImage={errorImage} removeImage={imageOnChange3} />
+            
+          </div> 
+          
           
           <div className="flex flex-col gap-4 md:flex-grow">
             {/* Nama Destinasi */}
