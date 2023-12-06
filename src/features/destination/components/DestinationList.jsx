@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { SearchIcon } from 'lucide-react';
+import { PlusIcon, SearchIcon } from 'lucide-react';
 
 import { Spinner } from '@/components/Elements';
 import { DataTable } from '@/components/Elements/Table';
 import { InputSearchField } from '@/components/Forms';
+import { Button } from '@/components/ui/button';
 import { useDebounce } from '@/hooks/useDebounce';
 import {
   fetchGetDestinations,
@@ -19,7 +20,6 @@ import {
 } from '@/stores/ReactTableSlice';
 import { convertNumberToThousand } from '@/utils/format';
 
-import { ButtonAddDestination } from './ButtonAddDestination';
 import { columns } from './DestinationColumn';
 
 export const DestinationList = () => {
@@ -68,7 +68,10 @@ export const DestinationList = () => {
         />
         {/* Add Destination Button */}
         <Link to="/destinasi/tambah">
-          <ButtonAddDestination />
+          <Button className="w-full gap-2 sm:w-auto">
+            Tambah Destinasi
+            <PlusIcon className="mr-2 h-4 w-4 bg-primary-80" />
+          </Button>
         </Link>
       </div>
 

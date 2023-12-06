@@ -4,7 +4,7 @@ import { Admins } from '@/features/admins';
 import { Login } from '@/features/auth';
 import { Category } from '@/features/categories';
 import { Dashboard } from '@/features/Dashboard';
-import { Destination } from '@/features/destination';
+import { AddDestinationRoute, Destination } from '@/features/destination';
 import { NotFound } from '@/features/notFound';
 import { AddPromoRoute, ChatBotRoute, EditPromoRoute, Promo } from '@/features/promo';
 import { EditTncRoute, Tnc } from '@/features/Tnc';
@@ -32,6 +32,7 @@ export const AppRoutes = () => {
         <Route path="/promo/virtual-asisten" element={<ChatBotRoute />} />
         <Route path="/promo/edit/:promoId" element={<EditPromoRoute />} />
         <Route path="/destinasi" element={<Destination />} />
+        <Route path="/destinasi/tambah" element={<AddDestinationRoute />} />
         <Route path="/kategori" element={<Category />} />
         <Route path="/transaksi" element={<Transactions />} />
         <Route path="/syarat_dan_ketentuan" element={<Tnc />} />

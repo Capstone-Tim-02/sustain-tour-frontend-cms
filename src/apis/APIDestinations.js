@@ -25,6 +25,16 @@ export const APIDestinations = {
     }
   },
 
+  addDestination: async (data) => {
+    try {
+      const result = await axiosInstance.post(`/wisata/create`, data);
+      toast.success(result.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
+      throw new Error(error);
+    }
+  },
+
   deleteDestination: async (id) => {
     try {
       const result = await axiosInstance.delete(`/admin/wisata/${id}`);
