@@ -3,10 +3,12 @@ import { toast } from 'react-toastify';
 import { axiosInstance } from '@/configs/axiosInstance';
 
 export const APITransactions = {
-  getTransactions: async () => {
+  getTransactions: async ({ search, pageIndex, pageSize }) => {
     try {
-      const result = await axiosInstance.get(`/admin/ticket`);
-      return result.data.tickets;
+      const result = await axiosInstance.get(
+        `/admin/ticket?search=${search}&page=${pageIndex}&per_page=${pageSize}`
+      );
+      return result.data;
     } catch (error) {
       console.error(error);
       throw new Error(error);

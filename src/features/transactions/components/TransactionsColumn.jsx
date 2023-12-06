@@ -5,11 +5,9 @@ import { DetailTransaction } from './DetailTransaction';
 import { EditTransaction } from './EditTransaction';
 
 const StatusOrder = ({ status_order }) => {
-  if (status_order === 'success') return <Badge variant="success">{status_order}</Badge>;
-  else if (status_order === 'pending') return <Badge variant="pending">{status_order}</Badge>;
-  else if (status_order === 'dibatalkan')
-    return <Badge variant="destructive">{status_order}</Badge>;
-  else return <Badge variant="secondary">{status_order}</Badge>;
+  if (status_order === 'success') return <Badge variant="success">Selesai</Badge>;
+  if (status_order === 'pending') return <Badge variant="pending">Tertunda</Badge>;
+  if (status_order === 'dibatalkan') return <Badge variant="destructive">Batal</Badge>;
 };
 
 const Action = ({ value }) => {
@@ -35,6 +33,10 @@ export const columns = [
     accessorKey: 'wisata_title',
   },
   {
+    header: 'Kode Promo',
+    accessorKey: 'kode_voucher',
+  },
+  {
     header: 'Harga Tiket',
     accessorKey: 'total_cost',
     cell: ({ row }) => {
@@ -47,7 +49,7 @@ export const columns = [
     accessorKey: 'created_at',
     cell: ({ row }) => {
       const created_at = row.original.created_at;
-      return created_at ? formatDate(created_at, 'D MMMM YYYY') : '-';
+      return created_at ? formatDate(created_at, 'D MMMM YYYY HH:mm:ss') : '-';
     },
   },
   {

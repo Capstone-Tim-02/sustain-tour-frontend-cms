@@ -7,7 +7,6 @@ import { PlusIcon } from 'lucide-react';
 import * as y from 'yup';
 
 import { APICategories } from '@/apis/APICategories';
-import { Spinner } from '@/components/Elements';
 import { InputField } from '@/components/Forms';
 import { Button } from '@/components/ui/button';
 import {
@@ -24,7 +23,8 @@ const schema = y.object({
   category_name: y
     .string()
     .required('Nama Kategori tidak boleh kosong')
-    .min(3, 'Minimal 3 karakter untuk nama'),
+    .min(5, 'Nama kategori minimal 5 karakter')
+    .max(30, 'Nama kategori tidak boleh lebih dari 30 karakter'),
 });
 
 export const AddCategories = () => {
@@ -86,8 +86,8 @@ export const AddCategories = () => {
           >
             <span>Batal</span>
           </DialogClose>
-          <Button disabled={isLoading} form="addCategory" type="submit">
-            {isLoading && <Spinner size="sm" className="mr-3" />} Tambah Kategori
+          <Button isloading={isLoading} form="addCategory" type="submit">
+            Tambah Kategori
           </Button>
         </DialogFooter>
       </DialogContent>

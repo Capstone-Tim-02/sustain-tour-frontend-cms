@@ -1,13 +1,54 @@
 import { Link } from 'react-router-dom';
+import dayjs from 'dayjs';
 
+import { Tooltip } from '@/components/Elements';
 import { EditIcon } from '@/components/Icons';
+import { Badge } from '@/components/ui/badge';
 import { formatDate } from '@/utils/format';
 
 import { DeletePromo } from './DeletePromo';
 
+const ExpiredAt = ({ value }) => {
+  const date = dayjs(value);
+  const today = dayjs();
+
+  const isExpired = date.isBefore(today, 'day');
+  const isLessThanSevenDays = date.diff(today, 'day') < 7;
+
+  if (isExpired) {
+    return (
+      <Tooltip message={'Kadaluarsa'}>
+        <span className="cursor-default text-sm font-medium text-redDestimate-100">
+          {formatDate(value, 'DD MMMM YYYY')}
+        </span>
+      </Tooltip>
+    );
+  } else if (isLessThanSevenDays) {
+    return (
+      <Tooltip message={'Kadaluarsa kurang dari 7 hari'}>
+        <span className="cursor-default text-sm font-medium text-warning-500">
+          {formatDate(value, 'DD MMMM YYYY')}
+        </span>
+      </Tooltip>
+    );
+  } else {
+    return (
+      <span className="text-sm font-medium text-success-500">
+        {formatDate(value, 'DD MMMM YYYY')}
+      </span>
+    );
+  }
+};
+
 const Status = ({ status }) => {
   return (
-    <div className="text-sm font-normal">{status?.status_aktif ? 'Aktif' : 'Tidak Aktif'}</div>
+    <div>
+      {status?.status_aktif ? (
+        <Badge variant="success">Aktif</Badge>
+      ) : (
+        <Badge variant="destructive">Tidak Aktif</Badge>
+      )}
+    </div>
   );
 };
 
@@ -17,7 +58,7 @@ const Action = ({ value }) => {
       <Link to={`/promo/edit/${value?.id}`}>
         <EditIcon className="h-5 w-5 stroke-2 text-primary-100 hover:cursor-pointer hover:text-primary-100/70" />
       </Link>
-      
+
       <DeletePromo id={value?.id} />
     </div>
   );
@@ -27,6 +68,10 @@ export const columns = [
   {
     header: 'Nama Promo',
     accessorKey: 'nama_promo',
+  },
+  {
+    header: 'Kode Promo',
+    accessorKey: 'kode_voucher',
   },
   {
     header: 'Diskon',
@@ -41,7 +86,7 @@ export const columns = [
     accessorKey: 'tanggal_kadaluarsa',
     cell: ({ row }) => {
       const expired = row.original.tanggal_kadaluarsa;
-      return expired ? formatDate(expired, 'D MMMM YYYY') : '-';
+      return <ExpiredAt value={expired} />;
     },
   },
   {

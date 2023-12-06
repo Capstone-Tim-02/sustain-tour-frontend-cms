@@ -3,13 +3,14 @@ import clsx from 'clsx';
 const sizes = {
   sm: 'h-4 w-4',
   md: 'h-8 w-8',
+  base: 'h-12 w-12',
   lg: 'h-16 w-16',
   xl: 'h-24 w-24',
 };
 
 const variants = {
   light: 'text-white',
-  primary: 'text-primary-40',
+  primary: 'text-primary-60',
 };
 
 export const Spinner = ({ size = 'md', variant = 'primary', className = '' }) => {

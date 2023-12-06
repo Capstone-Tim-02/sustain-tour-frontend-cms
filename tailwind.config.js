@@ -135,6 +135,7 @@ module.exports = {
     require('tailwindcss-animate'),
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
+    require('@material-tailwind/react'),
     require('tailwind-scrollbar')({ nocompatible: true }),
   ],
 };

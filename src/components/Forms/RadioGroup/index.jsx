@@ -1,15 +1,10 @@
-
 import { FieldWrapper } from '../FieldWrapper';
 
-export const RadioGroup = ({ label, isVertical, isRequired, children, error }) => {
+export const RadioGroup = ({ label, isHorizontal, isRequired, children, error }) => {
   return (
-    <FieldWrapper
-      isVertical={isVertical}
-      isRequired={isRequired}
-      label={label}
-      error={error}
-    >
+    <FieldWrapper isHorizontal={isHorizontal} isRequired={isRequired} label={label} error={error}>
       <div className="flex space-x-4">{children}</div>
-    </FieldWrapper>);
+    </FieldWrapper>
+  );
 };
 
