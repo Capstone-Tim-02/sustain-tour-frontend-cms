@@ -58,17 +58,17 @@ const schema = y.object({
     .required('Harga Tiket tidak boleh kosong')
     .transform((value) => (isNaN(value) ? undefined : value)),
   lat: y
-    .number()
+    .string()
     .required('Latitude Peta tidak boleh kosong')
     .transform((value) => (isNaN(value) ? undefined : value)),
   long: y
-    .number()
+    .string()
     .required('Longitude Peta tidak boleh kosong')
     .transform((value) => (isNaN(value) ? undefined : value)),
   maps_link: y
     .string()
-    .required('Alamat Peta tidak boleh kosong')
-    .max(200, 'Alamat Peta maksimal 200 karakter'),
+    .required('URL Peta tidak boleh kosong')
+    .max(200, 'URL Peta maksimal 200 karakter'),
   description_is_open: y
     .string()
     .required('Deskripsi tidak boleh kosong')
@@ -379,7 +379,7 @@ export const AddDestination = ({ onSuccess }) => {
             {/* Alamat */}
             <TextAreaField
               label="Alamat"
-              placeholder="Masukkan alamat"
+              placeholder="Masukkan Alamat, Contoh: Jl. Kebangsaan"
               autoComplete="off"
               registration={register('location')}
               error={errors.location}
@@ -553,15 +553,14 @@ export const AddDestination = ({ onSuccess }) => {
             />
 
             <InputField
-              placeholder="Masukkan alamat peta"
-              label="Alamat Peta"
+              placeholder="Masukkan URL Peta"
+              label="URL Peta"
               autoComplete="off"
               registration={register('maps_link')}
               error={errors.maps_link}
             />
 
             <InputField
-              type="number"
               placeholder="Masukkan latitude peta"
               label="Latitude Peta"
               autoComplete="off"
@@ -570,7 +569,6 @@ export const AddDestination = ({ onSuccess }) => {
             />
 
             <InputField
-              type="number"
               placeholder="Masukkan longitude peta"
               label="Longitude Peta"
               autoComplete="off"
