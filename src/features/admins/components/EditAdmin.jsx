@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { DialogClose } from '@radix-ui/react-dialog';
 import * as y from 'yup';
 
+import { APIAdmin } from '@/apis/APIAdmin';
 import { APIUsers } from '@/apis/APIUsers';
 import { Spinner } from '@/components/Elements';
 import { InputField } from '@/components/Forms';
@@ -75,7 +76,7 @@ export const EditAdmin = ({ id }) => {
   const onSubmit = async (data) => {
     try {
       setIsLoading(true);
-      await APIUsers.updateUser(id, data);
+      await APIAdmin.updateAdmin(id, data);
       dispatch(toggleFetchLatestAdmins());
     } catch (error) {
       setIsLoading(false);
@@ -123,7 +124,7 @@ export const EditAdmin = ({ id }) => {
                 error={errors.name}
               />
               <InputField
-                type="email"
+                type="text"
                 placeholder="Masukkan email"
                 label="Email"
                 autoComplete="off"

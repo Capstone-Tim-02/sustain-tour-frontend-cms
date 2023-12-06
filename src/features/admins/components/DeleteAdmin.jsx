@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 
-import { APIUsers } from '@/apis/APIUsers';
+import { APIAdmin } from '@/apis/APIAdmin';
 import { TrashIcon } from '@/components/Icons';
 import {
   AlertDialog,
@@ -19,7 +19,7 @@ export const DeleteAdmin = ({ id }) => {
   const dispatch = useDispatch();
 
   const handleDeleteAdmin = async (id) => {
-    await APIUsers.deleteUser(id);
+    await APIAdmin.deleteAdmin(id);
     dispatch(toggleFetchLatestAdmins());
   };
 
