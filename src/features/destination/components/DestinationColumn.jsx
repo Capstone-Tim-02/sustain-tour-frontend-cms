@@ -1,9 +1,11 @@
+import { Link } from 'react-router-dom';
+
+import { EditIcon } from '@/components/Icons';
 import { Badge } from '@/components/ui/badge';
 import { formatDate } from '@/utils/format';
 
 import { DeleteDestination } from './DeleteDestination';
 import { DetailDestination } from './DetailDestination';
-import { EditDestination } from './EditDestinations';
 
 const Status = ({ value }) => {
   return value ? <Badge variant="success">Buka</Badge> : <Badge variant="destructive">Tutup</Badge>;
@@ -30,7 +32,9 @@ const Action = ({ value }) => {
   return (
     <div className="flex items-center space-x-4">
       <DetailDestination id={value?.id} />
-      <EditDestination id={value?.id} />
+      <Link to={`/destinasi/edit/${value?.id}`}>
+        <EditIcon className="h-5 w-5 stroke-2 text-primary-100 hover:cursor-pointer hover:text-primary-100/70" />
+      </Link>
       <DeleteDestination id={value?.id} />
     </div>
   );

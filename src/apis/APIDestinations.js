@@ -14,7 +14,7 @@ export const APIDestinations = {
       throw new Error(error);
     }
   },
-
+  
   getDestination: async (id) => {
     try {
       const result = await axiosInstance.get(`/wisata/${id}`);
@@ -22,6 +22,15 @@ export const APIDestinations = {
     } catch (error) {
       console.error(error);
       throw new Error(error);
+    }
+  },
+
+  editDestination: async (id, formData) => {
+    try {
+      const result = await axiosInstance.put(`/admin/wisata/${id}`, formData);
+      toast.success(result.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
     }
   },
 
