@@ -26,7 +26,6 @@ export const APIDestinations = {
   },
 
   addDestination: async (data) => {
-    console.log(data);
     try {
       const result = await axiosInstance.post(`/wisata/create`, data);
       toast.success(result.data.message);

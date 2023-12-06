@@ -26,8 +26,8 @@ import { ImagePreview, ListFile } from './ImageDestinationPreview';
 const schema = y.object({
   kode: y
     .string()
-    .required('Kode Destinasi tidak boleh kosong')
-    .max(5, 'Kode Destinasi maksimal 5 karakter'),
+    .required('Destinasi Kode tidak boleh kosong')
+    .max(5, 'Destinasi Kode maksimal 5 karakter'),
   title: y
     .string()
     .required('Nama Destinasi tidak boleh kosong')
@@ -38,24 +38,24 @@ const schema = y.object({
     .max(100, 'Lokasi Kota maksimal 100 karakter'),
   location: y
     .string()
-    .required('Nama Lokasi tidak boleh kosong')
-    .max(200, 'Nama Lokasi maksimal 200 karakter'),
-  category_name: y.string().required('Category tidak boleh kosong'),
+    .required('Alamat tidak boleh kosong')
+    .max(200, 'Alamat maksimal 200 karakter'),
+  category_name: y.string().required('Kategori tidak boleh kosong'),
   description: y
     .string()
     .required('Highlight tidak boleh kosong')
     .max(2000, 'Highlight maksimal 2000 karakter'),
   fasilitas: y
     .string()
-    .required('Fasilitas tidak boleh kosong')
-    .max(100, 'Fasilitas maksimal 100 karakter'),
+    .required('Fasilitas lokal tidak boleh kosong')
+    .max(100, 'Fasilitas lokal maksimal 100 karakter'),
   available_tickets: y
     .number()
-    .required('Stok Tiket tidak boleh kosong')
+    .required(' Jumlah Stok Tiket tidak boleh kosong')
     .transform((value) => (isNaN(value) ? undefined : value)),
   price: y
     .number()
-    .required('Stok Tiket tidak boleh kosong')
+    .required('Harga Tiket tidak boleh kosong')
     .transform((value) => (isNaN(value) ? undefined : value)),
   lat: y
     .number()
@@ -73,10 +73,11 @@ const schema = y.object({
     .string()
     .required('Deskripsi tidak boleh kosong')
     .max(40, 'Deskripsi maksimal 40 karakter'),
-  is_open: y.bool().required(''),
+  video_link: y.string().required('URL Video tidak boleh kosong'),
+  is_open: y.string().required('Pilih salah satu'),
   image1: y
     .mixed()
-    .required('Gambar tidak boleh kosong')
+    .required('Gambar Destinasi tidak boleh kosong')
     .test(
       'fileFormat',
       'Format file tidak sesuai. Hanya diperbolehkan format JPG, JPEG, PNG.',
@@ -161,7 +162,7 @@ export const AddDestination = ({ onSuccess }) => {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      setCategories(await APICategories.getCategories());
+      setCategories(await APICategories.getAllCategories());
     };
     fetchCategories();
   }, []);
@@ -575,6 +576,14 @@ export const AddDestination = ({ onSuccess }) => {
               autoComplete="off"
               registration={register('long')}
               error={errors.long}
+            />
+
+            <InputField
+              placeholder="Masukkan URL Video"
+              label="URL Video"
+              autoComplete="off"
+              registration={register('video_link')}
+              error={errors.video_link}
             />
           </div>
         </div>
