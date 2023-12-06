@@ -170,7 +170,7 @@ export const EditDestination = ({ onSuccess }) => {
 
   useEffect(() => {
     async function fetchDestination() {
-      setWisata(await APIDestinations.getDestinationById(destinasiId));
+      setWisata(await APIDestinations.getDestination(destinasiId));
     }
     fetchDestination();
   }, [destinasiId]);

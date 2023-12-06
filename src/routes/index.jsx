@@ -4,7 +4,6 @@ import { Admins } from '@/features/admins';
 import { Login } from '@/features/auth';
 import { Category } from '@/features/categories';
 import { Dashboard } from '@/features/Dashboard';
-import { EditDestinationRoute} from '@/features/destination'
 import { AddDestinationRoute, Destination, EditDestinationRoute } from '@/features/destination';
 import { NotFound } from '@/features/notFound';
 import { AddPromoRoute, ChatBotRoute, EditPromoRoute, Promo } from '@/features/promo';
