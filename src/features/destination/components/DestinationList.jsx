@@ -6,10 +6,7 @@ import { SearchIcon } from 'lucide-react';
 import { Spinner } from '@/components/Elements';
 import { DataTable } from '@/components/Elements/Table';
 import { InputSearchField } from '@/components/Forms';
-<<<<<<< HEAD
-=======
 import { useDebounce } from '@/hooks/useDebounce';
->>>>>>> 4d3724de6f08890a7235ed356f1e036c33350174
 import {
   fetchGetDestinations,
   selectDestinations,
