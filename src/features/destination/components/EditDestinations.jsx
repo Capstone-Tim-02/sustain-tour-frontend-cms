@@ -130,11 +130,10 @@ const schema = y.object({
     .min(5, 'Minimal 5 karakter')
     .max(200, 'Maksimal 200 karakter'),
   lat: y
-    .number()
-    .typeError('Longitude Peta harus berupa angka')
+    .string()
     .required('Latitude Peta tidak boleh kosong'),
   long: y
-    .number()
+    .string()
     .typeError('Longitude Peta harus berupa angka')
     .required('Longitude Peta tidak boleh kosong')
 });
