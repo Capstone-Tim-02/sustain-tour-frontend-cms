@@ -3,10 +3,12 @@ import { toast } from 'react-toastify';
 import { axiosInstance } from '@/configs/axiosInstance';
 
 export const APIUsers = {
-  getUsers: async () => {
+  getUsers: async ({ search, pageIndex, pageSize }) => {
     try {
-      const result = await axiosInstance.get(`/admin/user`);
-      return result.data.users;
+      const result = await axiosInstance.get(
+        `/admin/user?name=${search}&page=${pageIndex}&per_page=${pageSize}`
+      );
+      return result.data;
     } catch (error) {
       console.error(error);
       throw new Error(error);

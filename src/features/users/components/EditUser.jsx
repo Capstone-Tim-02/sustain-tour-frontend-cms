@@ -6,6 +6,7 @@ import { DialogClose } from '@radix-ui/react-dialog';
 import * as y from 'yup';
 
 import { APIUsers } from '@/apis/APIUsers';
+import { Spinner } from '@/components/Elements';
 import { InputField } from '@/components/Forms';
 import { EditIcon } from '@/components/Icons';
 import { Button } from '@/components/ui/button';
@@ -54,7 +55,9 @@ export const EditUser = ({ id }) => {
 
   useEffect(() => {
     async function fetchUser() {
+      setIsLoading(true);
       setDetailUser(await APIUsers.getUser(id));
+      setIsLoading(false);
     }
 
     if (isDialogOpen) {
@@ -99,50 +102,57 @@ export const EditUser = ({ id }) => {
         <DialogHeader>
           <DialogTitle className="mb-4 text-primary-100">Edit Pengguna</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)} id="editUser" className="space-y-4">
-          <InputField
-            placeholder="Masukkan username"
-            label="Username"
-            autoComplete="off"
-            registration={register('username')}
-            error={errors.username}
-          />
-          <InputField
-            placeholder="Masukkan nama"
-            label="Nama"
-            autoComplete="off"
-            registration={register('name')}
-            error={errors.name}
-          />
-          <InputField
-            type="email"
-            placeholder="Masukkan email"
-            label="Email"
-            autoComplete="off"
-            registration={register('email')}
-            error={errors.email}
-          />
-          <InputField
-            startIcon={<span className="text-gray-500">+62</span>}
-            label="No. Telepon"
-            type="tel"
-            placeholder="cth : 81234382067"
-            autoComplete="off"
-            registration={register('phone_number')}
-            error={errors.phone_number}
-          />
-        </form>
-        <DialogFooter>
-          <DialogClose
-            onClick={() => setIsDialogOpen(!isDialogOpen)}
-            className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-600 ring-offset-white transition-colors hover:bg-slate-100 hover:text-slate-900"
-          >
-            <span>Batal</span>
-          </DialogClose>
-          <Button isloading={isLoading} form="editUser" type="submit">
-            Simpan
-          </Button>
-        </DialogFooter>
+
+        {isLoading ? (
+          <Spinner size="base" className="mx-auto mb-5" />
+        ) : (
+          <>
+            <form onSubmit={handleSubmit(onSubmit)} id="editUser" className="space-y-4">
+              <InputField
+                placeholder="Masukkan username"
+                label="Username"
+                autoComplete="off"
+                registration={register('username')}
+                error={errors.username}
+              />
+              <InputField
+                placeholder="Masukkan nama"
+                label="Nama"
+                autoComplete="off"
+                registration={register('name')}
+                error={errors.name}
+              />
+              <InputField
+                type="email"
+                placeholder="Masukkan email"
+                label="Email"
+                autoComplete="off"
+                registration={register('email')}
+                error={errors.email}
+              />
+              <InputField
+                startIcon={<span className="text-gray-500">+62</span>}
+                label="No. Telepon"
+                type="tel"
+                placeholder="cth : 81234382067"
+                autoComplete="off"
+                registration={register('phone_number')}
+                error={errors.phone_number}
+              />
+            </form>
+            <DialogFooter>
+              <DialogClose
+                onClick={() => setIsDialogOpen(!isDialogOpen)}
+                className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-600 ring-offset-white transition-colors hover:bg-slate-100 hover:text-slate-900"
+              >
+                <span>Batal</span>
+              </DialogClose>
+              <Button isloading={isLoading} form="editUser" type="submit">
+                Simpan
+              </Button>
+            </DialogFooter>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );

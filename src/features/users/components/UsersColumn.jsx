@@ -7,11 +7,11 @@ import { EditUser } from './EditUser';
 const Name = ({ user }) => {
   return (
     <div className="flex items-center">
-      <div className="h-10 w-10 flex-shrink-0">
+      <div className="flex-shrink-0">
         <img
           src={user?.photo_profil || avatar}
           alt="avatar"
-          className="h-10 w-10 rounded-lg object-cover object-center"
+          className="h-12 w-12 rounded-full object-cover object-center"
         />
       </div>
       <div className="ml-4">

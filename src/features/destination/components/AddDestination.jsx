@@ -15,16 +15,13 @@ import {
   RadioButton,
   RadioGroup,
   TextAreaField,
-  TextEditorField,
 } from '@/components/Forms';
 import { FieldWrapper } from '@/components/Forms/FieldWrapper';
 import { Button } from '@/components/ui/button';
 import { toggleFetchLatestDestinations } from '@/stores/features/DestinationSlice';
 
-// import { convertToPositive } from '@/utils/format';
-import { ListFile, ValidationImagePreview } from './ImageDestinationPreview';
-
-const { Dragger } = Upload;
+import { ImageDestinationField } from './ImageDestinationField';
+import { ImagePreview, ListFile } from './ImageDestinationPreview';
 
 const schema = y.object({
   kode: y
@@ -96,23 +93,71 @@ const schema = y.object({
       const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
       return value.size <= MAX_FILE_SIZE;
     }),
+  image2: y
+    .mixed()
+    .test(
+      'fileFormat',
+      'Format file tidak sesuai. Hanya diperbolehkan format JPG, JPEG, PNG.',
+      (value) => {
+        if (!value || typeof value === 'string') return true;
+
+        const allowedFormats = ['image/jpg', 'image/jpeg', 'image/png'];
+        return allowedFormats.includes(value.type);
+      }
+    )
+    .test('fileSize', 'Ukuran file terlalu besar. Maksimal 5MB.', (value) => {
+      if (!value || typeof value == 'string') return true;
+
+      const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+      return value.size <= MAX_FILE_SIZE;
+    }),
+  image3: y
+    .mixed()
+    .test(
+      'fileFormat',
+      'Format file tidak sesuai. Hanya diperbolehkan format JPG, JPEG, PNG.',
+      (value) => {
+        if (!value || typeof value === 'string') return true;
+
+        const allowedFormats = ['image/jpg', 'image/jpeg', 'image/png'];
+        return allowedFormats.includes(value.type);
+      }
+    )
+    .test('fileSize', 'Ukuran file terlalu besar. Maksimal 5MB.', (value) => {
+      if (!value || typeof value == 'string') return true;
+
+      const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+      return value.size <= MAX_FILE_SIZE;
+    }),
 });
 
 export const AddDestination = ({ onSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState({
+    image1: null,
+    image2: null,
+    image3: null,
+  });
   const [errorImage, setErrorImage] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [kategoriOptions, setKategoriOptions] = useState([]);
   const {
     register,
     handleSubmit,
-    control,
     setValue,
     setError,
     clearErrors,
     getValues,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
+
+  const dispatch = useDispatch();
+
+  const formData = new FormData();
+
+  const imageValue1 = getValues().image1;
+  const imageValue2 = getValues().image2;
+  const imageValue3 = getValues().image3;
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -121,7 +166,6 @@ export const AddDestination = ({ onSuccess }) => {
     fetchCategories();
   }, []);
 
-  const [kategoriOptions, setKategoriOptions] = useState([]);
   useEffect(() => {
     const options = categories.map((dataCategory) => ({
       value: dataCategory.category_name,
@@ -130,21 +174,13 @@ export const AddDestination = ({ onSuccess }) => {
     setKategoriOptions(options);
   }, [categories]);
 
-  const imageValue = getValues().image1;
-
-  const dispatch = useDispatch();
-
-  const formData = new FormData();
-
   const onSubmit = async (data) => {
-    // console.log(data);
-    console.log(data.title.length);
     try {
       Object.entries(data).forEach(([key, value]) => {
         formData.append(key, value);
       });
       setIsLoading(true);
-      await APIDestinations.addDestination(data);
+      await APIDestinations.addDestination(formData);
       dispatch(toggleFetchLatestDestinations());
       onSuccess();
     } catch (error) {
@@ -155,22 +191,70 @@ export const AddDestination = ({ onSuccess }) => {
     }
   };
 
-  const imageOnChange = (info) => {
+  const imageOnChange1 = (info) => {
     const reader = new FileReader();
 
     if (info.file.status === 'removed') {
       setValue('image1', null);
-      setSelectedImage(null);
+      setPreviewImage((prevState) => ({
+        ...prevState,
+        image1: null,
+      }));
     } else {
       reader.onload = (e) => {
         setValue('image1', info.file.originFileObj);
-        setSelectedImage(e.target.result);
+        setPreviewImage((prevState) => ({
+          ...prevState,
+          image1: e.target.result,
+        }));
       };
       reader.readAsDataURL(info.file.originFileObj);
     }
   };
 
-  const imageCustomRequest = async ({ file, onSuccess, onError }) => {
+  const imageOnChange2 = (info) => {
+    const reader = new FileReader();
+
+    if (info.file.status === 'removed') {
+      setValue('image2', null);
+      setPreviewImage((prevState) => ({
+        ...prevState,
+        image2: null,
+      }));
+    } else {
+      reader.onload = (e) => {
+        setValue('image2', info.file.originFileObj);
+        setPreviewImage((prevState) => ({
+          ...prevState,
+          image2: e.target.result,
+        }));
+      };
+      reader.readAsDataURL(info.file.originFileObj);
+    }
+  };
+
+  const imageOnChange3 = (info) => {
+    const reader = new FileReader();
+
+    if (info.file.status === 'removed') {
+      setValue('image3', null);
+      setPreviewImage((prevState) => ({
+        ...prevState,
+        image3: null,
+      }));
+    } else {
+      reader.onload = (e) => {
+        setValue('image3', info.file.originFileObj);
+        setPreviewImage((prevState) => ({
+          ...prevState,
+          image3: e.target.result,
+        }));
+      };
+      reader.readAsDataURL(info.file.originFileObj);
+    }
+  };
+
+  const imageCustomRequest1 = async ({ file, onSuccess, onError }) => {
     const isValid = file.type.startsWith('image/');
 
     if (isValid) {
@@ -199,10 +283,73 @@ export const AddDestination = ({ onSuccess }) => {
       setErrorImage(true);
     }
   };
+  const imageCustomRequest2 = async ({ file, onSuccess, onError }) => {
+    const isValid = file.type.startsWith('image/');
 
-  const removeImage = () => {
-    setValue('image1', null);
-    setSelectedImage('');
+    if (isValid) {
+      try {
+        const imageDestinationSchema = y.object({
+          image2: schema.fields.image2,
+        });
+
+        await imageDestinationSchema.validate({ image2: file });
+
+        clearErrors('image2');
+        setErrorImage(false);
+        onSuccess();
+      } catch (error) {
+        const errorMessage = error.errors[0];
+
+        setError('image2', {
+          type: 'manual',
+          message: errorMessage,
+        });
+        onError();
+        setErrorImage(true);
+      }
+    } else {
+      onError();
+      setErrorImage(true);
+    }
+  };
+  const imageCustomRequest3 = async ({ file, onSuccess, onError }) => {
+    const isValid = file.type.startsWith('image/');
+
+    if (isValid) {
+      try {
+        const imageDestinationSchema = y.object({
+          image3: schema.fields.image3,
+        });
+
+        await imageDestinationSchema.validate({ image3: file });
+
+        clearErrors('image3');
+        setErrorImage(false);
+        onSuccess();
+      } catch (error) {
+        const errorMessage = error.errors[0];
+
+        setError('image3', {
+          type: 'manual',
+          message: errorMessage,
+        });
+        onError();
+        setErrorImage(true);
+      }
+    } else {
+      onError();
+      setErrorImage(true);
+    }
+  };
+
+  const handlePreview = (file, imageKey) => {
+    if (!file.url && !file.preview) {
+      file.preview = file.originFileObj;
+    }
+    setPreviewImage((prevState) => ({
+      ...prevState,
+      [imageKey]: file.url || file.preview,
+    }));
   };
 
   return (
@@ -273,10 +420,10 @@ export const AddDestination = ({ onSuccess }) => {
             />
 
             {/* Fasilitas Lokal */}
-            <TextEditorField
-              textareaName="fasilitas"
+            <InputField
+              placeholder="Musholla, WC, Parkiran"
               label="Fasilitas Lokal"
-              control={control}
+              autoComplete="off"
               registration={register('fasilitas')}
               error={errors.fasilitas}
             />
@@ -311,32 +458,87 @@ export const AddDestination = ({ onSuccess }) => {
               error={errors.price}
             />
 
-            {/* Gambar Promo */}
+            {/* Gambar Destinasi*/}
             <FieldWrapper
               isHorizontal={false}
               label="Gambar Destinasi"
               id={'image1'}
               error={errors.image1}
             >
-              <Dragger
-                listType="picture"
-                name="image1"
-                registration={register('image1')}
-                multiple={false}
-                showUploadList={false}
-                onChange={(info) => {
-                  imageOnChange(info);
-                }}
-                customRequest={(file, onSuccess, onError) => {
-                  imageCustomRequest(file, onSuccess, onError);
-                }}
+              <ImageDestinationField
+                image1={previewImage.image1}
+                image2={previewImage.image2}
+                image3={previewImage.image3}
               >
-                {/* ValidationImagePreview */}
-                <ValidationImagePreview errorImage={errorImage} selectedImage={selectedImage} />
-              </Dragger>
+                <div>
+                  <Upload
+                    name="image1"
+                    listType="picture-card"
+                    showUploadList={false}
+                    onPreview={(file) => handlePreview(file, 'image1')}
+                    onChange={(info) => {
+                      imageOnChange1(info);
+                    }}
+                    customRequest={(file, onSuccess, onError) => {
+                      imageCustomRequest1(file, onSuccess, onError);
+                    }}
+                    registration={register('image1')}
+                  >
+                    <ImagePreview imageSource={previewImage.image1} />
+                  </Upload>
+                </div>
+                <div>
+                  <Upload
+                    name="image2"
+                    listType="picture-card"
+                    showUploadList={false}
+                    onPreview={(file) => handlePreview(file, 'image2')}
+                    onChange={(info) => {
+                      imageOnChange2(info);
+                    }}
+                    customRequest={(file, onSuccess, onError) => {
+                      imageCustomRequest2(file, onSuccess, onError);
+                    }}
+                    registration={register('image2')}
+                  >
+                    <ImagePreview imageSource={previewImage.image2} />
+                  </Upload>
+                </div>
+                <div>
+                  <Upload
+                    name="image3"
+                    listType="picture-card"
+                    showUploadList={false}
+                    onPreview={(file) => handlePreview(file, 'image3')}
+                    onChange={(info) => {
+                      imageOnChange3(info);
+                    }}
+                    customRequest={(file, onSuccess, onError) => {
+                      imageCustomRequest3(file, onSuccess, onError);
+                    }}
+                    registration={register('image3')}
+                  >
+                    <ImagePreview imageSource={previewImage.image3} />
+                  </Upload>
+                </div>
+              </ImageDestinationField>
             </FieldWrapper>
-            {/* List File */}
-            <ListFile imageValue={imageValue} errorImage={errorImage} removeImage={removeImage} />
+
+            <ListFile
+              imageValue={imageValue1}
+              errorImage={errorImage}
+              removeImage={imageOnChange1}
+            />
+            <ListFile
+              imageValue={imageValue2}
+              errorImage={errorImage}
+              removeImage={imageOnChange2}
+            />
+            <ListFile
+              imageValue={imageValue3}
+              errorImage={errorImage}
+              removeImage={imageOnChange3}
+            />
           </div>
 
           <div className="flex flex-col gap-4 md:flex-grow">

@@ -28,7 +28,7 @@ export const InputSearchField = ({
         className={clsx(
           'mt-1.5 w-full rounded-lg border border-gray-300 placeholder-gray-400 shadow-sm placeholder:text-sm focus:border-primary-100 focus:outline-none focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:mt-0 sm:text-sm',
           type !== 'file' && 'py-2.5',
-          startIcon && 'pl-11',
+          startIcon && 'pl-9',
           endIcon && 'pr-9',
           className
         )}

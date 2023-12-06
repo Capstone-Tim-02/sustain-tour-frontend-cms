@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogOutIcon } from 'lucide-react';
 
+import { APIAuth } from '@/apis/APIAuth';
 import { Spinner } from '@/components/Elements';
 import {
   AlertDialog,
@@ -14,22 +15,19 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { AuthService } from '@/services/AuthService';
 
 export const SignOut = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
     try {
       setIsLoading(true);
-      AuthService.clearCredentialsFromCookie(() => {
-        navigate('/login');
-      });
+      await APIAuth.signOut();
+      setIsLoading(false);
+      navigate('/login');
     } catch (error) {
       console.error(error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -41,13 +39,15 @@ export const SignOut = () => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Keluar</AlertDialogTitle>
-          <AlertDialogDescription>Apakah kamu yakin ingin Keluar?</AlertDialogDescription>
+          <AlertDialogDescription>
+            Apakah anda yakin ingin keluar dari akun anda ?
+          </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Batal</AlertDialogCancel>
           <AlertDialogAction
             disabled={isLoading}
-            className="bg-primary-80 hover:bg-primary-80/80"
+            className="bg-redDestimate-100 hover:bg-redDestimate-100/80"
             onClick={() => handleSignOut()}
           >
             {isLoading && <Spinner size="sm" className="mr-3" />}
