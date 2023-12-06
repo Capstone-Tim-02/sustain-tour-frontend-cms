@@ -73,7 +73,7 @@ const schema = y.object({
     .string()
     .required('Deskripsi tidak boleh kosong')
     .max(40, 'Deskripsi maksimal 40 karakter'),
-  video_link: y.string().required('URL Video tidak boleh kosong'),
+  video_link: y.string(),
   is_open: y.string().required('Pilih salah satu'),
   image1: y
     .mixed()
@@ -464,7 +464,7 @@ export const AddDestination = ({ onSuccess }) => {
               isHorizontal={false}
               label="Gambar Destinasi"
               id={'image1'}
-              error={errors.image1}
+              error={errors.image1 || errors.image2 || errors.image3}
             >
               <ImageDestinationField
                 image1={previewImage.image1}
@@ -578,7 +578,7 @@ export const AddDestination = ({ onSuccess }) => {
 
             <InputField
               placeholder="Masukkan URL Video"
-              label="URL Video"
+              label="URL Video (Opsional)"
               autoComplete="off"
               registration={register('video_link')}
               error={errors.video_link}
