@@ -34,7 +34,7 @@ export const DropdownField = ({
       <select
         className={clsx(
           error && 'focus:!border-0 focus:bg-white focus:!ring-redDestimate-100',
-          'mt-1.5 w-full rounded-lg border border-dashboardDestimate-300 bg-white placeholder-gray-400 shadow-sm placeholder:text-sm focus:border-primary-100 focus:outline-none focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:mt-0 sm:text-sm',
+          'mt-1.5 w-full rounded-lg border border-dashboardDestimate-500 bg-white placeholder-gray-400 shadow-sm placeholder:text-sm focus:border-primary-100 focus:outline-none focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:mt-0 sm:text-sm',
           'py-2.5',
           startIcon && 'pl-11',
           endIcon && 'pr-9',

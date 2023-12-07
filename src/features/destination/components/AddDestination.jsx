@@ -10,15 +10,17 @@ import * as y from 'yup';
 import { APICategories } from '@/apis/APICategories';
 import { APIDestinations } from '@/apis/APIDestinations';
 import {
-  DropdownField,
   InputField,
   RadioButton,
   RadioGroup,
+  ReactSelect,
   TextAreaField,
 } from '@/components/Forms';
 import { FieldWrapper } from '@/components/Forms/FieldWrapper';
 import { Button } from '@/components/ui/button';
+import { useDebounce } from '@/hooks/useDebounce';
 import { toggleFetchLatestDestinations } from '@/stores/features/DestinationSlice';
+import { convertToPositive, formatCurrency, replaceFormatCurrency } from '@/utils/format';
 
 import { ImageDestinationField } from './ImageDestinationField';
 import { ImagePreview, ListFile } from './ImageDestinationPreview';
@@ -40,7 +42,7 @@ const schema = y.object({
     .string()
     .required('Alamat tidak boleh kosong')
     .max(200, 'Alamat maksimal 200 karakter'),
-  category_name: y.string().required('Kategori tidak boleh kosong'),
+  category_name: y.object().required('Kategori tidak boleh kosong'),
   description: y
     .string()
     .required('Highlight tidak boleh kosong')
@@ -51,20 +53,17 @@ const schema = y.object({
     .max(100, 'Fasilitas lokal maksimal 100 karakter'),
   available_tickets: y
     .number()
-    .required(' Jumlah Stok Tiket tidak boleh kosong')
-    .transform((value) => (isNaN(value) ? undefined : value)),
+    .transform((value) => (isNaN(value) ? undefined : value))
+    .min(1, 'Minimal Jumlah Stock Tiket 1')
+    .required(' Jumlah Stok Tiket tidak boleh kosong'),
   price: y
-    .number()
+    .string()
     .required('Harga Tiket tidak boleh kosong')
-    .transform((value) => (isNaN(value) ? undefined : value)),
-  lat: y
-    .string()
-    .required('Latitude Peta tidak boleh kosong')
-    .transform((value) => (isNaN(value) ? undefined : value)),
-  long: y
-    .string()
-    .required('Longitude Peta tidak boleh kosong')
-    .transform((value) => (isNaN(value) ? undefined : value)),
+    .test('is-zero', 'price min Rp. 1', (value) => {
+      return value !== '0';
+    }),
+  lat: y.string().required('Latitude Peta tidak boleh kosong'),
+  long: y.string().required('Longitude Peta tidak boleh kosong'),
   maps_link: y
     .string()
     .required('URL Peta tidak boleh kosong')
@@ -74,8 +73,8 @@ const schema = y.object({
     .required('Deskripsi tidak boleh kosong')
     .max(40, 'Deskripsi maksimal 40 karakter'),
   video_link: y.string(),
-  is_open: y.string().required('Pilih salah satu'),
-  image1: y
+  is_open: y.string().required('Status tidak boleh kosong'),
+  photo_wisata1: y
     .mixed()
     .required('Gambar Destinasi tidak boleh kosong')
     .test(
@@ -94,7 +93,7 @@ const schema = y.object({
       const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
       return value.size <= MAX_FILE_SIZE;
     }),
-  image2: y
+  photo_wisata2: y
     .mixed()
     .test(
       'fileFormat',
@@ -112,7 +111,7 @@ const schema = y.object({
       const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
       return value.size <= MAX_FILE_SIZE;
     }),
-  image3: y
+  photo_wisata3: y
     .mixed()
     .test(
       'fileFormat',
@@ -135,13 +134,26 @@ const schema = y.object({
 export const AddDestination = ({ onSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [previewImage, setPreviewImage] = useState({
-    image1: null,
-    image2: null,
-    image3: null,
+    photo_wisata1: null,
+    photo_wisata2: null,
+    photo_wisata3: null,
   });
   const [errorImage, setErrorImage] = useState(false);
-  const [categories, setCategories] = useState([]);
-  const [kategoriOptions, setKategoriOptions] = useState([]);
+
+  const [searchText, setSearchText] = useState('');
+  const debouncedSearchText = useDebounce(searchText, 500);
+
+  const [dataCategories, setDataCategories] = useState([]);
+  const categoryOptions = dataCategories?.map((option) => ({
+    value: option.id,
+    label: option.category_name,
+  }));
+
+  const handleFormatCurrency = (e) => (e.target.value = formatCurrency(e.target.value));
+  const handleConvertToPositive = (e) => (e.target.value = convertToPositive(e.target.value));
+  const handleUpperCase = (e) => (e.target.value = e.target.value.toUpperCase());
+  const handleInputChange = (value) => setSearchText(value);
+
   const {
     register,
     handleSubmit,
@@ -149,6 +161,7 @@ export const AddDestination = ({ onSuccess }) => {
     setError,
     clearErrors,
     getValues,
+    control,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
@@ -156,28 +169,25 @@ export const AddDestination = ({ onSuccess }) => {
 
   const formData = new FormData();
 
-  const imageValue1 = getValues().image1;
-  const imageValue2 = getValues().image2;
-  const imageValue3 = getValues().image3;
+  const imageValue1 = getValues().photo_wisata1;
+  const imageValue2 = getValues().photo_wisata2;
+  const imageValue3 = getValues().photo_wisata3;
 
   useEffect(() => {
     const fetchCategories = async () => {
-      setCategories(await APICategories.getAllCategories());
+      setDataCategories(
+        await APICategories.getCategoriesWithoutPagination({ search: debouncedSearchText })
+      );
     };
     fetchCategories();
-  }, []);
-
-  useEffect(() => {
-    const options = categories.map((dataCategory) => ({
-      value: dataCategory.category_name,
-      label: dataCategory.category_name,
-    }));
-    setKategoriOptions(options);
-  }, [categories]);
+  }, [debouncedSearchText]);
 
   const onSubmit = async (data) => {
+    const category_name = data?.category_name?.label;
+    const price = replaceFormatCurrency(data?.price);
+
     try {
-      Object.entries(data).forEach(([key, value]) => {
+      Object.entries({ ...data, category_name, price }).forEach(([key, value]) => {
         formData.append(key, value);
       });
       setIsLoading(true);
@@ -192,156 +202,63 @@ export const AddDestination = ({ onSuccess }) => {
     }
   };
 
-  const imageOnChange1 = (info) => {
-    const reader = new FileReader();
+  const imageHandlers = (index) => ({
+    onChange: (info) => {
+      const reader = new FileReader();
 
-    if (info.file.status === 'removed') {
-      setValue('image1', null);
-      setPreviewImage((prevState) => ({
-        ...prevState,
-        image1: null,
-      }));
-    } else {
-      reader.onload = (e) => {
-        setValue('image1', info.file.originFileObj);
+      if (info.file.status === 'removed') {
+        setValue(`photo_wisata${index}`, null);
         setPreviewImage((prevState) => ({
           ...prevState,
-          image1: e.target.result,
+          [`photo_wisata${index}`]: null,
         }));
-      };
-      reader.readAsDataURL(info.file.originFileObj);
-    }
-  };
+      } else {
+        reader.onload = (e) => {
+          setValue(`photo_wisata${index}`, info.file.originFileObj);
+          setPreviewImage((prevState) => ({
+            ...prevState,
+            [`photo_wisata${index}`]: e.target.result,
+          }));
+        };
+        reader.readAsDataURL(info.file.originFileObj);
+      }
+    },
+    customRequest: async ({ file, onSuccess, onError }) => {
+      const isValid = file.type.startsWith('image/');
 
-  const imageOnChange2 = (info) => {
-    const reader = new FileReader();
+      if (isValid) {
+        try {
+          const fieldName = `photo_wisata${index}`;
+          const imageDestinationSchema = y.object({
+            [fieldName]: schema.fields[fieldName],
+          });
 
-    if (info.file.status === 'removed') {
-      setValue('image2', null);
-      setPreviewImage((prevState) => ({
-        ...prevState,
-        image2: null,
-      }));
-    } else {
-      reader.onload = (e) => {
-        setValue('image2', info.file.originFileObj);
-        setPreviewImage((prevState) => ({
-          ...prevState,
-          image2: e.target.result,
-        }));
-      };
-      reader.readAsDataURL(info.file.originFileObj);
-    }
-  };
+          await imageDestinationSchema.validate({ [fieldName]: file });
 
-  const imageOnChange3 = (info) => {
-    const reader = new FileReader();
+          clearErrors(fieldName);
+          setErrorImage(false);
+          onSuccess();
+        } catch (error) {
+          const fieldName = `photo_wisata${index}`;
+          const errorMessage = error.errors[0];
 
-    if (info.file.status === 'removed') {
-      setValue('image3', null);
-      setPreviewImage((prevState) => ({
-        ...prevState,
-        image3: null,
-      }));
-    } else {
-      reader.onload = (e) => {
-        setValue('image3', info.file.originFileObj);
-        setPreviewImage((prevState) => ({
-          ...prevState,
-          image3: e.target.result,
-        }));
-      };
-      reader.readAsDataURL(info.file.originFileObj);
-    }
-  };
-
-  const imageCustomRequest1 = async ({ file, onSuccess, onError }) => {
-    const isValid = file.type.startsWith('image/');
-
-    if (isValid) {
-      try {
-        const imageDestinationSchema = y.object({
-          image1: schema.fields.image1,
-        });
-
-        await imageDestinationSchema.validate({ image1: file });
-
-        clearErrors('image1');
-        setErrorImage(false);
-        onSuccess();
-      } catch (error) {
-        const errorMessage = error.errors[0];
-
-        setError('image1', {
-          type: 'manual',
-          message: errorMessage,
-        });
+          setError(fieldName, {
+            type: 'manual',
+            message: errorMessage,
+          });
+          onError();
+          setErrorImage(true);
+        }
+      } else {
         onError();
         setErrorImage(true);
       }
-    } else {
-      onError();
-      setErrorImage(true);
-    }
-  };
-  const imageCustomRequest2 = async ({ file, onSuccess, onError }) => {
-    const isValid = file.type.startsWith('image/');
+    },
+  });
 
-    if (isValid) {
-      try {
-        const imageDestinationSchema = y.object({
-          image2: schema.fields.image2,
-        });
-
-        await imageDestinationSchema.validate({ image2: file });
-
-        clearErrors('image2');
-        setErrorImage(false);
-        onSuccess();
-      } catch (error) {
-        const errorMessage = error.errors[0];
-
-        setError('image2', {
-          type: 'manual',
-          message: errorMessage,
-        });
-        onError();
-        setErrorImage(true);
-      }
-    } else {
-      onError();
-      setErrorImage(true);
-    }
-  };
-  const imageCustomRequest3 = async ({ file, onSuccess, onError }) => {
-    const isValid = file.type.startsWith('image/');
-
-    if (isValid) {
-      try {
-        const imageDestinationSchema = y.object({
-          image3: schema.fields.image3,
-        });
-
-        await imageDestinationSchema.validate({ image3: file });
-
-        clearErrors('image3');
-        setErrorImage(false);
-        onSuccess();
-      } catch (error) {
-        const errorMessage = error.errors[0];
-
-        setError('image3', {
-          type: 'manual',
-          message: errorMessage,
-        });
-        onError();
-        setErrorImage(true);
-      }
-    } else {
-      onError();
-      setErrorImage(true);
-    }
-  };
+  const { onChange: imageOnChange1, customRequest: imageCustomRequest1 } = imageHandlers(1); // photo_wisata1
+  const { onChange: imageOnChange2, customRequest: imageCustomRequest2 } = imageHandlers(2); // photo_wisata2
+  const { onChange: imageOnChange3, customRequest: imageCustomRequest3 } = imageHandlers(3); // photo_wisata3
 
   const handlePreview = (file, imageKey) => {
     if (!file.url && !file.preview) {
@@ -365,6 +282,7 @@ export const AddDestination = ({ onSuccess }) => {
               autoComplete="off"
               registration={register('kode')}
               error={errors.kode}
+              onInput={handleUpperCase}
             />
 
             {/* Lokasi Kota */}
@@ -379,50 +297,46 @@ export const AddDestination = ({ onSuccess }) => {
             {/* Alamat */}
             <TextAreaField
               label="Alamat"
-              placeholder="Masukkan Alamat, Contoh: Jl. Kebangsaan"
+              placeholder="Masukkan alamat, contoh: Jl. Kebangsaan"
               autoComplete="off"
               registration={register('location')}
               error={errors.location}
               className="row-span-2"
             />
 
-            <div>
-              {/* Buka/Tutup */}
-              <RadioGroup label="Buka/Tutup" isRequired error={errors.is_open}>
-                <RadioButton
-                  id="buka"
-                  label="Buka"
-                  value={true}
-                  registration={register('is_open')}
-                />
-                <RadioButton
-                  id="tutup"
-                  label="Tutup"
-                  value={false}
-                  registration={register('is_open')}
-                />
-              </RadioGroup>
-              <InputField
-                type="text"
-                placeholder="Masukkan deskripsi"
-                autoComplete="off"
-                registration={register('description_is_open')}
-                error={errors.description_is_open}
+            {/* Buka/Tutup */}
+            <RadioGroup label="Status" isRequired error={errors.is_open}>
+              <RadioButton id="buka" label="Buka" value={true} registration={register('is_open')} />
+              <RadioButton
+                id="tutup"
+                label="Tutup"
+                value={false}
+                registration={register('is_open')}
               />
-            </div>
+            </RadioGroup>
+            <InputField
+              type="text"
+              placeholder="Masukkan deskripsi"
+              autoComplete="off"
+              registration={register('description_is_open')}
+              error={errors.description_is_open}
+            />
 
             {/* Kategori */}
-            <DropdownField
+            <ReactSelect
+              name="category_name"
               label="Kategori"
               placeholder="Pilih Kategori"
-              options={kategoriOptions}
+              options={categoryOptions}
+              control={control}
               registration={register('category_name')}
               error={errors.category_name}
+              onInputChange={handleInputChange}
             />
 
             {/* Fasilitas Lokal */}
             <InputField
-              placeholder="Musholla, WC, Parkiran"
+              placeholder="Masukkan fasilitas contoh: Musholla, WC, Parkiran"
               label="Fasilitas Lokal"
               autoComplete="off"
               registration={register('fasilitas')}
@@ -439,7 +353,7 @@ export const AddDestination = ({ onSuccess }) => {
               className="row-span-2"
             />
 
-            {/*Stok Tiket*/}
+            {/*Jumlah Stok Tiket*/}
             <InputField
               type="number"
               placeholder="Masukkan jumlah stok tiket"
@@ -447,79 +361,74 @@ export const AddDestination = ({ onSuccess }) => {
               autoComplete="off"
               registration={register('available_tickets')}
               error={errors.available_tickets}
+              onInput={handleConvertToPositive}
             />
 
             {/* Harga Tiket */}
             <InputField
-              type="number"
               placeholder="Masukkan harga tiket"
               label="Harga Tiket"
               autoComplete="off"
               registration={register('price')}
               error={errors.price}
+              onInput={handleFormatCurrency}
             />
 
             {/* Gambar Destinasi*/}
             <FieldWrapper
               isHorizontal={false}
-              label="Gambar Destinasi"
-              id={'image1'}
-              error={errors.image1 || errors.image2 || errors.image3}
+              label="Gambar Destinasi (1920 x 1080)"
+              id={'photo_wisata1'}
+              error={errors.photo_wisata1 || errors.photo_wisata2 || errors.photo_wisata3}
             >
               <ImageDestinationField
-                image1={previewImage.image1}
-                image2={previewImage.image2}
-                image3={previewImage.image3}
+                photo_wisata1={previewImage.photo_wisata1}
+                photo_wisata2={previewImage.photo_wisata2}
+                photo_wisata3={previewImage.photo_wisata3}
               >
                 <div>
                   <Upload
-                    name="image1"
+                    name="photo_wisata1"
                     listType="picture-card"
                     showUploadList={false}
-                    onPreview={(file) => handlePreview(file, 'image1')}
-                    onChange={(info) => {
-                      imageOnChange1(info);
-                    }}
+                    onPreview={(file) => handlePreview(file, 'photo_wisata1')}
+                    onChange={(info) => imageOnChange1(info)}
                     customRequest={(file, onSuccess, onError) => {
                       imageCustomRequest1(file, onSuccess, onError);
                     }}
-                    registration={register('image1')}
+                    registration={register('photo_wisata1')}
                   >
-                    <ImagePreview imageSource={previewImage.image1} />
+                    <ImagePreview imageSource={previewImage.photo_wisata1} />
                   </Upload>
                 </div>
                 <div>
                   <Upload
-                    name="image2"
+                    name="photo_wisata2"
                     listType="picture-card"
                     showUploadList={false}
-                    onPreview={(file) => handlePreview(file, 'image2')}
-                    onChange={(info) => {
-                      imageOnChange2(info);
-                    }}
+                    onPreview={(file) => handlePreview(file, 'photo_wisata2')}
+                    onChange={(info) => imageOnChange2(info)}
                     customRequest={(file, onSuccess, onError) => {
                       imageCustomRequest2(file, onSuccess, onError);
                     }}
-                    registration={register('image2')}
+                    registration={register('photo_wisata2')}
                   >
-                    <ImagePreview imageSource={previewImage.image2} />
+                    <ImagePreview imageSource={previewImage.photo_wisata2} />
                   </Upload>
                 </div>
                 <div>
                   <Upload
-                    name="image3"
+                    name="photo_wisata3"
                     listType="picture-card"
                     showUploadList={false}
-                    onPreview={(file) => handlePreview(file, 'image3')}
-                    onChange={(info) => {
-                      imageOnChange3(info);
-                    }}
+                    onPreview={(file) => handlePreview(file, 'photo_wisata3')}
+                    onChange={(info) => imageOnChange3(info)}
                     customRequest={(file, onSuccess, onError) => {
                       imageCustomRequest3(file, onSuccess, onError);
                     }}
-                    registration={register('image3')}
+                    registration={register('photo_wisata3')}
                   >
-                    <ImagePreview imageSource={previewImage.image3} />
+                    <ImagePreview imageSource={previewImage.photo_wisata3} />
                   </Upload>
                 </div>
               </ImageDestinationField>
@@ -553,7 +462,7 @@ export const AddDestination = ({ onSuccess }) => {
             />
 
             <InputField
-              placeholder="Masukkan URL Peta"
+              placeholder="Masukkan url peta"
               label="URL Peta"
               autoComplete="off"
               registration={register('maps_link')}
@@ -577,7 +486,7 @@ export const AddDestination = ({ onSuccess }) => {
             />
 
             <InputField
-              placeholder="Masukkan URL Video"
+              placeholder="Masukkan url video"
               label="URL Video (Opsional)"
               autoComplete="off"
               registration={register('video_link')}

@@ -12,3 +12,37 @@
     @apply font-sans;
   }
 }
+
+@layer components {
+  .react-select-container {
+    @apply w-full;
+  }
+
+  .react-select-container .react-select__input {
+    @apply ring-0;
+  }
+
+  .react-select-container .react-select__control {
+    @apply rounded-lg border border-gray-300 py-0.5 shadow-sm sm:text-sm;
+  }
+
+  .react-select-container .react-select__control--is-focused {
+    @apply ring-2 ring-primary-100;
+  }
+
+  .react-select-container .react-select__control--is-focused:hover {
+    @apply border border-primary-100;
+  }
+
+  .react-select-container .react-select__option {
+    @apply font-normal text-gray-900 sm:text-sm;
+  }
+
+  .react-select-container .react-select__option--is-selected {
+    @apply bg-primary-100 text-white;
+  }
+
+  .react-select-container .react-select__option--is-disabled {
+    @apply bg-gray-100 text-gray-400;
+  }
+}

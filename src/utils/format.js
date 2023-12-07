@@ -9,6 +9,7 @@ export const formatDate = (date, format) => dayjs.locale('id') && dayjs(date).fo
 export const convertToRupiah = (number) => {
   let rupiah = '';
   let numberRev = number.toString().split('').reverse().join('');
+
   for (let i = 0; i < numberRev.length; i++) if (i % 3 == 0) rupiah += numberRev.substr(i, 3) + '.';
   return (
     'Rp. ' +
@@ -20,16 +21,20 @@ export const convertToRupiah = (number) => {
 };
 
 // NUMBER TO THOUSAND exp: 1000 => 1.000
-export const convertNumberToThousand = (number) => {
-  let formattedNumber = number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  return formattedNumber;
-};
+export const convertNumberToThousand = (number) =>
+  number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
 // SPLIT DATA EMISSION. exp: 1000.00 => 1000
-export const splitEmission = (number) => {
-  let splitNumber = number?.toString().split('.')[0];
-  return splitNumber;
-};
+export const splitEmission = (number) => number?.toString().split('.')[0];
 
 // CONVERT TO POSITIVE NUMBER exp: -1000 => 1000
 export const convertToPositive = (number) => Math.abs(number);
+
+// FORMAT CURRENCY exp: 1000 => 1,000
+export const formatCurrency = (value) => {
+  const removeCharacter = value?.toString().replace(/[^0-9]/g, '');
+  return removeCharacter?.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+};
+
+// REPLACE FORMAT CURRENCY exp: 1,000 => 1000
+export const replaceFormatCurrency = (value) => value?.replace(/[^0-9]/g, '');
