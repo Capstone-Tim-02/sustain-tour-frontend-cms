@@ -1,5 +1,10 @@
-export const ImageDestinationField = ({ image1, image2, image3, children }) => {
-  const isAnyImageSelected = image1 || image2 || image3;
+export const ImageDestinationField = ({
+  photo_wisata1,
+  photo_wisata2,
+  photo_wisata3,
+  children,
+}) => {
+  const isAnyImageSelected = photo_wisata1 || photo_wisata2 || photo_wisata3;
   return (
     <div className="my-3 flex flex-col flex-wrap items-center justify-center gap-2 rounded-lg border-2 border-dashed border-primary-20 py-5 md:my-2 md:flex-row">
       <div className="flex flex-col p-5 sm:p-2">
@@ -7,7 +12,7 @@ export const ImageDestinationField = ({ image1, image2, image3, children }) => {
           <p className="mb-2 text-center font-medium text-black">Tidak ada file yang dipilih</p>
         )}
 
-        <div className="flex flex-col flex-wrap items-center justify-center gap-2  md:my-2 md:flex-row">
+        <div className="flex flex-col flex-wrap items-center justify-center gap-2 md:my-2 md:flex-row">
           {children}
         </div>
 

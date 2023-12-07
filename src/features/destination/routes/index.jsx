@@ -5,7 +5,7 @@ import { ContentLayout } from '@/components/Layouts';
 
 import { AddDestination } from '../components/AddDestination';
 import { DestinationList } from '../components/DestinationList';
-import { EditDestination } from '../components/EditDestinations'
+import { EditDestination } from '../components/EditDestination';
 
 export const Destination = () => {
   return (

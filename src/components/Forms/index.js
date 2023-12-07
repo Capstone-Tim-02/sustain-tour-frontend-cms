@@ -6,5 +6,6 @@ export * from './InputField';
 export * from './InputSearchField';
 export * from './RadioButton';
 export * from './RadioGroup';
+export * from './ReactSelect';
 export * from './TextAreaField';
 export * from './TextEditorField';
