@@ -201,7 +201,7 @@ export const AddDestination = ({ onSuccess }) => {
       dispatch(clearQuery());
       onSuccess();
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
       setIsLoading(false);
     } finally {
       setIsLoading(false);
