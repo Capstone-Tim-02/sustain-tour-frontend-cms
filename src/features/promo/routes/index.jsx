@@ -1,19 +1,20 @@
-import { useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 
+import IconChatBot from '@/assets/images/icon-chat-bot.png';
 import { Breadcrumb } from '@/components/Elements';
 import { ContentLayout } from '@/components/Layouts';
-import IconChatBot from '@/assets/images/icon-chat-bot.png';
+import { bubbleRight } from '@/utils/bubble';
 
 import { AddPromo } from '../components/AddPromo';
-import { bubbleRight } from '@/utils/bubble';
 import { ChatBot } from '../components/ChatBot';
 import { EditPromo } from '../components/EditPromo';
 import { PromoList } from '../components/PromoList';
 
-export const Promo = () => {
+export const PromoRoute = () => {
   const [isVisible, setIsVisible] = useState(true);
+
   useEffect(() => {
     const timer = setInterval(() => {
       setIsVisible((prevIsVisible) => !prevIsVisible);
@@ -123,31 +124,29 @@ export const AddPromoRoute = () => {
 
 export const ChatBotRoute = () => {
   return (
-    <>
-      <ContentLayout title="Virtual Asisten">
-        <div className="justify-between sm:flex">
-          <Breadcrumb>
-            <Link to="/promo">
-              <span className="px-2 text-sm font-semibold text-gray-700">Promo</span>
-            </Link>
-            <span className="px-2 text-sm font-semibold text-primary-100">Virtual Asisten</span>
-          </Breadcrumb>
-        </div>
+    <ContentLayout title="Virtual Asisten">
+      <div className="justify-between sm:flex">
+        <Breadcrumb>
+          <Link to="/promo">
+            <span className="px-2 text-sm font-semibold text-gray-700">Promo</span>
+          </Link>
+          <span className="px-2 text-sm font-semibold text-primary-100">Virtual Asisten</span>
+        </Breadcrumb>
+      </div>
 
-        <div className="mt-5">
-          <div className="flex items-center justify-between rounded-[8px] bg-primary-40 px-4 py-1">
-            <div className="sm:flex-auto">
-              <h1 className="text-xl font-semibold text-white sm:text-2xl">Virtual Asisten</h1>
-            </div>
-            <div className="h-12 w-12 rounded-full border border-primary-80 bg-white px-2 py-3">
-              <img src={IconChatBot} alt="Chat Bot Icon" />
-            </div>
+      <div className="mt-5">
+        <div className="flex items-center justify-between rounded-[8px] bg-primary-40 px-4 py-1">
+          <div className="sm:flex-auto">
+            <h1 className="text-xl font-semibold text-white sm:text-2xl">Virtual Asisten</h1>
+          </div>
+          <div className="h-12 w-12 rounded-full border border-primary-80 bg-white px-2 py-3">
+            <img src={IconChatBot} alt="Chat Bot Icon" />
           </div>
         </div>
-        <div className="-mb-20 mt-6 rounded-lg border border-gray-100 bg-white px-5 py-3 shadow sm:px-10 ">
-          <ChatBot />
-        </div>
-      </ContentLayout>
-    </>
+      </div>
+      <div className="-mb-20 mt-6 rounded-lg border border-gray-100 bg-white px-5 py-3 shadow sm:px-10 ">
+        <ChatBot />
+      </div>
+    </ContentLayout>
   );
 };

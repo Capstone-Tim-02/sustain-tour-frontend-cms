@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { axiosInstance } from '@/configs/axiosInstance';
 
 export const APIAdmin = {
-  getAdmins: async ({ search, pageIndex, pageSize }) => {
+  getAllAdmin: async ({ search = '', pageIndex, pageSize }) => {
     try {
       const result = await axiosInstance.get(
         `/admin?name=${search}&page=${pageIndex}&per_page=${pageSize}`

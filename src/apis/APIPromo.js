@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { axiosInstance } from '@/configs/axiosInstance';
 
 export const APIPromo = {
-  getPromo: async ({ search, pageIndex, pageSize }) => {
+  getAllPromo: async ({ search = '', pageIndex, pageSize }) => {
     try {
       const result = await axiosInstance.get(
         `/user/promo?nama_promo=${search}&page=${pageIndex}&per_page=${pageSize}`

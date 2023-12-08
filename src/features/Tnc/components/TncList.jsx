@@ -1,10 +1,9 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Spinner } from '@/components/Elements';
-import { DataTable } from '@/components/Elements/Table';
-import { fetchGetTnc, selectTnc, toggleFetchLatestTnc } from '@/stores/features/TncSlice';
-import { selectReactTable } from '@/stores/ReactTableSlice';
+import { DataTable, Spinner } from '@/components/Elements';
+import { fetchGetAllTnc, selectTnc, toggleFetchLatestAllTnc } from '@/stores/features';
+import { selectReactTable } from '@/stores/ui-slice';
 
 import { columns } from './TncColumn';
 
@@ -18,12 +17,12 @@ export const TncList = () => {
   const TNC_PAGINATION = tncSelector?.data?.pagination;
 
   useEffect(() => {
-    if (tncSelector?.shouldFetchLatestTnc) {
-      dispatch(fetchGetTnc());
-      dispatch(toggleFetchLatestTnc());
+    if (tncSelector?.shouldFetchLatestAllTnc) {
+      dispatch(fetchGetAllTnc());
+      dispatch(toggleFetchLatestAllTnc());
     }
-    dispatch(fetchGetTnc({ pageIndex: pageIndex + 1, pageSize }));
-  }, [dispatch, tncSelector.shouldFetchLatestTnc, pageIndex, pageSize]);
+    dispatch(fetchGetAllTnc({ pageIndex: pageIndex + 1, pageSize }));
+  }, [dispatch, tncSelector.shouldFetchLatestAllTnc, pageIndex, pageSize]);
 
   return (
     <>

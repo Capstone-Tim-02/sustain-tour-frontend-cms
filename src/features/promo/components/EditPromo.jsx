@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as y from 'yup';
 
-import { APIPromo } from '@/apis/APIPromo';
+import { APIPromo } from '@/apis';
 import { Spinner } from '@/components/Elements';
 import {
   DropdownField,
@@ -16,7 +16,7 @@ import {
   TextEditorField,
 } from '@/components/Forms';
 import { Button } from '@/components/ui/button';
-import { clearQuery } from '@/stores/ReactTableSlice';
+import { clearQuery } from '@/stores/ui-slice';
 import { convertToPositive, formatDate } from '@/utils/format';
 
 const schema = y.object({

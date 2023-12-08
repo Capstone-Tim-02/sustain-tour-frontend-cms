@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 
-import { APIDestinations } from '@/apis/APIDestinations';
+import { APIDestination } from '@/apis';
 import { TrashIcon } from '@/components/Icons';
 import {
   AlertDialog,
@@ -13,14 +13,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { toggleFetchLatestDestinations } from '@/stores/features/DestinationSlice';
+import { toggleFetchLatestAllDestination } from '@/stores/features';
 
 export const DeleteDestination = ({ id }) => {
   const dispatch = useDispatch();
 
   const handleDeleteDestination = async (id) => {
-    await APIDestinations.deleteDestination(id);
-    dispatch(toggleFetchLatestDestinations());
+    await APIDestination.deleteDestination(id);
+    dispatch(toggleFetchLatestAllDestination());
   };
 
   return (

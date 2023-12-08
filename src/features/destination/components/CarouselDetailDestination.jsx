@@ -1,7 +1,7 @@
 import { Carousel } from '@material-tailwind/react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
-import noPicture from '@/assets/images/no-picture.png';
+import noPicture2 from '@/assets/images/no-picture-2.png';
 
 export function CarouselDetailDestination({ detailDestination }) {
   return (
@@ -51,7 +51,7 @@ export function CarouselDetailDestination({ detailDestination }) {
       {detailDestination?.photo_wisata1 ? (
         <div className="relative h-full w-full">
           <img
-            src={detailDestination?.photo_wisata1 ? detailDestination?.photo_wisata1 : noPicture}
+            src={detailDestination?.photo_wisata1 ? detailDestination?.photo_wisata1 : noPicture2}
             alt="image 1"
             className="h-full w-full object-cover"
           />
@@ -67,7 +67,7 @@ export function CarouselDetailDestination({ detailDestination }) {
       {detailDestination?.photo_wisata2 ? (
         <div className="relative h-full w-full">
           <img
-            src={detailDestination?.photo_wisata2 || noPicture}
+            src={detailDestination?.photo_wisata2 || noPicture2}
             alt="image 2"
             className="h-full w-full object-cover"
           />
@@ -83,7 +83,7 @@ export function CarouselDetailDestination({ detailDestination }) {
       {detailDestination?.photo_wisata3 ? (
         <div className="relative h-full w-full">
           <img
-            src={detailDestination?.photo_wisata3 || noPicture}
+            src={detailDestination?.photo_wisata3 || noPicture2}
             alt="image 3"
             className="h-full w-full object-cover"
           />

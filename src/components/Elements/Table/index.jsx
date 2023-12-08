@@ -19,7 +19,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { DOTS, useCustomPagination } from '@/hooks/useCustomPagination';
-import { selectReactTable, setQueryPageIndex, setQueryPageSize } from '@/stores/ReactTableSlice';
+import { selectReactTable, setQueryPageIndex, setQueryPageSize } from '@/stores/ui-slice';
 
 const PaginationOptions = ({ currentPage, pageCount, siblingCount = 1, pageSize }) => {
   const dispatch = useDispatch();

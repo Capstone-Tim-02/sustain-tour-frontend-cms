@@ -1,26 +1,27 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import currentUser from '@/stores/CurrentUserSlice';
-import admins from '@/stores/features/AdminsSlice';
-import categories from '@/stores/features/CategoriesSlice';
-import destinations from '@/stores/features/DestinationSlice';
-import promos from '@/stores/features/PromoSlice';
-import tnc from '@/stores/features/TncSlice';
-import transactions from '@/stores/features/TransactionsSlice';
-import users from '@/stores/features/UsersSlice';
-import reactTable from '@/stores/ReactTableSlice';
+import {
+  adminReducer,
+  categoryReducer,
+  destinationReducer,
+  promoReducer,
+  tncReducer,
+  transactionReducer,
+  userReducer,
+} from '@/stores/features';
+import { currentUserReducer, reactTableReducer } from '@/stores/ui-slice';
 
 const store = configureStore({
   reducer: {
-    categories,
-    users,
-    tnc,
-    destinations,
-    promos,
-    transactions,
-    reactTable,
-    currentUser,
-    admins,
+    fetchAllAdmin: adminReducer,
+    fetchAllCategory: categoryReducer,
+    currentUser: currentUserReducer,
+    fetchAllDestination: destinationReducer,
+    fetchAllPromo: promoReducer,
+    reactTable: reactTableReducer,
+    fetchAllTnc: tncReducer,
+    fetchAllTransaction: transactionReducer,
+    fetchAllUser: userReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

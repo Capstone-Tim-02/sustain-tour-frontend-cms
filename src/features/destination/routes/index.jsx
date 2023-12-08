@@ -7,7 +7,7 @@ import { AddDestination } from '../components/AddDestination';
 import { DestinationList } from '../components/DestinationList';
 import { EditDestination } from '../components/EditDestination';
 
-export const Destination = () => {
+export const DestinationRoute = () => {
   return (
     <ContentLayout title="Destinasi">
       <div className="justify-between sm:flex">

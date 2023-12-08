@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 
-import { APIDashboard } from '@/apis/APIDashboard';
+import { APIDashboard } from '@/apis';
 import { Breadcrumb, Spinner } from '@/components/Elements';
 import { DateRangePickerField } from '@/components/Forms';
 import { ContentLayout } from '@/components/Layouts';
 
 import { BarChart } from '../components/BarChart';
-import { Cards } from '../components/Cards';
+import { Card } from '../components/Card';
 import { PopularDestination } from '../components/PopularDestination';
 import { TopCarbonEmission } from '../components/TopCarbonEmission';
 
-export const Dashboard = () => {
+export const DashboardRoute = () => {
   const [data, setData] = useState(null);
 
   const [topData, setTopData] = useState({
@@ -41,14 +41,14 @@ export const Dashboard = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => setData(await APIDashboard.getGraphics(dateRange[0]));
+    const fetchData = async () => setData(await APIDashboard.getGraphic(dateRange[0]));
 
     fetchData();
   }, [dateRange]);
 
   useEffect(() => {
     const fetchTopData = async () => {
-      const topDestination = await APIDashboard.getTopDestinations();
+      const topDestination = await APIDashboard.getTopDestination();
       const topEmission = await APIDashboard.getTopEmissionCarbon();
 
       setTopData({
@@ -95,7 +95,7 @@ export const Dashboard = () => {
         ) : (
           <>
             {/* Section 1 */}
-            <Cards data={data} />
+            <Card data={data} />
 
             {/* Section 2 */}
             <div className="mx-auto grid w-full grid-cols-1 gap-3 xl:grid-cols-9">
@@ -110,8 +110,6 @@ export const Dashboard = () => {
             </div>
           </>
         )}
-
-        {/* Section 2 */}
       </div>
     </ContentLayout>
   );

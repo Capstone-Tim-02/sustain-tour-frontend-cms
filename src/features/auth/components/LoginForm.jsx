@@ -6,7 +6,7 @@ import { EyeOff } from 'lucide-react';
 import { Eye } from 'lucide-react';
 import * as y from 'yup';
 
-import { APIAuth } from '@/apis/APIAuth';
+import { APIAuth } from '@/apis';
 import { InputField } from '@/components/Forms';
 import { Button } from '@/components/ui/button';
 

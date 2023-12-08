@@ -1,12 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
-import IconChatBot from '@/assets/images/icon-chat-bot.png';
-import LogoDestimate from '/logo-2.png';
-
-import { APIPromo } from '@/apis/APIPromo';
+import { useEffect, useRef, useState } from 'react';
 import { RotateCcwIcon, SendIcon } from 'lucide-react';
-import { formatDate } from '@/utils/format';
-import { bubbleLeft, bubbleRight } from '@/utils/bubble';
+
+import { APIPromo } from '@/apis';
+import IconChatBot from '@/assets/images/icon-chat-bot.png';
 import { Spinner } from '@/components/Elements';
+import { bubbleLeft, bubbleRight } from '@/utils/bubble';
+import { formatDate } from '@/utils/format';
+
+import LogoDestimate from '/logo-2.png';
 
 export const ChatBot = () => {
   const bottomRef = useRef(null);

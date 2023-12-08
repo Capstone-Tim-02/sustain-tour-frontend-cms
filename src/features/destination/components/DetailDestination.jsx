@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Clock5Icon, DotIcon } from 'lucide-react';
 
-import { APIDestinations } from '@/apis/APIDestinations';
+import { APIDestination } from '@/apis';
 import LogoGoogleMaps from '@/assets/images/logo-google-maps.png';
 import { Spinner } from '@/components/Elements';
 import { DetailIcon } from '@/components/Icons';
@@ -39,7 +39,7 @@ export const DetailDestination = ({ id }) => {
   useEffect(() => {
     async function fetchDestination() {
       setIsLoading(true);
-      setDetailDestination(await APIDestinations.getDestination(id));
+      setDetailDestination(await APIDestination.getDestinationById(id));
       setIsLoading(false);
     }
 

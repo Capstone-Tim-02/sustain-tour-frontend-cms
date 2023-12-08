@@ -11,8 +11,8 @@ import {
   fetchGetCurrentUser,
   selectCurrentUser,
   toggleFetchLatestCurrentUser,
-} from '@/stores/CurrentUserSlice';
-import { clearQuery } from '@/stores/ReactTableSlice';
+} from '@/stores/ui-slice';
+import { clearQuery } from '@/stores/ui-slice';
 
 export const MobileSidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const currentSelector = useSelector(selectCurrentUser);

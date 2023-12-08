@@ -6,8 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Upload } from 'antd';
 import * as y from 'yup';
 
-import { APICategories } from '@/apis/APICategories';
-import { APIDestinations } from '@/apis/APIDestinations';
+import { APICategory, APIDestination } from '@/apis';
 import {
   FieldWrapper,
   InputField,
@@ -174,7 +173,7 @@ export const EditDestination = ({ onSuccess }) => {
 
   useEffect(() => {
     async function fetchDestination() {
-      setWisata(await APIDestinations.getDestination(destinasiId));
+      setWisata(await APIDestination.getDestinationById(destinasiId));
     }
     fetchDestination();
   }, [destinasiId]);
@@ -182,7 +181,7 @@ export const EditDestination = ({ onSuccess }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       setDataCategories(
-        await APICategories.getCategoriesWithoutPagination({ search: debouncedSearchText })
+        await APICategory.getAllCategoryWithoutPagination({ search: debouncedSearchText })
       );
     };
     fetchCategories();
@@ -224,7 +223,7 @@ export const EditDestination = ({ onSuccess }) => {
       });
 
       setIsLoading(true);
-      await APIDestinations.editDestination(destinasiId, formData);
+      await APIDestination.editDestination(destinasiId, formData);
       onSuccess();
     } catch (error) {
       toast.error(error);

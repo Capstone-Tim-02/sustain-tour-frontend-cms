@@ -2,7 +2,7 @@ import { axiosInstance } from '@/configs/axiosInstance';
 import { formatDate } from '@/utils/format';
 
 export const APIDashboard = {
-  getGraphics: async (dateRange) => {
+  getGraphic: async (dateRange) => {
     try {
       const startDate = dateRange.startDate ? formatDate(dateRange.startDate, 'YYYY-MM-DD') : '';
       const endDate = dateRange.endDate ? formatDate(dateRange.endDate, 'YYYY-MM-DD') : '';
@@ -15,7 +15,7 @@ export const APIDashboard = {
     }
   },
 
-  getTopDestinations: async () => {
+  getTopDestination: async () => {
     try {
       const result = await axiosInstance.get(`/top/wisata`);
       return result.data;

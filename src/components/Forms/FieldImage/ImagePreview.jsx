@@ -1,4 +1,4 @@
-import NoPicture from '@/assets/images/no-picture.png';
+import noPicture2 from '@/assets/images/no-picture-2.png';
 import { TrashIcon, UploadIcon } from '@/components/Icons';
 
 export const ValidationImagePreview = ({ isImageError, selectedImage }) => {
@@ -10,7 +10,7 @@ export const ValidationImagePreview = ({ isImageError, selectedImage }) => {
         <>
           <p className="ant-upload-text">Format file tidak sesuai</p>
           <p className="ant-upload-drag-icon grid justify-items-center">
-            <img src={NoPicture} alt="No Picture" />
+            <img src={noPicture2} alt="No Picture" />
           </p>
           <p className="ant-upload-hint">
             Maksimal ukuran file: 5MB <br />

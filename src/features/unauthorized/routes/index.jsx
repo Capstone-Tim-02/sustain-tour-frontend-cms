@@ -4,7 +4,7 @@ import { ChevronRightIcon } from 'lucide-react';
 import unauthorized from '@/assets/images/unauthorized.png';
 import { Button } from '@/components/ui/button';
 
-export const Unauthorized = () => {
+export const UnauthorizedRoute = () => {
   const navigate = useNavigate();
 
   return (

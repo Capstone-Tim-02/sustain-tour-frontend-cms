@@ -1,4 +1,4 @@
-import noImage from '@/assets/images/no-image.png';
+import noPicture1 from '@/assets/images/no-picture-1.png';
 import { UserIcon } from '@/components/Icons';
 import { convertNumberToThousand } from '@/utils/format';
 
@@ -19,7 +19,7 @@ export const PopularDestination = ({ topData }) => {
 
                 {/* Image */}
                 <img
-                  src={item?.photo_wisata1 || noImage}
+                  src={item?.photo_wisata1 || noPicture1}
                   className="h-12 w-12 flex-none rounded-sm object-cover"
                   alt="wisata"
                 />

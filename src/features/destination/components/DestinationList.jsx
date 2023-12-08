@@ -9,15 +9,11 @@ import { InputSearchField } from '@/components/Forms';
 import { Button } from '@/components/ui/button';
 import { useDebounce } from '@/hooks/useDebounce';
 import {
-  fetchGetDestinations,
-  selectDestinations,
-  toggleFetchLatestDestinations,
-} from '@/stores/features/DestinationSlice';
-import {
-  selectReactTable,
-  setQueryPageIndex,
-  setQuerySearchGlobal,
-} from '@/stores/ReactTableSlice';
+  fetchgetAllDestination,
+  selectDestination,
+  toggleFetchLatestAllDestination,
+} from '@/stores/features';
+import { selectReactTable, setQueryPageIndex, setQuerySearchGlobal } from '@/stores/ui-slice';
 import { convertNumberToThousand } from '@/utils/format';
 
 import { columns } from './DestinationColumn';
@@ -26,7 +22,7 @@ export const DestinationList = () => {
   const [searchText, setSearchText] = useState('');
   const debouncedSearchTextFilter = useDebounce(searchText, 600);
 
-  const destinationsSelector = useSelector(selectDestinations);
+  const destinationsSelector = useSelector(selectDestination);
   const { searchGlobal, pageIndex, pageSize } = useSelector(selectReactTable);
 
   const dispatch = useDispatch();
@@ -40,14 +36,14 @@ export const DestinationList = () => {
   }, [dispatch, debouncedSearchTextFilter]);
 
   useEffect(() => {
-    if (destinationsSelector?.shouldFetchLatestDestinations) {
-      dispatch(fetchGetDestinations());
-      dispatch(toggleFetchLatestDestinations());
+    if (destinationsSelector?.shouldFetchLatestAllDestination) {
+      dispatch(fetchgetAllDestination());
+      dispatch(toggleFetchLatestAllDestination());
     }
-    dispatch(fetchGetDestinations({ search: searchGlobal, pageIndex: pageIndex + 1, pageSize }));
+    dispatch(fetchgetAllDestination({ search: searchGlobal, pageIndex: pageIndex + 1, pageSize }));
   }, [
     dispatch,
-    destinationsSelector.shouldFetchLatestDestinations,
+    destinationsSelector.shouldFetchLatestAllDestination,
     searchGlobal,
     pageIndex,
     pageSize,

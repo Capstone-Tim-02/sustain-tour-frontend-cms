@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 
-import { APIPromo } from '@/apis/APIPromo';
+import { APIPromo } from '@/apis';
 import { TrashIcon } from '@/components/Icons';
 import {
   AlertDialog,
@@ -13,14 +13,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { toggleFetchLatestPromo } from '@/stores/features/PromoSlice';
+import { toggleFetchLatestAllPromo } from '@/stores/features';
 
 export const DeletePromo = ({ id }) => {
   const dispatch = useDispatch();
 
   const handleDeletePromo = async (id) => {
     await APIPromo.deletePromo(id);
-    dispatch(toggleFetchLatestPromo());
+    dispatch(toggleFetchLatestAllPromo());
   };
 
   return (

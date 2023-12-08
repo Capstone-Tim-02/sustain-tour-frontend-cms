@@ -6,7 +6,7 @@ import { ContentLayout } from '@/components/Layouts';
 import { EditTnc } from '../components/EditTnc';
 import { TncList } from '../components/TncList';
 
-export const Tnc = () => {
+export const TncRoute = () => {
   return (
     <ContentLayout title="Syarat & Ketentuan">
       <div className="justify-between sm:flex">
