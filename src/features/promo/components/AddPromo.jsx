@@ -206,6 +206,7 @@ export const AddPromo = ({ onSuccess }) => {
                   control={control}
                   registration={register('status_aktif')}
                   error={errors.status_aktif}
+                  placeholder='Pilih status'
                 />
 
                 {/* Deskripsi */}
