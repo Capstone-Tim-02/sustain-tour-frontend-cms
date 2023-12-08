@@ -20,7 +20,8 @@ export const APIAuth = {
   signInWithCredentials: async (data) => {
     try {
       const result = await axiosInstance.post('/admin/signin', data);
-      AuthService.storeCredentialsToCookie(result.data.token);
+      const { token, expires_at } = result.data;
+      AuthService.storeCredentialsToCookie({ token, expires_at });
       toast.success(result.data.message);
     } catch (error) {
       toast.error(error.response.data.message);
