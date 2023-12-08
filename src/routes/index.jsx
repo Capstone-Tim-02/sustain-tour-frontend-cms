@@ -37,7 +37,7 @@ export const AppRoutes = () => {
         <Route path="/promo/edit/:promoId" element={<EditPromoRoute />} />
         <Route path="/destinasi" element={<DestinationRoute />} />
         <Route path="/destinasi/tambah" element={<AddDestinationRoute />} />
-        <Route path="/destinasi/edit/:destinasiId" element={<EditDestinationRoute />} />
+        <Route path="/destinasi/edit/:destinationId" element={<EditDestinationRoute />} />
         <Route path="/kategori" element={<CategoryRoute />} />
         <Route path="/transaksi" element={<TransactionRoute />} />
         <Route path="/syarat_dan_ketentuan" element={<TncRoute />} />
