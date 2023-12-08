@@ -1,16 +1,20 @@
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
-import { Admins } from '@/features/admins';
-import { Login } from '@/features/auth';
-import { Category } from '@/features/categories';
-import { Dashboard } from '@/features/Dashboard';
-import { AddDestinationRoute, Destination, EditDestinationRoute } from '@/features/destination';
-import { NotFound } from '@/features/notFound';
-import { AddPromoRoute, ChatBotRoute, EditPromoRoute, Promo } from '@/features/promo';
-import { EditTncRoute, Tnc } from '@/features/Tnc';
-import { Transactions } from '@/features/transactions';
-import { Unauthorized } from '@/features/unauthorized';
-import { Users } from '@/features/users';
+import { AdminRoute } from '@/features/admin';
+import { LoginRoute } from '@/features/auth';
+import { CategoryRoute } from '@/features/category';
+import { DashboardRoute } from '@/features/dashboard';
+import {
+  AddDestinationRoute,
+  DestinationRoute,
+  EditDestinationRoute,
+} from '@/features/destination';
+import { NotFoundRoute } from '@/features/not-found';
+import { AddPromoRoute, ChatBotRoute, EditPromoRoute, PromoRoute } from '@/features/promo';
+import { EditTncRoute, TncRoute } from '@/features/tnc';
+import { TransactionRoute } from '@/features/transaction';
+import { UnauthorizedRoute } from '@/features/unauthorized';
+import { UserRoute } from '@/features/user';
 import { globalRoute } from '@/lib/globalRoute';
 
 import { PrivateRoute } from './private';
@@ -24,26 +28,26 @@ export const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<PrivateRoute />}>
         <Route path="/" element={<Navigate to="/overview" replace />} />
-        <Route path="/overview" element={<Dashboard />} />
-        <Route path="/admin" element={<Admins />} />
-        <Route path="/pengguna" element={<Users />} />
-        <Route path="/promo" element={<Promo />} />
+        <Route path="/overview" element={<DashboardRoute />} />
+        <Route path="/admin" element={<AdminRoute />} />
+        <Route path="/pengguna" element={<UserRoute />} />
+        <Route path="/promo" element={<PromoRoute />} />
         <Route path="/promo/tambah" element={<AddPromoRoute />} />
         <Route path="/promo/virtual-asisten" element={<ChatBotRoute />} />
         <Route path="/promo/edit/:promoId" element={<EditPromoRoute />} />
-        <Route path="/destinasi" element={<Destination />} />
+        <Route path="/destinasi" element={<DestinationRoute />} />
         <Route path="/destinasi/tambah" element={<AddDestinationRoute />} />
         <Route path="/destinasi/edit/:destinasiId" element={<EditDestinationRoute />} />
-        <Route path="/kategori" element={<Category />} />
-        <Route path="/transaksi" element={<Transactions />} />
-        <Route path="/syarat_dan_ketentuan" element={<Tnc />} />
+        <Route path="/kategori" element={<CategoryRoute />} />
+        <Route path="/transaksi" element={<TransactionRoute />} />
+        <Route path="/syarat_dan_ketentuan" element={<TncRoute />} />
         <Route path="/syarat_dan_ketentuan/:tncId" element={<EditTncRoute />} />
       </Route>
       <Route path="/" element={<ProtectedRoute />}>
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<LoginRoute />} />
       </Route>
-      <Route path="*" element={<NotFound />} />
-      <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route path="*" element={<NotFoundRoute />} />
+      <Route path="/unauthorized" element={<UnauthorizedRoute />} />
     </Routes>
   );
 };

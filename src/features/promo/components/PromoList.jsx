@@ -8,12 +8,8 @@ import { DataTable } from '@/components/Elements/Table';
 import { InputSearchField } from '@/components/Forms';
 import { Button } from '@/components/ui/button';
 import { useDebounce } from '@/hooks/useDebounce';
-import { fetchGetPromo, selectPromo, toggleFetchLatestPromo } from '@/stores/features/PromoSlice';
-import {
-  selectReactTable,
-  setQueryPageIndex,
-  setQuerySearchGlobal,
-} from '@/stores/ReactTableSlice';
+import { fetchGetAllPromo, selectPromo, toggleFetchLatestAllPromo } from '@/stores/features';
+import { selectReactTable, setQueryPageIndex, setQuerySearchGlobal } from '@/stores/ui-slice';
 import { convertNumberToThousand } from '@/utils/format';
 
 import { columns } from './PromoColumn';
@@ -36,12 +32,12 @@ export const PromoList = () => {
   }, [dispatch, debouncedSearchTextFilter]);
 
   useEffect(() => {
-    if (promosSelector?.shouldFetchLatestPromo) {
-      dispatch(fetchGetPromo());
-      dispatch(toggleFetchLatestPromo());
+    if (promosSelector?.shouldFetchLatestAllPromo) {
+      dispatch(fetchGetAllPromo());
+      dispatch(toggleFetchLatestAllPromo());
     }
-    dispatch(fetchGetPromo({ search: searchGlobal, pageIndex: pageIndex + 1, pageSize }));
-  }, [dispatch, promosSelector?.shouldFetchLatestPromo, searchGlobal, pageIndex, pageSize]);
+    dispatch(fetchGetAllPromo({ search: searchGlobal, pageIndex: pageIndex + 1, pageSize }));
+  }, [dispatch, promosSelector?.shouldFetchLatestAllPromo, searchGlobal, pageIndex, pageSize]);
 
   return (
     <>

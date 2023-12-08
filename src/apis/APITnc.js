@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { axiosInstance } from '@/configs/axiosInstance';
 
 export const APITnc = {
-  getTnc: async ({ pageIndex, pageSize }) => {
+  getAllTnc: async ({ pageIndex, pageSize }) => {
     try {
       const result = await axiosInstance.get(`/tnc?page=${pageIndex}&per_page=${pageSize}`);
       return result.data;

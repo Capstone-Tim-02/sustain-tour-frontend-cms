@@ -9,8 +9,8 @@ import {
   fetchGetCurrentUser,
   selectCurrentUser,
   toggleFetchLatestCurrentUser,
-} from '@/stores/CurrentUserSlice';
-import { clearQuery } from '@/stores/ReactTableSlice';
+} from '@/stores/ui-slice';
+import { clearQuery } from '@/stores/ui-slice';
 
 export const SidebarNavigation = () => {
   const currentSelector = useSelector(selectCurrentUser);

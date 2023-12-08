@@ -2,7 +2,7 @@ import { AuthLayout } from '@/components/Layouts';
 
 import { LoginForm } from '../components/LoginForm';
 
-export const Login = () => {
+export const LoginRoute = () => {
   return (
     <AuthLayout title="Masuk">
       <div className="relative flex flex-1 flex-col justify-center px-4 pb-12 sm:px-6 lg:flex-none lg:px-20 lg:pb-0 xl:px-44">

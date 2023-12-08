@@ -7,8 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Upload } from 'antd';
 import * as y from 'yup';
 
-import { APICategories } from '@/apis/APICategories';
-import { APIDestinations } from '@/apis/APIDestinations';
+import { APICategory, APIDestination } from '@/apis';
 import {
   InputField,
   RadioButton,
@@ -19,7 +18,7 @@ import {
 import { FieldWrapper } from '@/components/Forms/FieldWrapper';
 import { Button } from '@/components/ui/button';
 import { useDebounce } from '@/hooks/useDebounce';
-import { toggleFetchLatestDestinations } from '@/stores/features/DestinationSlice';
+import { toggleFetchLatestAllDestination } from '@/stores/features';
 import { convertToPositive, formatCurrency, replaceFormatCurrency } from '@/utils/format';
 
 import { ImageDestinationField } from './ImageDestinationField';
@@ -176,7 +175,7 @@ export const AddDestination = ({ onSuccess }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       setDataCategories(
-        await APICategories.getCategoriesWithoutPagination({ search: debouncedSearchText })
+        await APICategory.getAllCategoryWithoutPagination({ search: debouncedSearchText })
       );
     };
     fetchCategories();
@@ -191,8 +190,8 @@ export const AddDestination = ({ onSuccess }) => {
         formData.append(key, value);
       });
       setIsLoading(true);
-      await APIDestinations.addDestination(formData);
-      dispatch(toggleFetchLatestDestinations());
+      await APIDestination.addDestination(formData);
+      dispatch(toggleFetchLatestAllDestination());
       onSuccess();
     } catch (error) {
       toast.error(error);

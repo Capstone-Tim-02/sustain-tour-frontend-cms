@@ -5,11 +5,11 @@ import { Link, useParams } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as y from 'yup';
 
-import { APITnc } from '@/apis/APITnc';
+import { APITnc } from '@/apis';
 import { Spinner } from '@/components/Elements';
 import { InputField, TextEditorField } from '@/components/Forms';
 import { Button } from '@/components/ui/button';
-import { clearQuery } from '@/stores/ReactTableSlice';
+import { clearQuery } from '@/stores/ui-slice';
 
 const schema = y.object({
   tnc_name: y
