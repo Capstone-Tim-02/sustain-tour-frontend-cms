@@ -8,6 +8,7 @@ import { Upload } from 'antd';
 import * as y from 'yup';
 
 import { APICategory, APIDestination } from '@/apis';
+import { Spinner } from '@/components/Elements';
 import {
   InputField,
   RadioButton,
@@ -18,7 +19,7 @@ import {
 import { FieldWrapper } from '@/components/Forms/FieldWrapper';
 import { Button } from '@/components/ui/button';
 import { useDebounce } from '@/hooks/useDebounce';
-import { toggleFetchLatestAllDestination } from '@/stores/features';
+import { clearQuery } from '@/stores/ui-slice';
 import { convertToPositive, formatCurrency, replaceFormatCurrency } from '@/utils/format';
 
 import { ImageDestinationField } from './ImageDestinationField';
@@ -61,8 +62,14 @@ const schema = y.object({
     .test('is-zero', 'price min Rp. 1', (value) => {
       return value !== '0';
     }),
-  lat: y.string().required('Latitude Peta tidak boleh kosong'),
-  long: y.string().required('Longitude Peta tidak boleh kosong'),
+  lat: y
+    .string()
+    .required('Latitude Peta tidak boleh kosong')
+    .matches(/^[0-9.-]+$/, 'Latitude Peta hanya boleh angka, titik, dan minus'),
+  long: y
+    .string()
+    .required('Longitude Peta tidak boleh kosong')
+    .matches(/^[0-9.-]+$/, 'Longitude Peta hanya boleh angka, titik, dan minus'),
   maps_link: y
     .string()
     .required('URL Peta tidak boleh kosong')
@@ -191,7 +198,7 @@ export const AddDestination = ({ onSuccess }) => {
       });
       setIsLoading(true);
       await APIDestination.addDestination(formData);
-      dispatch(toggleFetchLatestAllDestination());
+      dispatch(clearQuery());
       onSuccess();
     } catch (error) {
       toast.error(error);
@@ -270,239 +277,258 @@ export const AddDestination = ({ onSuccess }) => {
   };
 
   return (
-    <div className="mt-8 overflow-hidden rounded-lg bg-white p-10 shadow">
-      <form onSubmit={handleSubmit(onSubmit)} id="addDestination" className="space-y-5">
-        <div className="flex flex-col gap-4 md:flex-row">
-          <div className="flex flex-col gap-4 md:max-w-[50%] md:flex-grow">
-            {/* Kode Wisata */}
-            <InputField
-              placeholder="Masukkan kode"
-              label="Destinasi Kode"
-              autoComplete="off"
-              registration={register('kode')}
-              error={errors.kode}
-              onInput={handleUpperCase}
-            />
-
-            {/* Lokasi Kota */}
-            <InputField
-              placeholder="Masukkan lokasi kota"
-              label="Lokasi Kota"
-              autoComplete="off"
-              registration={register('kota')}
-              error={errors.kota}
-            />
-
-            {/* Alamat */}
-            <TextAreaField
-              label="Alamat"
-              placeholder="Masukkan alamat, contoh: Jl. Kebangsaan"
-              autoComplete="off"
-              registration={register('location')}
-              error={errors.location}
-              className="row-span-2"
-            />
-
-            {/* Buka/Tutup */}
-            <RadioGroup label="Status" isRequired error={errors.is_open}>
-              <RadioButton id="buka" label="Buka" value={true} registration={register('is_open')} />
-              <RadioButton
-                id="tutup"
-                label="Tutup"
-                value={false}
-                registration={register('is_open')}
-              />
-            </RadioGroup>
-            <InputField
-              type="text"
-              placeholder="Masukkan deskripsi"
-              autoComplete="off"
-              registration={register('description_is_open')}
-              error={errors.description_is_open}
-            />
-
-            {/* Kategori */}
-            <ReactSelect
-              name="category_name"
-              label="Kategori"
-              placeholder="Pilih Kategori"
-              options={categoryOptions}
-              control={control}
-              registration={register('category_name')}
-              error={errors.category_name}
-              onInputChange={handleInputChange}
-            />
-
-            {/* Fasilitas Lokal */}
-            <InputField
-              placeholder="Masukkan fasilitas contoh: Musholla, WC, Parkiran"
-              label="Fasilitas Lokal"
-              autoComplete="off"
-              registration={register('fasilitas')}
-              error={errors.fasilitas}
-            />
-
-            {/* Highlight */}
-            <TextAreaField
-              label="Highlight"
-              placeholder="Masukkan highlight"
-              autoComplete="off"
-              registration={register('description')}
-              error={errors.description}
-              className="row-span-2"
-            />
-
-            {/*Jumlah Stok Tiket*/}
-            <InputField
-              type="number"
-              placeholder="Masukkan jumlah stok tiket"
-              label="Jumlah Stok Tiket"
-              autoComplete="off"
-              registration={register('available_tickets')}
-              error={errors.available_tickets}
-              onInput={handleConvertToPositive}
-            />
-
-            {/* Harga Tiket */}
-            <InputField
-              placeholder="Masukkan harga tiket"
-              label="Harga Tiket"
-              autoComplete="off"
-              registration={register('price')}
-              error={errors.price}
-              onInput={handleFormatCurrency}
-            />
-
-            {/* Gambar Destinasi*/}
-            <FieldWrapper
-              isHorizontal={false}
-              label="Gambar Destinasi (1920 x 1080)"
-              id={'photo_wisata1'}
-              error={errors.photo_wisata1 || errors.photo_wisata2 || errors.photo_wisata3}
-            >
-              <ImageDestinationField
-                photo_wisata1={previewImage.photo_wisata1}
-                photo_wisata2={previewImage.photo_wisata2}
-                photo_wisata3={previewImage.photo_wisata3}
-              >
-                <div>
-                  <Upload
-                    name="photo_wisata1"
-                    listType="picture-card"
-                    showUploadList={false}
-                    onPreview={(file) => handlePreview(file, 'photo_wisata1')}
-                    onChange={(info) => imageOnChange1(info)}
-                    customRequest={(file, onSuccess, onError) => {
-                      imageCustomRequest1(file, onSuccess, onError);
-                    }}
-                    registration={register('photo_wisata1')}
-                  >
-                    <ImagePreview imageSource={previewImage.photo_wisata1} />
-                  </Upload>
-                </div>
-                <div>
-                  <Upload
-                    name="photo_wisata2"
-                    listType="picture-card"
-                    showUploadList={false}
-                    onPreview={(file) => handlePreview(file, 'photo_wisata2')}
-                    onChange={(info) => imageOnChange2(info)}
-                    customRequest={(file, onSuccess, onError) => {
-                      imageCustomRequest2(file, onSuccess, onError);
-                    }}
-                    registration={register('photo_wisata2')}
-                  >
-                    <ImagePreview imageSource={previewImage.photo_wisata2} />
-                  </Upload>
-                </div>
-                <div>
-                  <Upload
-                    name="photo_wisata3"
-                    listType="picture-card"
-                    showUploadList={false}
-                    onPreview={(file) => handlePreview(file, 'photo_wisata3')}
-                    onChange={(info) => imageOnChange3(info)}
-                    customRequest={(file, onSuccess, onError) => {
-                      imageCustomRequest3(file, onSuccess, onError);
-                    }}
-                    registration={register('photo_wisata3')}
-                  >
-                    <ImagePreview imageSource={previewImage.photo_wisata3} />
-                  </Upload>
-                </div>
-              </ImageDestinationField>
-            </FieldWrapper>
-
-            <ListFile
-              imageValue={imageValue1}
-              errorImage={errorImage}
-              removeImage={imageOnChange1}
-            />
-            <ListFile
-              imageValue={imageValue2}
-              errorImage={errorImage}
-              removeImage={imageOnChange2}
-            />
-            <ListFile
-              imageValue={imageValue3}
-              errorImage={errorImage}
-              removeImage={imageOnChange3}
-            />
-          </div>
-
-          <div className="flex flex-col gap-4 md:flex-grow">
-            {/* Nama Destinasi */}
-            <InputField
-              placeholder="Masukkan nama destinasi"
-              label="Nama Destinasi"
-              autoComplete="off"
-              registration={register('title')}
-              error={errors.title}
-            />
-
-            <InputField
-              placeholder="Masukkan url peta"
-              label="URL Peta"
-              autoComplete="off"
-              registration={register('maps_link')}
-              error={errors.maps_link}
-            />
-
-            <InputField
-              placeholder="Masukkan latitude peta"
-              label="Latitude Peta"
-              autoComplete="off"
-              registration={register('lat')}
-              error={errors.lat}
-            />
-
-            <InputField
-              placeholder="Masukkan longitude peta"
-              label="Longitude Peta"
-              autoComplete="off"
-              registration={register('long')}
-              error={errors.long}
-            />
-
-            <InputField
-              placeholder="Masukkan url video"
-              label="URL Video (Opsional)"
-              autoComplete="off"
-              registration={register('video_link')}
-              error={errors.video_link}
-            />
-          </div>
+    <>
+      {isLoading ? (
+        <div className="flex h-96 items-center justify-center">
+          <Spinner size="lg" className="mx-auto mt-10" />
         </div>
+      ) : (
+        <div className="mt-8 overflow-hidden rounded-lg bg-white p-10 shadow">
+          <form onSubmit={handleSubmit(onSubmit)} id="addDestination" className="space-y-5">
+            <div className="flex flex-col gap-4 md:flex-row">
+              <div className="flex flex-col gap-4 md:max-w-[50%] md:flex-grow">
+                {/* Kode Wisata */}
+                <InputField
+                  placeholder="Masukkan kode"
+                  label="Destinasi Kode"
+                  autoComplete="off"
+                  registration={register('kode')}
+                  error={errors.kode}
+                  onInput={handleUpperCase}
+                />
 
-        <div className="flex justify-end gap-x-2 pt-5">
-          <Link to="/destinasi" replace>
-            <Button variant="outline">Kembali</Button>
-          </Link>
-          <Button id="addDestination" type="submit" isloading={isLoading}>
-            Tambah Destinasi
-          </Button>
+                {/* Lokasi Kota */}
+                <InputField
+                  placeholder="Masukkan lokasi kota"
+                  label="Lokasi Kota"
+                  autoComplete="off"
+                  registration={register('kota')}
+                  error={errors.kota}
+                />
+
+                {/* Alamat */}
+                <TextAreaField
+                  label="Alamat"
+                  placeholder="Masukkan alamat, contoh: Jl. Kebangsaan"
+                  autoComplete="off"
+                  registration={register('location')}
+                  error={errors.location}
+                  className="row-span-2"
+                />
+
+                {/* Buka/Tutup */}
+                <RadioGroup label="Status" isRequired error={errors.is_open}>
+                  <RadioButton
+                    id="buka"
+                    label="Buka"
+                    value={true}
+                    registration={register('is_open')}
+                  />
+                  <RadioButton
+                    id="tutup"
+                    label="Tutup"
+                    value={false}
+                    registration={register('is_open')}
+                  />
+                </RadioGroup>
+                <InputField
+                  type="text"
+                  placeholder="Masukkan deskripsi"
+                  autoComplete="off"
+                  registration={register('description_is_open')}
+                  error={errors.description_is_open}
+                />
+
+                {/* Kategori */}
+                <ReactSelect
+                  name="category_name"
+                  label="Kategori"
+                  placeholder="Pilih Kategori"
+                  options={categoryOptions}
+                  control={control}
+                  registration={register('category_name')}
+                  error={errors.category_name}
+                  onInputChange={handleInputChange}
+                />
+
+                {/* Fasilitas Lokal */}
+                <InputField
+                  placeholder="Masukkan fasilitas contoh: Musholla, WC, Parkiran"
+                  label="Fasilitas Lokal"
+                  autoComplete="off"
+                  registration={register('fasilitas')}
+                  error={errors.fasilitas}
+                />
+
+                {/* Highlight */}
+                <TextAreaField
+                  rows={6}
+                  label="Highlight"
+                  placeholder="Masukkan highlight"
+                  autoComplete="off"
+                  registration={register('description')}
+                  error={errors.description}
+                />
+
+                {/*Jumlah Stok Tiket*/}
+                <InputField
+                  type="number"
+                  placeholder="Masukkan jumlah stok tiket"
+                  label="Jumlah Stok Tiket"
+                  autoComplete="off"
+                  registration={register('available_tickets')}
+                  error={errors.available_tickets}
+                  onInput={handleConvertToPositive}
+                />
+
+                {/* Harga Tiket */}
+                <InputField
+                  placeholder="Masukkan harga tiket"
+                  label="Harga Tiket"
+                  autoComplete="off"
+                  registration={register('price')}
+                  error={errors.price}
+                  onInput={handleFormatCurrency}
+                />
+
+                {/* Gambar Destinasi*/}
+                <FieldWrapper
+                  isHorizontal={false}
+                  label="Gambar Destinasi (1920 x 1080)"
+                  id={'photo_wisata1'}
+                  error={errors.photo_wisata1 || errors.photo_wisata2 || errors.photo_wisata3}
+                >
+                  <ImageDestinationField
+                    photo_wisata1={previewImage.photo_wisata1}
+                    photo_wisata2={previewImage.photo_wisata2}
+                    photo_wisata3={previewImage.photo_wisata3}
+                  >
+                    <div>
+                      <Upload
+                        name="photo_wisata1"
+                        listType="picture-card"
+                        showUploadList={false}
+                        onPreview={(file) => handlePreview(file, 'photo_wisata1')}
+                        onChange={(info) => imageOnChange1(info)}
+                        customRequest={(file, onSuccess, onError) => {
+                          imageCustomRequest1(file, onSuccess, onError);
+                        }}
+                        registration={register('photo_wisata1')}
+                      >
+                        <ImagePreview imageSource={previewImage.photo_wisata1} />
+                      </Upload>
+                    </div>
+                    <div>
+                      <Upload
+                        name="photo_wisata2"
+                        listType="picture-card"
+                        showUploadList={false}
+                        onPreview={(file) => handlePreview(file, 'photo_wisata2')}
+                        onChange={(info) => imageOnChange2(info)}
+                        customRequest={(file, onSuccess, onError) => {
+                          imageCustomRequest2(file, onSuccess, onError);
+                        }}
+                        registration={register('photo_wisata2')}
+                      >
+                        <ImagePreview imageSource={previewImage.photo_wisata2} />
+                      </Upload>
+                    </div>
+                    <div>
+                      <Upload
+                        name="photo_wisata3"
+                        listType="picture-card"
+                        showUploadList={false}
+                        onPreview={(file) => handlePreview(file, 'photo_wisata3')}
+                        onChange={(info) => imageOnChange3(info)}
+                        customRequest={(file, onSuccess, onError) => {
+                          imageCustomRequest3(file, onSuccess, onError);
+                        }}
+                        registration={register('photo_wisata3')}
+                      >
+                        <ImagePreview imageSource={previewImage.photo_wisata3} />
+                      </Upload>
+                    </div>
+                  </ImageDestinationField>
+                </FieldWrapper>
+
+                <ListFile
+                  imageValue={imageValue1}
+                  errorImage={errorImage}
+                  removeImage={imageOnChange1}
+                />
+                <ListFile
+                  imageValue={imageValue2}
+                  errorImage={errorImage}
+                  removeImage={imageOnChange2}
+                />
+                <ListFile
+                  imageValue={imageValue3}
+                  errorImage={errorImage}
+                  removeImage={imageOnChange3}
+                />
+              </div>
+
+              <div className="flex flex-col gap-4 md:flex-grow">
+                {/* Nama Destinasi */}
+                <InputField
+                  placeholder="Masukkan nama destinasi"
+                  label="Nama Destinasi"
+                  autoComplete="off"
+                  registration={register('title')}
+                  error={errors.title}
+                />
+
+                <InputField
+                  placeholder="Masukkan url peta"
+                  label="URL Peta"
+                  autoComplete="off"
+                  registration={register('maps_link')}
+                  error={errors.maps_link}
+                />
+
+                <InputField
+                  placeholder="Masukkan latitude peta"
+                  label="Latitude Peta"
+                  autoComplete="off"
+                  registration={register('lat')}
+                  error={errors.lat}
+                  onInput={(e) => {
+                    e.target.value = e.target.value.replace(/[^0-9.-]/g, '');
+                  }}
+                />
+
+                <InputField
+                  placeholder="Masukkan longitude peta"
+                  label="Longitude Peta"
+                  autoComplete="off"
+                  registration={register('long')}
+                  error={errors.long}
+                  onInput={(e) => {
+                    e.target.value = e.target.value.replace(/[^0-9.-]/g, '');
+                  }}
+                />
+
+                <InputField
+                  placeholder="Masukkan url video"
+                  label="URL Video (Opsional)"
+                  autoComplete="off"
+                  registration={register('video_link')}
+                  error={errors.video_link}
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-x-2 pt-5">
+              <Link to="/destinasi" replace>
+                <Button variant="outline">Kembali</Button>
+              </Link>
+              <Button id="addDestination" type="submit" isloading={isLoading}>
+                Tambah Destinasi
+              </Button>
+            </div>
+          </form>
         </div>
-      </form>
-    </div>
+      )}
+    </>
   );
 };

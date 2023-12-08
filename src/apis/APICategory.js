@@ -15,7 +15,7 @@ export const APICategory = {
     }
   },
 
-  getCategoryByIdById: async (category_name) => {
+  getCategoryById: async (category_name) => {
     try {
       const result = await axiosInstance.get(`/categories?category_name=${category_name}`);
       return result.data.categories?.[0];

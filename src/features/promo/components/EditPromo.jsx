@@ -180,119 +180,121 @@ export const EditPromo = ({ onSuccess }) => {
           <Spinner size="lg" className="mx-auto mt-10" />
         </div>
       ) : (
-        <form onSubmit={handleSubmit(onSubmit)} id="editPromo" className="space-y-5">
-          <div className="flex flex-col gap-4 md:flex-row">
-            <div className="flex flex-col gap-4 md:max-w-[50%] md:flex-grow">
-              {/* Judul Promo */}
-              <InputField
-                placeholder="Masukkan judul promo"
-                label="Judul Promo"
-                autoComplete="off"
-                registration={register('title')}
-                error={errors.title}
-              />
+        <div className="mt-8 overflow-hidden rounded-lg bg-white p-10 shadow">
+          <form onSubmit={handleSubmit(onSubmit)} id="editPromo" className="space-y-5">
+            <div className="flex flex-col gap-4 md:flex-row">
+              <div className="flex flex-col gap-4 md:max-w-[50%] md:flex-grow">
+                {/* Judul Promo */}
+                <InputField
+                  placeholder="Masukkan judul promo"
+                  label="Judul Promo"
+                  autoComplete="off"
+                  registration={register('title')}
+                  error={errors.title}
+                />
 
-              {/* Kode Promo */}
-              <InputField
-                placeholder="Masukkan kode promo"
-                label="Kode Promo"
-                autoComplete="off"
-                registration={register('kode_voucher')}
-                error={errors.kode_voucher}
-                onInput={(e) => {
-                  e.target.value = e.target.value.toUpperCase();
-                }}
-              />
+                {/* Kode Promo */}
+                <InputField
+                  placeholder="Masukkan kode promo"
+                  label="Kode Promo"
+                  autoComplete="off"
+                  registration={register('kode_voucher')}
+                  error={errors.kode_voucher}
+                  onInput={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
+                />
 
-              {/* Diskon Promo */}
-              <InputField
-                type="number"
-                placeholder="Masukkan diskon promo"
-                label="Diskon (Masukkan Angka)"
-                autoComplete="off"
-                registration={register('jumlah_potongan_persen')}
-                error={errors.jumlah_potongan_persen}
-                onChange={handleConvertToPositive}
-              />
+                {/* Diskon Promo */}
+                <InputField
+                  type="number"
+                  placeholder="Masukkan diskon promo"
+                  label="Diskon (Masukkan Angka)"
+                  autoComplete="off"
+                  registration={register('jumlah_potongan_persen')}
+                  error={errors.jumlah_potongan_persen}
+                  onChange={handleConvertToPositive}
+                />
 
-              {/* Status */}
-              <DropdownField
-                label="Status"
-                options={statusOptions}
-                registration={register('status_aktif')}
-                error={errors.status_aktif}
-              />
+                {/* Status */}
+                <DropdownField
+                  label="Status"
+                  options={statusOptions}
+                  registration={register('status_aktif')}
+                  error={errors.status_aktif}
+                />
 
-              {/* Deskripsi */}
-              <TextAreaField
-                label="Deskripsi"
-                placeholder="Masukkan deskripsi promo"
-                autoComplete="off"
-                registration={register('deskripsi')}
-                error={errors.deskripsi}
-                className="row-span-2"
-              />
+                {/* Deskripsi */}
+                <TextAreaField
+                  label="Deskripsi"
+                  placeholder="Masukkan deskripsi promo"
+                  autoComplete="off"
+                  registration={register('deskripsi')}
+                  error={errors.deskripsi}
+                  className="row-span-2"
+                />
 
-              {/* Peraturan */}
-              <TextEditorField
-                textareaName="peraturan"
-                label="Peraturan"
-                control={control}
-                registration={register('peraturan')}
-                error={errors.peraturan}
-              />
+                {/* Peraturan */}
+                <TextEditorField
+                  textareaName="peraturan"
+                  label="Peraturan"
+                  control={control}
+                  registration={register('peraturan')}
+                  error={errors.peraturan}
+                />
 
-              {/* Gambar Promo */}
-              <FieldImage
-                id="image_voucher"
-                label="Gambar Promo"
-                name="image_voucher"
-                register={register}
-                setValue={setValue}
-                getValues={getValues}
-                error={errors.image_voucher}
-                customRequest={(file, onSuccess, onError) =>
-                  imageCustomRequest(file, onSuccess, onError)
-                }
-                isImageError={errorImage}
-                setIsImageError={setErrorImage}
-                promo={promo}
-              />
+                {/* Gambar Promo */}
+                <FieldImage
+                  id="image_voucher"
+                  label="Gambar Promo"
+                  name="image_voucher"
+                  register={register}
+                  setValue={setValue}
+                  getValues={getValues}
+                  error={errors.image_voucher}
+                  customRequest={(file, onSuccess, onError) =>
+                    imageCustomRequest(file, onSuccess, onError)
+                  }
+                  isImageError={errorImage}
+                  setIsImageError={setErrorImage}
+                  promo={promo}
+                />
+              </div>
+
+              <div className="flex flex-col gap-4 md:flex-grow">
+                {/* Nama Promo */}
+                <InputField
+                  placeholder="Masukkan nama promo"
+                  label="Nama Promo"
+                  autoComplete="off"
+                  registration={register('nama_promo')}
+                  error={errors.nama_promo}
+                />
+
+                {/* Tanggal Kadaluarsa */}
+                <InputField
+                  type="date"
+                  placeholder="Pilih tanggal"
+                  label="Tanggal Kadaluarsa"
+                  autoComplete="off"
+                  registration={register('tanggal_kadaluarsa')}
+                  error={errors.tanggal_kadaluarsa}
+                />
+              </div>
             </div>
 
-            <div className="flex flex-col gap-4 md:flex-grow">
-              {/* Nama Promo */}
-              <InputField
-                placeholder="Masukkan nama promo"
-                label="Nama Promo"
-                autoComplete="off"
-                registration={register('nama_promo')}
-                error={errors.nama_promo}
-              />
-
-              {/* Tanggal Kadaluarsa */}
-              <InputField
-                type="date"
-                placeholder="Pilih tanggal"
-                label="Tanggal Kadaluarsa"
-                autoComplete="off"
-                registration={register('tanggal_kadaluarsa')}
-                error={errors.tanggal_kadaluarsa}
-              />
-            </div>
-          </div>
-
-          <div className="flex justify-end gap-x-2 pt-5">
-            <Link to="/promo">
-              <Button variant="outline" onClick={() => dispatch(clearQuery())}>
-                Kembali
+            <div className="flex justify-end gap-x-2 pt-5">
+              <Link to="/promo">
+                <Button variant="outline" onClick={() => dispatch(clearQuery())}>
+                  Kembali
+                </Button>
+              </Link>
+              <Button form="editPromo" type="submit" isloading={isLoading}>
+                Simpan
               </Button>
-            </Link>
-            <Button form="editPromo" type="submit" isloading={isLoading}>
-              Simpan
-            </Button>
-          </div>
-        </form>
+            </div>
+          </form>
+        </div>
       )}
     </>
   );

@@ -84,9 +84,7 @@ export const EditPromoRoute = () => {
             </div>
           </div>
         </div>
-        <div className="mt-8 rounded-lg border border-gray-100 bg-white px-5 py-5 shadow sm:px-[58px] sm:py-[57.5px]">
-          <EditPromo onSuccess={() => navigate('/promo', { replace: true })} />
-        </div>
+        <EditPromo onSuccess={() => navigate('/promo', { replace: true })} />
       </ContentLayout>
     </>
   );
@@ -114,9 +112,7 @@ export const AddPromoRoute = () => {
             </div>
           </div>
         </div>
-        <div className="mt-8 rounded-lg border border-gray-100 bg-white px-5 py-5 shadow sm:px-[58px] sm:py-[57.5px]">
-          <AddPromo onSuccess={() => navigate('/promo', { replace: true })} />
-        </div>
+        <AddPromo onSuccess={() => navigate('/promo', { replace: true })} />
       </ContentLayout>
     </>
   );
