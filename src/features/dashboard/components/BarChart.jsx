@@ -105,9 +105,7 @@ export const BarChart = ({ data }) => {
             </div>
           </div>
         </div>
-        {/* <div className="h-auto sm:h-[391px]"> */}
         <Bar options={options} data={datas} />
-        {/* </div> */}
       </div>
     </div>
   );
