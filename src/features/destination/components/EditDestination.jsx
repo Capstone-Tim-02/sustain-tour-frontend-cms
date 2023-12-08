@@ -29,28 +29,36 @@ const schema = y.object({
   kode: y
     .string()
     .required('Destinasi Kode tidak boleh kosong')
-    .max(5, 'Destinasi Kode maksimal 5 karakter'),
+    .max(5, 'Destinasi Kode maksimal 5 karakter')
+    .min(3, 'Destinasi Kode minimal 3 karakter'),
   title: y
     .string()
     .required('Nama Destinasi tidak boleh kosong')
-    .max(100, 'Nama Destinasi maksimal 100 karakter'),
+    .max(100, 'Nama Destinasi maksimal 100 karakter')
+    .min(8, 'Nama Destinasi minimal 8 karakter'),
   kota: y
     .string()
     .required('Lokasi Kota tidak boleh kosong')
-    .max(100, 'Lokasi Kota maksimal 100 karakter'),
+    .max(100, 'Lokasi Kota maksimal 100 karakter')
+    .min(4, 'Lokasi Kota minimal 4 karakter'),
   location: y
     .string()
     .required('Alamat tidak boleh kosong')
-    .max(200, 'Alamat maksimal 200 karakter'),
-  category_name: y.object().required('Kategori tidak boleh kosong'),
+    .max(200, 'Alamat maksimal 200 karakter')
+    .min(8, 'Alamat minimal 8 karakter'),
+  category_name: y
+    .object()
+    .required('Kategori tidak boleh kosong'),
   description: y
     .string()
     .required('Highlight tidak boleh kosong')
-    .max(2000, 'Highlight maksimal 2000 karakter'),
+    .max(2000, 'Highlight maksimal 2000 karakter')
+    .min(10, 'Highlight minimal 10 karakter'),
   fasilitas: y
     .string()
     .required('Fasilitas lokal tidak boleh kosong')
-    .max(100, 'Fasilitas lokal maksimal 100 karakter'),
+    .max(100, 'Fasilitas lokal maksimal 100 karakter')
+    .min(5, 'Fasilitas lokal minimal 5 karakter'),
   available_tickets: y
     .number()
     .transform((value) => (isNaN(value) ? undefined : value))
@@ -240,8 +248,9 @@ export const EditDestination = ({ onSuccess }) => {
       dispatch(clearQuery());
       onSuccess();
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
       setIsLoading(false);
+      reset();
     } finally {
       setIsLoading(false);
     }

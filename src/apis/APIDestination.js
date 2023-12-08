@@ -30,7 +30,7 @@ export const APIDestination = {
       const result = await axiosInstance.put(`/admin/wisata/${id}`, formData);
       toast.success(result.data.message);
     } catch (error) {
-      toast.error(error.response.data.message);
+      throw new Error(error.response.data.message);
     }
   },
 
@@ -39,8 +39,7 @@ export const APIDestination = {
       const result = await axiosInstance.post(`/wisata/create`, data);
       toast.success(result.data.message);
     } catch (error) {
-      toast.error(error.response.data.message);
-      throw new Error(error);
+      throw new Error(error.response.data.message);
     }
   },
 

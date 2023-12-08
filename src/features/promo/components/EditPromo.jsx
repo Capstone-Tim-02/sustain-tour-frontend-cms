@@ -9,9 +9,9 @@ import * as y from 'yup';
 import { APIPromo } from '@/apis';
 import { Spinner } from '@/components/Elements';
 import {
-  DropdownField,
   FieldImage,
   InputField,
+  ReactSelect,
   TextAreaField,
   TextEditorField,
 } from '@/components/Forms';
@@ -42,7 +42,9 @@ const schema = y.object({
     .min(1, 'Minimum 1%')
     .max(100, 'Maximum 100%')
     .required('Diskon promo tidak boleh kosong'),
-  status_aktif: y.string().required('Status promo harus diisi'),
+  status_aktif: y
+    .object()
+    .required('Status promo harus diisi'),
   deskripsi: y
     .string()
     .required('Deskripsi promo tidak boleh kosong')
@@ -115,15 +117,17 @@ export const EditPromo = ({ onSuccess }) => {
     reset({
       ...promo,
       tanggal_kadaluarsa: formattedDate,
+      status_aktif: statusOptions?.find((option) => option.value === promo?.status_aktif),
     });
   }, [reset, promo]);
 
   const formData = new FormData();
 
   const onSubmit = async (data) => {
+    const status_aktif = data?.status_aktif?.value;
     try {
-      Object.entries(data).forEach(([key, value]) => {
-        formData.append(key, key === 'status_aktif' ? value === 'true' : value);
+      Object.entries({ ...data, status_aktif }).forEach(([key, value]) => {
+        formData.append(key, value);
       });
 
       setIsLoading(true);
@@ -217,9 +221,11 @@ export const EditPromo = ({ onSuccess }) => {
                 />
 
                 {/* Status */}
-                <DropdownField
-                  label="Status"
+                <ReactSelect
+                  name='status_aktif'
+                  label='Status'
                   options={statusOptions}
+                  control={control}
                   registration={register('status_aktif')}
                   error={errors.status_aktif}
                 />
