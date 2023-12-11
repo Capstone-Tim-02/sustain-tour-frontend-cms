@@ -46,9 +46,7 @@ const schema = y.object({
     .required('Alamat tidak boleh kosong')
     .max(200, 'Alamat maksimal 200 karakter')
     .min(8, 'Alamat minimal 8 karakter'),
-  category_name: y
-    .object()
-    .required('Kategori tidak boleh kosong'),
+  category_name: y.object().required('Kategori tidak boleh kosong'),
   description: y
     .string()
     .required('Highlight tidak boleh kosong')
@@ -527,8 +525,10 @@ export const AddDestination = ({ onSuccess }) => {
             </div>
 
             <div className="flex justify-end gap-x-2 pt-5">
-              <Link to="/destinasi" replace>
-                <Button variant="outline">Kembali</Button>
+              <Link to="/destinasi">
+                <Button variant="outline" onClick={() => dispatch(clearQuery())}>
+                  Kembali
+                </Button>
               </Link>
               <Button id="addDestination" type="submit" isloading={isLoading}>
                 Tambah Destinasi

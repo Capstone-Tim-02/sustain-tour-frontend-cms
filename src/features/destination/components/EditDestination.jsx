@@ -46,9 +46,7 @@ const schema = y.object({
     .required('Alamat tidak boleh kosong')
     .max(200, 'Alamat maksimal 200 karakter')
     .min(8, 'Alamat minimal 8 karakter'),
-  category_name: y
-    .object()
-    .required('Kategori tidak boleh kosong'),
+  category_name: y.object().required('Kategori tidak boleh kosong'),
   description: y
     .string()
     .required('Highlight tidak boleh kosong')
@@ -222,7 +220,7 @@ export const EditDestination = ({ onSuccess }) => {
       photo_wisata2: wisata?.photo_wisata2 || null,
       photo_wisata3: wisata?.photo_wisata3 || null,
     });
-  }, [reset, wisata]);
+  }, [reset, wisata, categoryOptions]);
 
   const handlePreview = (file, imageKey) => {
     if (!file.url && !file.preview) {
@@ -563,8 +561,10 @@ export const EditDestination = ({ onSuccess }) => {
             </div>
 
             <div className="flex justify-end gap-x-2 pt-5">
-              <Link to="/destinasi" replace>
-                <Button variant="outline">Batal</Button>
+              <Link to="/destinasi">
+                <Button variant="outline" onClick={() => dispatch(clearQuery())}>
+                  Batal
+                </Button>
               </Link>
               <Button form="editDestination" type="submit" isloading={isLoading}>
                 Simpan
