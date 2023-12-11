@@ -2,10 +2,21 @@ import { default as dayjs } from 'dayjs';
 
 import 'dayjs/locale/id';
 
-// DATE FORMAT exp: 2021-01-01 => 30 November 2023
+/**
+ * Format date to locale id (indonesia) with dayjs library (https://day.js.org/)
+ * @function formatDate
+ * @param date {string} -> 2023-12-31
+ * @param format {string} -> DD MMMM YYYY
+ * @returns {string} -> 31 Desember 2023
+ */
 export const formatDate = (date, format) => dayjs.locale('id') && dayjs(date).format(format);
 
-// RUPIAH FORMAT exp: 1000 => Rp. 1.000
+/**
+ * Convert number to rupiah format
+ * @function convertToRupiah
+ * @param number {number} -> 1000000
+ * @returns {string} -> Rp. 1.000.000
+ */
 export const convertToRupiah = (number) => {
   let rupiah = '';
   let numberRev = number.toString().split('').reverse().join('');
@@ -20,21 +31,46 @@ export const convertToRupiah = (number) => {
   );
 };
 
-// NUMBER TO THOUSAND exp: 1000 => 1.000
+/**
+ * Convert Number to Thousand
+ * @function convertNumberToThousand
+ * @param number {number} -> 1000
+ * @returns {string} -> 1.000
+ */
 export const convertNumberToThousand = (number) =>
   number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-// SPLIT DATA EMISSION. exp: 1000.00 => 1000
+/**
+ * Split Emission
+ * @function splitEmission
+ * @param number {number} -> 1000.00
+ * @returns {string} -> 1000
+ */
 export const splitEmission = (number) => number?.toString().split('.')[0];
 
-// CONVERT TO POSITIVE NUMBER exp: -1000 => 1000
+/**
+ * Convert number to positive
+ * @function convertToPositive
+ * @param number {number} -> -1000
+ * @returns {string} -> 1000
+ */
 export const convertToPositive = (number) => Math.abs(number);
 
-// FORMAT CURRENCY exp: 1000 => 1,000
+/**
+ * Format Currency
+ * @function formatCurrency
+ * @param number {number} -> 1000
+ * @returns {string} -> 1.000
+ */
 export const formatCurrency = (value) => {
   const removeCharacter = value?.toString().replace(/[^0-9]/g, '');
   return removeCharacter?.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 };
 
-// REPLACE FORMAT CURRENCY exp: 1,000 => 1000
+/**
+ * Replace Format Currency
+ * @function replaceFormatCurrency
+ * @param number {number} -> 1.000
+ * @returns {string} -> 1000
+ */
 export const replaceFormatCurrency = (value) => value?.replace(/[^0-9]/g, '');
