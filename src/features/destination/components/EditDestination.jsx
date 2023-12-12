@@ -156,15 +156,11 @@ export const EditDestination = ({ onSuccess }) => {
   });
   const [errorImage, setErrorImage] = useState(false);
 
-  const [wisata, setWisata] = useState({});
   const [searchText, setSearchText] = useState('');
   const debouncedSearchText = useDebounce(searchText, 500);
 
-  const [dataCategories, setDataCategories] = useState([]);
-  const categoryOptions = dataCategories?.map((option) => ({
-    value: option.id,
-    label: option.category_name,
-  }));
+  const [wisata, setWisata] = useState({});
+  const [currentCategoryOptions, setCurrentCategoryOptions] = useState([]);
 
   const handleConvertToPositive = (e) => (e.target.value = convertToPositive(e.target.value));
   const handleFormatCurrency = (e) => (e.target.value = formatCurrency(e.target.value));
@@ -199,8 +195,14 @@ export const EditDestination = ({ onSuccess }) => {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      setDataCategories(
-        await APICategory.getAllCategoryWithoutPagination({ search: debouncedSearchText })
+      const categories = await APICategory.getAllCategoryWithoutPagination({
+        search: debouncedSearchText,
+      });
+      setCurrentCategoryOptions(
+        categories.map((option) => ({
+          value: option.id,
+          label: option.category_name,
+        }))
       );
     };
     fetchCategories();
@@ -209,7 +211,7 @@ export const EditDestination = ({ onSuccess }) => {
   useEffect(() => {
     reset({
       ...wisata,
-      category_name: categoryOptions?.find((option) => option.value === wisata?.category_id),
+      category_name: currentCategoryOptions?.find((option) => option.value === wisata?.category_id),
       is_open: wisata?.is_open?.toString(),
       price: formatCurrency(wisata?.price),
       fasilitas: wisata?.fasilitas ? JSON.parse(wisata?.fasilitas).join(',') : '',
@@ -220,7 +222,7 @@ export const EditDestination = ({ onSuccess }) => {
       photo_wisata2: wisata?.photo_wisata2 || null,
       photo_wisata3: wisata?.photo_wisata3 || null,
     });
-  }, [reset, wisata, categoryOptions]);
+  }, [reset, wisata, currentCategoryOptions]);
 
   const handlePreview = (file, imageKey) => {
     if (!file.url && !file.preview) {
@@ -378,7 +380,7 @@ export const EditDestination = ({ onSuccess }) => {
                   name="category_name"
                   label="Kategori"
                   placeholder="Pilih Kategori"
-                  options={categoryOptions}
+                  options={currentCategoryOptions}
                   control={control}
                   registration={register('category_name')}
                   error={errors.category_name}
