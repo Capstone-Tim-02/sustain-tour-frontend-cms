@@ -164,6 +164,7 @@ export const EditDestination = ({ onSuccess }) => {
 
   const handleConvertToPositive = (e) => (e.target.value = convertToPositive(e.target.value));
   const handleFormatCurrency = (e) => (e.target.value = formatCurrency(e.target.value));
+  const handleUpperCase = (e) => (e.target.value = e.target.value.toUpperCase());
   const handleInputChange = (value) => setSearchText(value);
 
   const formData = new FormData();
@@ -332,6 +333,7 @@ export const EditDestination = ({ onSuccess }) => {
                   autoComplete="off"
                   registration={register('kode')}
                   error={errors.kode}
+                  onInput={handleUpperCase}
                 />
 
                 {/* Lokasi Kota */}
