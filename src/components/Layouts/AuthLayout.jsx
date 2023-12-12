@@ -5,11 +5,11 @@ export const AuthLayout = ({ children, title }) => {
   return (
     <>
       <Head title={title} />
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen items-center">
         {children}
         <div className="relative hidden w-0 flex-1 lg:block lg:overflow-hidden">
           <img
-            className="absolute h-auto w-full object-cover object-center lg:w-full"
+            className="max-h-screen w-full object-cover object-center"
             src={loginBg}
             alt="screen-mockup-destimate"
           />
