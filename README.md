@@ -37,17 +37,17 @@ The CMS Destimate is a web application designed to effectively manage content fo
 
 ### Built With
 This project is built utilizing several technology stacks, as listed below </br>
-[![React][React.js]](React-url)
-[![Vite][Vite]](Vite-url)
-[![Tailwind][Tailwind]](Tailwind-url)
-[![Github][Github]](Github-url)
-[![React Hook Form][React_Hook_Form]](React-hook-form-url)
+[![React][React.js]][React-url]
+[![Vite][Vite]][Vite-url]
+[![Tailwind][Tailwind]][Tailwind-url]
+[![Github][Github]][Github-url]
+[![React Hook Form][React_Hook_Form]][React-hook-form-url]
 </br>
 
-[![Netlify][Netlify]](Netlify-url)
-[![Redux][Redux]](Redux-url)
-[![Antd][Antd]](Antd-url)
-[![Shadcn][Shadcn]](Shadcn-url)
+[![Netlify][Netlify]][Netlify-url]
+[![Redux][Redux]][Redux-url]
+[![Antd][Antd]][Antd-url]
+[![Shadcn][Shadcn]][Shadcn-url]
 
 ### Project Structure
 Most of the code lives in the `src` folder and looks like this:
