@@ -13,8 +13,8 @@ const Action = ({ value }) => {
 
   return (
     <div className="flex items-center space-x-4">
-      {!categoryDefaultId[value.id] && <EditCategory value={value} />}
-      {!categoryDefaultId[value.id] && <DeleteCategory value={value} />}
+      {!categoryDefaultId[value.id] && <EditCategory category_name={value?.category_name} />}
+      {!categoryDefaultId[value.id] && <DeleteCategory id={value?.id} />}
     </div>
   );
 };
