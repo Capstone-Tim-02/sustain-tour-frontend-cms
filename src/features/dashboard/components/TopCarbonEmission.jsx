@@ -31,7 +31,7 @@ export const TopCarbonEmission = ({ topData }) => {
                   </p>
                 </div>
                 <p className="mt-2 flex-none text-xs font-medium text-primary-100 sm:mt-0">
-                  {splitEmission(item?.total_emition || '-')} CC
+                  {splitEmission(item?.total_emition || '-')} C02
                 </p>
               </div>
             </div>
