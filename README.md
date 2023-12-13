@@ -37,12 +37,17 @@ The CMS Destimate is a web application designed to effectively manage content fo
 
 ### Built With
 This project is built utilizing several technology stacks, as listed below </br>
-[![React][React.js]](React-url)
-[![Vite][Vite]](Vite-url)
-[![Tailwind][Tailwind]](Tailwind-url)
-[![Github][Github]](Github-url)
-[![Netlify][Netlify]](Netlify-url)
-[![Redux][Redux]](Redux-url)
+[![React][React.js]][React-url]
+[![Vite][Vite]][Vite-url]
+[![Tailwind][Tailwind]][Tailwind-url]
+[![Github][Github]][Github-url]
+[![React Hook Form][React_Hook_Form]][React-hook-form-url]
+</br>
+
+[![Netlify][Netlify]][Netlify-url]
+[![Redux][Redux]][Redux-url]
+[![Antd][Antd]][Antd-url]
+[![Shadcn][Shadcn]][Shadcn-url]
 
 ### Project Structure
 Most of the code lives in the `src` folder and looks like this:
@@ -121,6 +126,9 @@ This project is deployed using netlify. You can access the production deployment
 [Netlify]: https://img.shields.io/badge/Netlify-0E1E25?style=for-the-badge&logo=netlify&logoColor=00C7B7
 [Vite]: https://img.shields.io/badge/Vite-1B1B23?style=for-the-badge&logo=vite&logoColor=646CFF
 [Redux]: https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=FFFFFF
+[Antd]: https://img.shields.io/badge/Ant_Design-FFFFFF?style=for-the-badge&logo=antdesign&logoColor=0170FE
+[Shadcn]: https://img.shields.io/badge/Shadcn/UI-000000?style=for-the-badge&logo=shadcn/ui&logoColor=FFFFFF
+[React_Hook_Form]: https://img.shields.io/badge/React_Hook_Form-EC5990?style=for-the-badge&logo=reacthookform&logoColor=FFFFFF
 
 [React-url]: https://reactjs.org/
 [Tailwind-url]: https://tailwindcss.com/
@@ -128,3 +136,6 @@ This project is deployed using netlify. You can access the production deployment
 [Netlify-url]: https://www.netlify.com/
 [Vite-url]: https://vitejs.dev/
 [Redux-url]: https://redux.js.org/
+[Antd-url]: https://ant.design/
+[Shadcn-url]: https://ui.shadcn.com/
+[React-hook-form-url]: https://react-hook-form.com/
