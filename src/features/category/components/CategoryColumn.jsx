@@ -4,10 +4,17 @@ import { DeleteCategory } from './DeleteCategory';
 import { EditCategory } from './EditCategory';
 
 const Action = ({ value }) => {
+  const categoryDefaultId = {
+    1: 'Wisata Alam',
+    2: 'Wisata Hiburan',
+    16: 'Wisata Budaya',
+    21: 'Wisata Sejarah',
+  };
+
   return (
     <div className="flex items-center space-x-4">
-      <EditCategory category_name={value?.category_name} />
-      <DeleteCategory id={value?.id} />
+      {!categoryDefaultId[value.id] && <EditCategory value={value} />}
+      {!categoryDefaultId[value.id] && <DeleteCategory value={value} />}
     </div>
   );
 };
