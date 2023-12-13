@@ -1,19 +1,33 @@
 # DESTIMATE FRONTEND - CMS
 <img src='public/cms-destimate.png'>
 
-## Table of Contents
-- [Project Description](#project-desctiption)
-- [Features](#features)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Project Structure](#project-structure)
-- [Deployment](#deployment)
-- [Contributors](#contributors) 
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#built-with">Built With</a></li>
+        <li><a href="#project-structure">Project Structure</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#configuration">Configuration</a></li>
+      </ul>
+    </li>
+    <li><a href="#deployment">Deployment</a></li>
+    <li><a href="#contributors">Contributors</a></li>
+  </ol>
+</details>
 
-## Project Description
+## About The Project
 The CMS Destimate is a web application designed to effectively manage content for the Destimate mobile application and serves as a centralized platform for organizing and updating related to tours and user account settings. 
 
-## Features
+### Features
 - View Dashboard
 - Manage User Detail
 - Manage User Routes
@@ -21,31 +35,16 @@ The CMS Destimate is a web application designed to effectively manage content fo
 - Manage Destination
 - Add Custom Data for OpenAI (AI Implementation) 
 
-## Installation
-To get started with the CMS Destimate, follow these steps:
+### Built With
+This project is built utilizing several technology stacks, as listed below </br>
+[![React][React.js]](React-url)
+[![Vite][Vite]](Vite-url)
+[![Tailwind][Tailwind]](Tailwind-url)
+[![Github][Github]](Github-url)
+[![Netlify][Netlify]](Netlify-url)
+[![Redux][Redux]](Redux-url)
 
-1. Clone the Repository
-    ```shell
-    git clone https://github.com/Capstone-Tim-02/sustain-tour-frontend-cms.git
-    ```    
-2. Installation
-    ```shell
-    cd sustain-tour-frontend-cms
-    npm install
-    ```
-3. Run the Application
-    ```shell
-    npm run dev
-    ```
-
-## Configuration
-
-Please create a .env or .env.local file in the root of your project and fill it with this criteria
-```
-VITE_BASE_URL_API="Your API Key"
-```
-
-## Project Structure
+### Project Structure
 Most of the code lives in the `src` folder and looks like this:
 
 ```sh
@@ -76,10 +75,36 @@ src
 +-- utils             # shared utility functions
 ```
 
-## Deployment
+## Getting Started
+### Installation
+To get started with the CMS Destimate, follow these steps:
+
+1. Clone the Repository
+    ```shell
+    git clone https://github.com/Capstone-Tim-02/sustain-tour-frontend-cms.git
+    ```    
+2. Installation
+    ```shell
+    cd sustain-tour-frontend-cms
+    npm install
+    ```
+3. Run the Application
+    ```shell
+    npm run dev
+    ```
+
+### Configuration
+
+Please create a .env or .env.local file in the root of your project and fill it with this criteria
+```
+VITE_BASE_URL_API="Your API Key"
+```
+
+### Deployment
 This project is deployed using netlify. You can access the production deployment at [this link](https://cms-destimate.netlify.app).
 
-### Contributors
+
+## Contributors
 - July Dwi Saputra
 - Angga Saputra
 - Agung Nurprasetya Putra
@@ -88,3 +113,18 @@ This project is deployed using netlify. You can access the production deployment
 - Ahmad Rizky Has
 - Maulidaturrohmah
 - Ganang Aji Suseno
+
+<!-- MARKDOWN LINKS & IMAGES -->
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[Tailwind]: https://img.shields.io/badge/Tailwind_CSS-092749?style=for-the-badge&logo=tailwindcss&logoColor=06B6D4
+[Github]: https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=github&logoColor=FFFFFF
+[Netlify]: https://img.shields.io/badge/Netlify-0E1E25?style=for-the-badge&logo=netlify&logoColor=00C7B7
+[Vite]: https://img.shields.io/badge/Vite-1B1B23?style=for-the-badge&logo=vite&logoColor=646CFF
+[Redux]: https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=FFFFFF
+
+[React-url]: https://reactjs.org/
+[Tailwind-url]: https://tailwindcss.com/
+[Github-url]: https://github.com/
+[Netlify-url]: https://www.netlify.com/
+[Vite-url]: https://vitejs.dev/
+[Redux-url]: https://redux.js.org/
