@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
+  darkMode: ['class'],
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
@@ -9,6 +10,9 @@ export default {
         sans: ['Inter', 'sans-serif'],
       },
       colors: {
+        blackDestimate: {
+          100: '#070707',
+        },
         greyDestimate: {
           50: '#E1E1E1',
           80: '#BEBEBE',
@@ -17,12 +21,18 @@ export default {
         redDestimate: {
           50: '#ED6E6E',
           100: '#E10E0E',
+          200: '#FC5555',
         },
         greenDestimate: {
           100: '#36B734',
+          200: '#29CC6A',
         },
         dashboardDestimate: {
-          100: '#EEEFF8',
+          100: '#F1F2FF',
+          200: '#EEEFF8',
+          300: '#F0F0F0',
+          400: '#515151',
+          500: '#C6C6C6',
         },
         primary: {
           10: '#C3CEF6',
@@ -105,11 +115,27 @@ export default {
           900: '#1E3A8A',
         },
       },
+      keyframes: {
+        'accordion-down': {
+          from: { height: 0 },
+          to: { height: 'var(--radix-accordion-content-height)' },
+        },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: 0 },
+        },
+      },
+      animation: {
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
+      },
     },
   },
   plugins: [
+    require('tailwindcss-animate'),
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
+    require('@material-tailwind/react'),
     require('tailwind-scrollbar')({ nocompatible: true }),
   ],
 };

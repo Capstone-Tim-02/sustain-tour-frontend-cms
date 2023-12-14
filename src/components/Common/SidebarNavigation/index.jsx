@@ -1,16 +1,36 @@
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
 
 import avatar from '@/assets/images/avatar.png';
-import { Logo, Logout, sideNavigation } from '@/components/Common';
+import { Logo, sideNavigation, SignOut } from '@/components/Common';
+import {
+  fetchGetCurrentUser,
+  selectCurrentUser,
+  toggleFetchLatestCurrentUser,
+} from '@/stores/ui-slice';
+import { clearQuery } from '@/stores/ui-slice';
 
 export const SidebarNavigation = () => {
+  const currentSelector = useSelector(selectCurrentUser);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (currentSelector?.shouldFetchCurrentUser) {
+      dispatch(fetchGetCurrentUser());
+      dispatch(toggleFetchLatestCurrentUser());
+    }
+    dispatch(fetchGetCurrentUser());
+  }, [dispatch, currentSelector?.shouldFetchCurrentUser]);
+
   return (
     <>
       {/* Static sidebar for desktop */}
-      <div className="-ml-72 flex w-[281px] shrink-0 flex-col border border-gray-200 bg-white shadow-lg lg:static lg:-ml-0">
+      <div className="-ml-[280px] flex w-[281px] shrink-0 flex-col border border-gray-200 bg-white shadow-lg lg:static lg:-ml-0">
         {/* Logo */}
-        <div className="flex shrink-0 items-center border-r border-gray-200 bg-white pb-5 pl-6 pt-6">
+        <div className="flex shrink-0 items-center border-r border-gray-200 bg-white pb-5 pl-5 pt-6">
           <Logo>
             <div className="ml-3 w-full font-heading text-lg font-bold text-gray-600">
               Destimate
@@ -28,6 +48,7 @@ export const SidebarNavigation = () => {
                     <li key={item.name}>
                       <NavLink
                         to={item.to}
+                        onClick={() => dispatch(clearQuery())}
                         className={({ isActive }) =>
                           clsx(
                             isActive
@@ -50,16 +71,26 @@ export const SidebarNavigation = () => {
 
         <div className="flex items-center justify-between border-r border-gray-200 bg-white px-4 py-6">
           <img
-            className="inline-block h-12 w-12 rounded-full object-cover"
-            src={avatar}
+            className="inline-block h-12 w-12 flex-none rounded-full object-cover"
+            src={currentSelector?.data?.photoProfil || avatar}
             alt="avatar"
           />
-          <div className="ml-3 flex w-48 flex-col">
-            <div className="truncate text-sm font-medium text-gray-900">Admin</div>
-            <div className="truncate text-sm text-gray-500">admin@mail.com</div>
+
+          <div className="ml-2 mr-1 flex w-44 grow flex-col">
+            <div className="truncate text-sm font-medium text-gray-900">
+              {currentSelector?.data?.name || (
+                <div className="mb-2 flex h-3 w-40 animate-pulse rounded-full bg-gray-300" />
+              )}
+            </div>
+            <div className="truncate text-sm text-gray-500">
+              {currentSelector?.data?.email || (
+                <div className="flex h-3 w-40 animate-pulse rounded-full bg-gray-300" />
+              )}
+            </div>
           </div>
+
           <div className="text-center">
-            <Logout />
+            <SignOut />
           </div>
         </div>
       </div>

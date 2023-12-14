@@ -1,26 +1,16 @@
-import {
-  // BadgePercentIcon,
-  LayoutDashboardIcon,
-} from 'lucide-react';
+import { BadgePercentIcon, LayoutDashboardIcon, UserCogIcon } from 'lucide-react';
 
-// import {
-//   CategoryIcon,
-//   CoinIcon,
-//   PaperIcon,
-//   RouteIcon,
-//   TicketIcon,
-//   UsersIcon,
-// } from '@/components/Icons';
+import { CategoryIcon, CoinIcon, PaperIcon, RouteIcon, UsersIcon } from '@/components/Icons';
 
 const sideNavigation = [
-  { name: 'Dashboard', to: '/dashboard', icon: LayoutDashboardIcon },
-  // { name: 'Users', to: '/users', icon: UsersIcon },
-  // { name: 'Category', to: '/category', icon: CategoryIcon },
-  // { name: 'Destinations', to: '/destinations', icon: RouteIcon },
-  // { name: 'Promo', to: '/promo', icon: BadgePercentIcon },
-  // { name: 'Ticket', to: '/ticket', icon: TicketIcon },
-  // { name: 'Transactions', to: '/transactions', icon: CoinIcon },
-  // { name: 'Terms & Condition', to: '/terms_and_condition', icon: PaperIcon },
+  { name: 'Overview', to: '/overview', icon: LayoutDashboardIcon },
+  { name: 'Admin', to: '/admin', icon: UserCogIcon },
+  { name: 'Pengguna', to: '/pengguna', icon: UsersIcon },
+  { name: 'Kategori', to: '/kategori', icon: CategoryIcon },
+  { name: 'Destinasi', to: '/destinasi', icon: RouteIcon },
+  { name: 'Promo', to: '/promo', icon: BadgePercentIcon },
+  { name: 'Transaksi', to: '/transaksi', icon: CoinIcon },
+  { name: 'Syarat & Ketentuan', to: '/syarat_dan_ketentuan', icon: PaperIcon },
 ];
 
 export { sideNavigation };
